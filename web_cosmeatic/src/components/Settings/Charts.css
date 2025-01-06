@@ -1,0 +1,70 @@
+/* General styles for charts container */
+.charts-container {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Chart title styling */
+.charts-title {
+  color: #4e73df;
+  margin-bottom: 20px;
+}
+
+/* Flex container for Pie and Line charts */
+.charts {
+  display: flex;
+  justify-content: space-between; /* Space out the charts */
+  gap: 20px; /* Adjust space between Pie and Line charts */
+  margin-bottom: 30px;
+}
+
+/* Individual chart container styling */
+.chart-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Ensure equal width for each chart */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Title styling for each chart */
+.chart-container h4 {
+  margin-bottom: 20px;
+  color: #4e73df;
+}
+
+/* Bar chart container styling */
+.bar-chart-container {
+  margin-top: 30px;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Bar chart title styling */
+.bar-chart-container h4 {
+  margin-bottom: 10px;
+  color: #4e73df;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .charts {
+    flex-direction: column; /* Stack the charts vertically on smaller screens */
+    align-items: center; /* Center align the charts */
+  }
+
+  .chart-container {
+    width: 100%; /* Ensure the charts take up full width on small screens */
+  }
+
+  .bar-chart-container {
+    width: 100%;
+  }
+}

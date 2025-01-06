@@ -1,0 +1,48 @@
+.comments-container {
+    
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.comments-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comments-container textarea,
+.comments-container input {
+    background-color: #fff;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.comments-container button {
+    background-color: #ffcc00;
+    color: #333;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.comments-container button:hover {
+    background-color: #e6b800;
+}
+
+.comments-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.comments-container li {
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
