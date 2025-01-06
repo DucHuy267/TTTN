@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { addCategory, deleteCategory, getAllCategory, getDetailCategory, updateCategory } from "../../services/CategorySevices";
@@ -104,7 +104,7 @@ const AdminCategory = () => {
     const handleDeleteCategory = async () => {
         try {
             await deleteCategory(stateCategoryDetails.categoryId, stateCategoryDetails);
-            alert("Xóa danh mục thành công");
+            message.success("Xóa danh mục thành công");
             setIsOpenDrawer(false);
             setIsModalOpenDelete(false);
             fetchCategories();
@@ -116,7 +116,7 @@ const AdminCategory = () => {
     const onFinish = async () => {
         try {
             await addCategory(stateCategory);
-            alert("Thêm danh mục thành công");
+            message.success("Thêm danh mục thành công");
             setIsModalOpen(false);
             fetchCategories();
         } catch (error) {
