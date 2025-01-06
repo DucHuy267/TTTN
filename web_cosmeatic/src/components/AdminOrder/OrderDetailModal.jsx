@@ -49,7 +49,7 @@ const OrderDetailModal = ({ visible, onClose, order, onConfirm }) => {
     const handleStatusUpdate = async () => {
         try {
             const response = await axios.put(
-                `http://localhost:4000/orders/status/${order.orderId}`, { status: "pendingPickup" } 
+                `http://localhost:4000/orders/status/${order.key}`, { status: "pendingPickup" } 
             );
             message.success("Xác nhận đơn hàng thành công!");
             onConfirm && onConfirm(response.data); // Optionally, call onConfirm prop after updating
@@ -74,7 +74,7 @@ const OrderDetailModal = ({ visible, onClose, order, onConfirm }) => {
                     key="confirm"
                     type="primary"
                     onClick={handleStatusUpdate}
-                    disabled={order?.status === 'success' || order?.status === 'canceled'} 
+                    disabled={order?.status === 'success' || order?.status === 'canceled' || order?.status === 'pendingPickup'} 
                 >
                     Xác nhận đơn hàng
                 </Button>,
