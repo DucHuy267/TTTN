@@ -5,6 +5,7 @@ const {
     getCategoryById,
     updateCategory,
     deleteCategory,
+    getCategoryBySubcategoryName
 } = require('../controllers/categoryController');
 
 const router = express.Router();
@@ -18,6 +19,8 @@ router.get('/getAll', getAllCategories);
 // Route để lấy thông tin danh mục theo categoryId
 router.get('/getDetailCategory/:categoryId', getCategoryById);
 
+// Route để lấy thông tin danh mục theo subcategoryName
+router.get('/getCategoryBySubcategoryName/:subcategoryName', getCategoryBySubcategoryName);
 
 // Route để cập nhật danh mục
 router.put('/updateCategory/:categoryId', updateCategory);

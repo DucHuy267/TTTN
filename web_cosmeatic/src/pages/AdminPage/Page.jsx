@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
 import Charts from '../../components/Settings/Charts';
 import AdminBrand from '../../components/AdminBrand/AdminBrand';
+import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
 
 const AdminPage = () => {
     // Initialize navigate
@@ -38,8 +39,8 @@ const AdminPage = () => {
                 getItem('Đơn hàng', 'order', <ShoppingOutlined />),
                 getItem('Quản lý thương hiệu ', 'brand', <ShoppingOutlined />),
                 getItem('Quan ly voucher', 'voucher', <ShoppingOutlined />),
-                getItem('Quan ly bài đăng', 'voucher', <ShoppingOutlined />),
-                getItem('Quan ly tin nhắn', 'voucher', <ShoppingOutlined />),
+                getItem('Quan ly bài đăng', 'post', <ShoppingOutlined />),
+                getItem('Quan ly tin nhắn', 'message', <ShoppingOutlined />),
             ],
         },
         {
@@ -73,7 +74,9 @@ const AdminPage = () => {
             case 'brand':
                 return <AdminBrand />;
             case 'charts':
-                return <Charts />;    
+                return <Charts />;  
+            case 'voucher':
+                return <AdminVoucher />;  
             default:
                 return <></>;
         }

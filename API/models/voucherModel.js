@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const promotionSchema = new mongoose.Schema({
+const voucherSchema = new mongoose.Schema({
+    voucherId: {type: String,required: true,unique: true,trim: true},
     name: {type: String, required: true, trim: true },
     description: {type: String,required: true,trim: true},
     discount: {type: String,required: true,trim: true
@@ -26,6 +27,6 @@ const promotionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Promotion = mongoose.model('Promotion', promotionSchema);
+const Voucher = mongoose.model('Voucher', voucherSchema);
 
-module.exports = Promotion;
+module.exports = Voucher;

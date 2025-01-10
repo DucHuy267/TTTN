@@ -26,7 +26,23 @@ exports.getProductsByCategoryIdTrue = async (req, res) => {
     }
 };
 
-// Hàm lấy sản phẩm theo subcategoryId
+// Hàm lấy sản phẩm theo subcategoryId (chỉ hiển thị sản phẩm có isVisible = true)
+exports.getProductsBySubcategoryIdTrue = async (req, res) => {
+    try {
+        const subcategoryId = req.params.subcategoryId;
+        const products = await Product.find({ subcategoryId: subcategoryId }, { isVisible: true });
+
+        if (products.length > 0) {
+            res.status(200).json(products);
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy sản phẩm cho danh mục con này' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Lỗi khi lấy sản phẩm theo danh mục con', details: err });
+    }
+};
+
+// Hàm lấy sản phẩm theo subcategoryId 
 exports.getProductsBySubcategoryId = async (req, res) => {
     try {
         const subcategoryId = req.params.subcategoryId;

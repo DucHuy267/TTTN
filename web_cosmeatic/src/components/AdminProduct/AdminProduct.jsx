@@ -23,7 +23,7 @@ const AdminProduct = () => {
         description: '',
         quantity: '',
         categoryId: '',
-        subcategoryId:'',
+        subcategoryName:'',
         brand:'',
         imageUrl: '',
     });
@@ -35,7 +35,7 @@ const AdminProduct = () => {
         quantity: '',
         categoryId: '',
         brand:'',
-        subcategoryId:'',
+        subcategoryName:'',
         imageUrl: '',
     });
 
@@ -53,7 +53,7 @@ const AdminProduct = () => {
                 quantity: res?.quantity,
                 brand: res?.brand,
                 categoryId: res?.categoryId,
-                subcategoryId: res?.subcategoryId,
+                subcategoryName: res?.subcategoryName,
                 imageUrl: res?.imageUrl,
             });
         }
@@ -177,7 +177,7 @@ const AdminProduct = () => {
         { title: 'Số lượng', dataIndex: 'quantity', sorter: (a, b) => a.quantity - b.quantity },
         { title: 'Mã loại', dataIndex: 'categoryId' },
         { title: 'Thương hiệu', dataIndex: 'brand'},
-        { title: 'Mã danh mục', dataIndex: 'subcategoryId' },
+        { title: 'Mã danh mục', dataIndex: 'subcategoryName' },
         {
             title: 'Action',
             dataIndex: 'action',
@@ -237,7 +237,7 @@ const AdminProduct = () => {
                     autoComplete="off"
                     form={form}
                 >
-                    {['name', 'description', 'price', 'quantity', 'categoryId', 'subcategoryId', 'brand'].map(field => (
+                    {['name', 'description', 'price', 'quantity', 'categoryId', 'subcategoryName', 'brand'].map(field => (
                         <Form.Item
                             key={field}
                             label={field.charAt(0).toUpperCase() + field.slice(1)}
@@ -280,7 +280,7 @@ const AdminProduct = () => {
                     autoComplete="off"
                     form={form}
                 >
-                    {['name', 'description', 'price', 'quantity', 'categoryId', 'subcategoryId', 'brand'].map(field => (
+                    {['name', 'description', 'price', 'quantity', 'categoryId', 'subcategoryName', 'brand'].map(field => (
                         <Form.Item
                             key={field}
                             label={field.charAt(0).toUpperCase() + field.slice(1)}

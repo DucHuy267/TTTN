@@ -1,5 +1,20 @@
 const Category = require('../models/categoryModel');
 
+// Hàm lấy Category theo subcategoryName 
+exports.getCategoryBySubcategoryName = async (req, res) => {
+    try {
+        const subcategoryName = req.params.subcategoryName;
+        const category = await Category.findOne({ 'subcategories.subcategoryName': subcategoryName });
+        if (category) {
+            res.status(200).json(category);
+        } else {
+            res.status(404).json({ message: 'Không tìm thấy danh mục' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Lỗi khi lấy thông tin danh mục', details: err });
+    }
+};
+
 // Hàm lấy Category theo categoryId
 exports.getCategoryById = async (req, res) => {
     try {

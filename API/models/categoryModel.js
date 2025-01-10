@@ -6,7 +6,6 @@ const categorySchema = new mongoose.Schema({
     image: { type: String, required: false, },
     subcategories: [
         {
-            subcategoryId: { type: String, required: true },
             subcategoryName: { type: String, required: true },
         }
     ], // Mảng chứa danh mục con

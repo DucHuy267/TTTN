@@ -17,7 +17,6 @@ const AdminCategory = () => {
         image: '',
         subcategories: [
             {
-                subcategoryId: '',
                 subcategoryName: '',
             }
         ],
@@ -29,7 +28,6 @@ const AdminCategory = () => {
         image: '',
         subcategories: [
             {
-                subcategoryId: '',
                 subcategoryName: '',
             }
         ],
@@ -83,6 +81,7 @@ const AdminCategory = () => {
         try {
             const res = await getAllCategory();
             setAllCategories(res.map(item => ({ ...item, key: item.categoryId })));
+            console.log('cate',res);
         } catch (error) {
             console.error("Failed to fetch categories:", error);
         }
@@ -195,7 +194,7 @@ const AdminCategory = () => {
                 ...prevState,
                 subcategories: [
                     ...prevState.subcategories,
-                    { subcategoryId: '', subcategoryName: '' }
+                    { subcategoryName: '' }
                 ]
             }));
         } else {
@@ -203,7 +202,7 @@ const AdminCategory = () => {
                 ...prevState,
                 subcategories: [
                     ...prevState.subcategories,
-                    { subcategoryId: '', subcategoryName: '' }
+                    { subcategoryName: '' }
                 ]
             }));
         }
@@ -299,20 +298,6 @@ const AdminCategory = () => {
                     {stateCategory.subcategories.map((subcategory, index) => (
                         <div key={index} style={{ marginBottom: '10px', border: '1px solid #ccc', padding: '10px 10px 0px 10px', borderRadius: '5px' }}>
                             <Form.Item
-                                name={`subcategoryId${index}`}
-                                labelCol={{ span: 9 }}
-                                wrapperCol={{ span: 14 }}
-                                label={`SubcategoryID ${index + 1}`}
-                                rules={[{ required: true, message: 'Please input Subcategory ID!' }]}
-                            >
-                                <Input
-                                    value={subcategory.subcategoryId}
-                                    onChange={(e) => handleSubcategoryChange(e, index, 'subcategoryId')}
-                                    name={`subcategoryId${index}`}
-                                    style={{ marginLeft:10}}
-                                />
-                            </Form.Item>
-                            <Form.Item
                                 labelCol={{ span: 9 }}
                                 wrapperCol={{ span: 14 }}
                                 label={` Name ${index + 1}`}
@@ -392,19 +377,7 @@ const AdminCategory = () => {
                     </Form.Item>
                     {stateCategoryDetails.subcategories.map((subcategory, index) => (
                         <div style={{width:'80%', display: 'flex' , border: '1px solid #ccc', padding: '10px 10px 0px 10px', margin:'10px 90px ', borderRadius: '5px' }}>
-                            <div key={index} style={{ marginBottom: '10px', width: '95%' }}>
-                                <Form.Item
-                                 
-                                    label={`Subcategory ID ${index + 1}`}
-                                    name={`subcategoryId${index}`}
-                                    rules={[{ required: true, message: 'Please input Subcategory ID!' }]}
-                                >
-                                    <Input
-                                        value={subcategory.subcategoryId}
-                                        onChange={(e) => handleSubcategoryChange(e, index, 'subcategoryId', true)}
-                                        name={`subcategoryId${index}`}
-                                    />
-                                </Form.Item>
+                            <div key={index} style={{ marginBottom: '10px', width: '95%' }}>         
                                 <Form.Item
                                 
                                     label={` Name ${index + 1}`}

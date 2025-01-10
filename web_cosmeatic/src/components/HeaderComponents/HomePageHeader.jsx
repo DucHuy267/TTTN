@@ -1,20 +1,13 @@
-// src/components/HeaderComponents/HomePageHeader.jsx
+
 import React, { useEffect, useState } from "react";
 import { Col, Input, Popover, message, Badge, notification } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserById } from "../../services/UserSevices"; // Sửa tên service
-import { getAllCategory } from "../../services/CategorySevices";
-import { getAllProductTrue, getProductByCate, searchProduct } from "../../services/ProductServices";
-import {
-  TextHeader,
-  WrapperHeader,
-  AccoutHeader,
-  ContentPopup,
-  Span,
-} from "./style";
-import DrawerComponent from "../../components/DrawerComponent/DrawerComponent";
+import { searchProduct } from "../../services/ProductServices";
+import { TextHeader, WrapperHeader, AccoutHeader, ContentPopup, Span, } from "./style";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import CategoryDrawer from "./CategoryDrawer";
 
 const { Search } = Input;
 
@@ -24,7 +17,6 @@ const HomePageHeader = () => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [cartQuantity, setCartQuantity] = useState(0);
 
   // Fetch user information
@@ -52,44 +44,6 @@ const HomePageHeader = () => {
       console.error("Failed to fetch user information:", error);
     }
   };
-
-  const fetchCategories = async () => {
-    try {
-      const res = await getAllCategory();
-      if (res) {
-        setCategories(res.map((item) => ({ ...item, key: item.categoryId })));
-      }
-    } catch (error) {
-      message.error("Failed to load categories.");
-    }
-  };
-
-  const fetchGetDetailProduct = async (categoryId) => {
-    try {
-      const res = await getProductByCate(categoryId);
-      if (res) {
-        navigate("/products", { state: { products: res } });
-        setIsOpenDrawer(false);
-      }
-    } catch (error) {
-      message.error("Failed to load product details. Please try again.");
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const res = await getAllProductTrue();
-      if (res) {
-        navigate("/products", { state: { products: res } });
-      }
-    } catch (error) {
-      message.error("Failed to load products.");
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const handleSearch = async (value) => {
     if (!value) {
@@ -225,46 +179,8 @@ const HomePageHeader = () => {
       </div>
 
       {/* hiển thị danh mục sản phẩm */}
-      <DrawerComponent
-        title="Sản Phẩm"
-        placement="left"
-        isOpen={isOpenDrawer}
-        onClose={() => setIsOpenDrawer(false)}
-        width="25%"
-      >
-        <TextHeader
-          onClick={() => {
-            fetchProducts();
-            setIsOpenDrawer(false);
-          }}
-          style={{ margin: "5px 5px 10px", fontSize: 20 }}
-        >
-          Tất cả sản Phẩm
-        </TextHeader>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-          {categories.map((category) => (
-            <div
-              key={category.categoryId}
-              style={{
-                height: "120px",
-                width: "120px",
-                marginTop: 10,
-                cursor: "pointer",
-              }}
-              onClick={() => fetchGetDetailProduct(category.categoryId)}
-            >
-              {category.image && (
-                <img
-                  src={category.image}
-                  alt="Category"
-                  style={{ height: "100px", width: "100px", borderRadius: "20%" }}
-                />
-              )}
-              <p style={{ marginTop: 5, marginLeft: 5 }}>{category.categoryName}</p>
-            </div>
-          ))}
-        </div>
-      </DrawerComponent>
+      <CategoryDrawer isOpenDrawer={isOpenDrawer} onClose={() => setIsOpenDrawer(false)}  />
+
     </div>
   );
 };
