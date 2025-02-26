@@ -2,7 +2,6 @@ const order = require('../models/orderModel');
 const product = require('../models/productModel');
 const user = require('../models/userModel'); 
 const tf = require('@tensorflow/tfjs');
-console.log('TensorFlow.js version:', tf.version.tfjs);
 
 // Tải dữ liệu từ các models
 async function loadData() {

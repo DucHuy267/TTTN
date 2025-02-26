@@ -1,13 +1,15 @@
-
 import React, { useEffect, useState } from "react";
-import { Col, Input, Popover, message, Badge, notification } from "antd";
+import { Col, Input, Popover, message, Badge, notification, Modal, ConfigProvider } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserById } from "../../services/UserSevices"; // Sửa tên service
 import { searchProduct } from "../../services/ProductServices";
 import { TextHeader, WrapperHeader, AccoutHeader, ContentPopup, Span, } from "./style";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import CategoryDrawer from "./CategoryDrawer";
+import CategoryDropdown from "./CategoryDropdown";
+import logo from "./logo.png"
+import DropdownMenu from "./DropdownMenu";
+import LoginPage from "../Login-SignUp/LoginPage"; // Import LoginPage component
 
 const { Search } = Input;
 
@@ -18,6 +20,8 @@ const HomePageHeader = () => {
   const [username, setUsername] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // Thêm trạng thái cho CategoryDropdown
+  const [isModalVisible, setIsModalVisible] = useState(false); // State to manage modal visibility
 
   // Fetch user information
   useEffect(() => {
@@ -62,35 +66,42 @@ const HomePageHeader = () => {
     }
   };
 
-    // lấy số lượng sp trong giỏ
-    const fetchCart = async (userId) => {
-      try {
-          const response = await axios.get(`http://localhost:4000/carts/${userId}`);
-          if (response.status === 200) {
-              const products = response.data?.products || [];
-              const totalQuantity = products.reduce((sum, item) => sum + item.quantity, 0); // Calculate total quantity
-              // Set the total quantity into the state or use it as needed
-              setCartQuantity(totalQuantity); // Assuming you're using React's useState for the count
-          }
-      } catch (error) {
-          notification.error({
-              message: 'Error',
-              description: `Error displaying cart products: ${error}`,
-          });
-          console.error(error);
-      }
-  };
-  
+  // lấy số lượng sp trong giỏ
+  const fetchCart = async (userId) => {
+    try {
+        const response = await axios.get(`http://localhost:4000/carts/${userId}`);
+        if (response.status === 200) {
+            const products = response.data?.products || [];
+            const totalQuantity = products.reduce((sum, item) => sum + item.quantity, 0); // Calculate total quantity
+            // Set the total quantity into the state or use it as needed
+            setCartQuantity(totalQuantity); // Assuming you're using React's useState for the count
+        }
+    } catch (error) {
+        notification.error({
+            message: 'Error',
+            description: `Error displaying cart products: ${error}`,
+        });
+        console.error(error);
+    }
+};
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken("");
     setUsername("");
-    navigate("/login");
+    navigate("/");
   };
 
   const handleNavigateLogin = () => {
-    navigate(token ? "/profile" : "/login");
+    if (token) {
+      navigate("/profile");
+    } else {
+      setIsModalVisible(true); // Show the modal
+    }
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false); // Hide the modal
   };
 
   const content = (
@@ -100,23 +111,29 @@ const HomePageHeader = () => {
     </div>
   );
 
-    // Kiểm tra nếu hiện tại là trang cart
-    const isCartPage = location.pathname === "/cart";
-  
+  // Kiểm tra nếu hiện tại là trang cart
+  const isCartPage = location.pathname === "/cart";
 
   return (
     <div style={{ backgroundColor: "#fdfff8", borderBottom: "2px solid  #357D18" }}>
       <div>
           <WrapperHeader>
-            <Col span={5} style={{ padding: "10px 0px" }}> 
-              <img
-                width={165}
-                src="https://cocoonvietnam.com/_nuxt/img/logo.f502f17.svg"
+            <Col span={5} style={{ padding: "18px 0px" }}> 
+              {/* <img
+                width={50}
+                height={50}
+                src={logo}
                 alt="Logo"
-              />
+              /> */}
+              <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>Audora</h2>
             </Col>
             <Col span={15} style={{ padding: "18px 0px" }}>
-              <Search placeholder="Search" allowClear style={{ padding: "0px 50px" , width: '65%'}} onSearch={handleSearch} />
+            <Search 
+              placeholder="Search" 
+              allowClear 
+              style={{ padding: "0px 50px", width: '65%', borderRadius: '10px' }} 
+              onSearch={handleSearch} 
+            />
             </Col>
             <Col span={1} style={{ padding: "18px 0px" }}>
             {!isCartPage && (
@@ -154,14 +171,15 @@ const HomePageHeader = () => {
           </WrapperHeader>
       </div>
       <div style={{ display: "flex", marginTop: 8, marginLeft: 100, marginBottom: 15 }}>
-            <div onClick={() => setIsOpenDrawer(true)}>
+            <div style={{ display: "flex" }}>
               <TextHeader style={{ marginLeft: 5, fontWeight: "bold"  }}>
-                DANH MỤC 
+                <CategoryDropdown/>
+                {/* <DropdownMenu /> */}
               </TextHeader>
             </div>
             <div>
               <TextHeader style={{ marginLeft: 50, fontWeight: "bold" }} onClick={() => navigate("/brands")}>
-                THƯƠNG HIỆU 
+                THƯƠNG HIỆU
               </TextHeader>
             </div>
             <div>
@@ -174,15 +192,30 @@ const HomePageHeader = () => {
                 HOT DEALS 
               </TextHeader>
             </div>
-        
-        
       </div>
 
-      {/* hiển thị danh mục sản phẩm */}
-      <CategoryDrawer isOpenDrawer={isOpenDrawer} onClose={() => setIsOpenDrawer(false)}  />
+      
 
+      <ConfigProvider theme={theme}>
+      <Modal
+       title="Đăng nhập" visible={isModalVisible} onCancel={handleModalCancel} footer={null}
+        style={{ top: 30 }}
+       >
+        <LoginPage onClose={handleModalCancel} />
+      </Modal>
+    </ConfigProvider>
     </div>
   );
+};
+
+const theme = {
+  components: {
+    Modal: {
+      contentBg: "#fdfff8", // Thay đổi màu nền
+      headerBg: "#fdfff8", // Màu header
+      colorText: "#333", // Màu chữ
+    },
+  },
 };
 
 export default HomePageHeader;

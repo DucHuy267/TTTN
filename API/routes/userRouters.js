@@ -202,6 +202,30 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Đăng nhập theo quyền shipper
+router.post('/login-shipper', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+      // Kiểm tra email có tồn tại không
+      const user = await User.findOne({ email, role: 'shipper' });
+      if (!user) {
+          return res.status(400).json({ error: 'Email không tồn tại' });
+      }
+      // So sánh mật khẩu
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Mật khẩu không đúng' });
+      }
+      // Tạo token JWT
+      const token = jwt.sign({ userId: user._id }, 'jwt_secret_key', { expiresIn: '5h' });
+
+      res.status(200).json({ message: 'Đăng nhập thành công', token });
+  } catch (err) {
+      console.error('Login error:', err); // Log the full error in the server console
+      res.status(500).json({ error: 'Lỗi đăng nhập', details: err.message });
+  }
+});
+
 // Lấy tất cả người dùng
 router.get('/', async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
+import { PlusOutlined, DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { addProduct, deleteProduct, getAllProduct, getDetailProduct, updateProduct } from "../../services/ProductServices";
 import DrawerCompoment from "../DrawerComponent/DrawerComponent";
@@ -183,11 +183,19 @@ const AdminProduct = () => {
             dataIndex: 'action',
             render: (_, record) => (
                 <div>
-                    <Button
-                        icon={<DeleteOutlined style={{ color: 'red' }} />}
-                        onClick={() => setIsModalOpenDelete(true)}
-                        style={{ marginRight: 5 }}
-                    />
+                    <Popconfirm 
+                        title="Bạn có chắc chắn muốn xóa không?" 
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        onConfirm={handleDeleteProduct} // Add your delete handler here
+                        okText="Có"
+                        cancelText="Không"
+                        >
+                        <Button
+                            icon={<DeleteOutlined style={{ color: 'red' }} />}
+                            style={{ marginRight: 5 }}
+                        />
+                    </Popconfirm>
+                     
                     <Button
                         icon={<EditOutlined style={{ color: 'orange' }} />}
                         onClick={handleDetailsProduct}

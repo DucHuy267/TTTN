@@ -8,13 +8,14 @@ const {
     create_order,
     create_order_receive,
     getOrdersByUserId,
+    getOrdersByStatus,
     createPaymentUrl,
     vnpayReturn
 } = require('../controllers/orderController');
 
 const router = express.Router();
 
-// lấy theo id
+// lấy chi tiết theo id
 router.get('/getOrderById/:id', getOrderById);
 // tạo
 router.post('/addOrder', addOrder);
@@ -24,6 +25,8 @@ router.put('/status/:id', updateOrderStatus);
 router.delete('/delete/:id', deleteOrder);
 // lấy tất cả
 router.get('/getAll', getAllOrders);
+// lấy theo trạng thái
+router.get('/status/:status', getOrdersByStatus);
 // Route để thêm đơn hàng mới
 router.post('/create_order', create_order);
 // thanh toans khi nhan hang

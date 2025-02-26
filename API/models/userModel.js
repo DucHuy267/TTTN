@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String },
     gender: { type: String, enum: ['male', 'female', 'other'], default: 'other' }, // Không bắt buộc
     birthday: { type: Date }, // Không bắt buộc
+    role: { type: String, enum: ['user', 'shipper', 'admin'], default: 'user' }, // Thêm phân quyền
 });
 
 const User = mongoose.model('users', userSchema);

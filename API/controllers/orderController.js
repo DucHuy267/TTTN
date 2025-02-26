@@ -344,6 +344,31 @@ exports.getOrdersByUserId = async (req, res) => {
     }
 };
 
+// Lấy danh sách đơn hàng theo trạng thái
+exports.getOrdersByStatus = async (req, res) => {
+    try {
+      const { status } = req.params;
+      
+      // Kiểm tra trạng thái hợp lệ
+      const validStatuses = ['pending', 'processing', 'delivered', 'success', 'cancelled'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: "Trạng thái đơn hàng không hợp lệ." });
+      }
+  
+      const orders = await Order.find({ status })
+        .populate('products.productId', 'name price imageUrl')
+        .populate('userId', 'name email');
+  
+      if (orders.length === 0) {
+        return res.status(404).json({ message: "Không có đơn hàng nào trong trạng thái này." });
+      }
+  
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Lỗi khi lấy danh sách đơn hàng", error: error.message });
+    }
+  };
+
 // lấy tất cả order
 exports.getAllOrders = async (req, res) => {
     try {
@@ -367,13 +392,14 @@ exports.getAllOrders = async (req, res) => {
     }
 };
 
-// lấy chi tiết orderorder
+// lấy chi tiết order theo id
 exports.getOrderById = async (req, res) => {
     try {
         const { id } = req.params;
+
         const order = await Order.findById(id)
-            .populate('userId', 'name email')
-            .populate('products.productId', 'name price');
+            .populate('userId', 'name email') // Chỉ lấy trường name và email của user
+            .populate('products.productId', 'name price'); // Chỉ lấy trường name và price của product
 
         if (!order) {
             return res.status(404).json({
