@@ -4,7 +4,7 @@ const {getHotSellingProducts} = require('../controllers/DMF_HotSelling');
 
 const router = express.Router();
 
-router.get('top-products/:userId', getTopProducts);
+router.get('/top-products/:userId', getTopProducts);
 
 router.get('/hot-selling-products', getHotSellingProducts);
 

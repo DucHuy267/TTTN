@@ -3,12 +3,12 @@ const product = require('../models/productModel');
 const user = require('../models/userModel'); 
 const tf = require('@tensorflow/tfjs');
 
-// Tải dữ liệu từ các models
+// Tải dữ liệu từ database
 async function loadData() {
     try {
-        const orders = await order.findAll();
-        const products = await product.findAll();
-        const users = await user.findAll();
+        const orders = await order.find();
+        const products = await product.find();
+        const users = await user.find();
         return { orders, products, users };
     } catch (error) {
         console.error('Error loading data:', error);
@@ -16,78 +16,73 @@ async function loadData() {
     }
 }
 
-// Tạo ma trận người dùng-sản phẩm từ dữ liệu đơn hàng
+// Tạo ma trận người dùng - sản phẩm từ đơn hàng
 function createUserProductMatrix(orders, users, products) {
     const matrix = Array(users.length).fill(null).map(() => Array(products.length).fill(0));
 
     orders.forEach(order => {
-        const userIndex = users.findIndex(user => user.id === order.userId);
-        const productIndex = products.findIndex(product => product.id === order.productId);
+        const userIndex = users.findIndex(user => String(user.id) === String(order.userId));
+        const productIndex = products.findIndex(product => String(product.id) === String(order.productId));
         
         if (userIndex !== -1 && productIndex !== -1) {
-            matrix[userIndex][productIndex] += 1; // Tăng số lượng sản phẩm đã mua
+            matrix[userIndex][productIndex] += 1;
         }
     });
 
     return matrix;
 }
 
-// Thực hiện chuẩn hóa ma trận
+// Chuẩn hóa ma trận
 function normalizeMatrix(matrix) {
-    const normalizedMatrix = matrix.map(row => row.map(value => value / 5)); // Giả sử giá trị tối đa là 5
-    return normalizedMatrix;
+    const maxValue = Math.max(...matrix.flat());
+    return matrix.map(row => row.map(value => value / maxValue));
 }
 
 // Tiền xử lý dữ liệu
 function preprocessData(data) {
     const { orders, users, products } = data;
-
-    // Tạo ma trận người dùng-sản phẩm
     const userProductMatrix = createUserProductMatrix(orders, users, products);
-
-    // Chuẩn hóa dữ liệu nếu cần thiết
-    // Ví dụ: chuẩn hóa giá trị đánh giá về khoảng [0, 1]
     const normalizedMatrix = normalizeMatrix(userProductMatrix);
-
     return { normalizedMatrix, orders, users, products };
 }
 
-// Chia ma trận thành tập huấn luyện và kiểm tra
+// Chia dữ liệu thành tập huấn luyện và kiểm tra
 function splitData(matrix) {
     const trainData = [];
     const trainLabels = [];
     const testData = [];
     const testLabels = [];
-    // Logic để chia dữ liệu
+
     matrix.forEach((row, rowIndex) => {
         row.forEach((value, colIndex) => {
-            if (Math.random() < 0.8) { // 80% dữ liệu cho tập huấn luyện
+            if (Math.random() < 0.8) { 
                 trainData.push([rowIndex, colIndex]);
                 trainLabels.push(value);
-            } else { // 20% dữ liệu cho tập kiểm tra
+            } else { 
                 testData.push([rowIndex, colIndex]);
                 testLabels.push(value);
             }
         });
     });
+
     return { trainData, trainLabels, testData, testLabels };
 }
 
 // Xây dựng mô hình Deep Matrix Factorization
 function buildModel(numUsers, numProducts) {
-    const userInput = tf.input({ shape: [1], name: 'user' });
-    const productInput = tf.input({ shape: [1], name: 'product' });
+    const userInput = tf.input({ shape: [1], dtype: 'int32' });
+    const productInput = tf.input({ shape: [1], dtype: 'int32' });
 
-    const userEmbedding = tf.layers.embedding({ inputDim: numUsers, outputDim: 50 })(userInput);
-    const productEmbedding = tf.layers.embedding({ inputDim: numProducts, outputDim: 50 })(productInput);
+    const userEmbedding = tf.layers.embedding({ inputDim: numUsers, outputDim: 50 }).apply(userInput);
+    const productEmbedding = tf.layers.embedding({ inputDim: numProducts, outputDim: 50 }).apply(productInput);
 
-    const userVec = tf.layers.flatten()(userEmbedding);
-    const productVec = tf.layers.flatten()(productEmbedding);
+    const userVec = tf.layers.flatten().apply(userEmbedding);
+    const productVec = tf.layers.flatten().apply(productEmbedding);
 
-    const concat = tf.layers.concatenate()([userVec, productVec]);
-    const dense1 = tf.layers.dense({ units: 128, activation: 'relu' })(concat);
-    const dense2 = tf.layers.dense({ units: 64, activation: 'relu' })(dense1);
-    const output = tf.layers.dense({ units: 1 })(dense2);
+    const concat = tf.layers.concatenate().apply([userVec, productVec]);
+    const dense1 = tf.layers.dense({ units: 128, activation: 'relu' }).apply(concat);
+    const dense2 = tf.layers.dense({ units: 64, activation: 'relu' }).apply(dense1);
+    const output = tf.layers.dense({ units: 1 }).apply(dense2);
 
     const model = tf.model({ inputs: [userInput, productInput], outputs: output });
     model.compile({ optimizer: 'adam', loss: 'meanSquaredError' });
@@ -98,46 +93,97 @@ function buildModel(numUsers, numProducts) {
 // Huấn luyện mô hình
 async function trainModel(model, data) {
     const { normalizedMatrix } = data;
-
-    // Chia dữ liệu thành tập huấn luyện và kiểm tra
     const { trainData, trainLabels, testData, testLabels } = splitData(normalizedMatrix);
 
-    // Huấn luyện mô hình
-    await model.fit(trainData, trainLabels, {
+    const userTrainTensor = tf.tensor1d(trainData.map(d => d[0]), 'int32');
+    const productTrainTensor = tf.tensor1d(trainData.map(d => d[1]), 'int32');
+    const trainLabelsTensor = tf.tensor1d(trainLabels);
+
+    const userTestTensor = tf.tensor1d(testData.map(d => d[0]), 'int32');
+    const productTestTensor = tf.tensor1d(testData.map(d => d[1]), 'int32');
+    const testLabelsTensor = tf.tensor1d(testLabels);
+
+    await model.fit([userTrainTensor, productTrainTensor], trainLabelsTensor, {
         epochs: 10,
         batchSize: 32,
-        validationData: [testData, testLabels],
+        validationData: [[userTestTensor, productTestTensor], testLabelsTensor],
     });
+
+    // Giải phóng bộ nhớ để tránh memory leak
+    userTrainTensor.dispose();
+    productTrainTensor.dispose();
+    trainLabelsTensor.dispose();
+    userTestTensor.dispose();
+    productTestTensor.dispose();
+    testLabelsTensor.dispose();
 }
 
-// Dự đoán 10 sản phẩm phù hợp nhất cho một người dùng
-async function predictTopProducts(userId, model, data) {
-    const { products } = data;
-    const userTensor = tf.tensor1d([userId]);
 
-    const predictions = await Promise.all(products.map(async (product) => {
-        const productTensor = tf.tensor1d([product.id]);
-        const prediction = tf.tidy(() => model.predict([userTensor, productTensor]));
-        return { product, score: prediction.dataSync()[0] };
+// Dự đoán 10 sản phẩm phù hợp nhất
+async function predictTopProducts(userId, model, data) {
+    const { products, users } = data;
+    
+    const userIndex = users.findIndex(user => String(user.id) === String(userId));
+    if (userIndex === -1) {
+        throw new Error("User not found");
+    }
+
+    const userTensor = tf.tensor2d([[userIndex]]); // Chuyển userId thành chỉ số ma trận
+
+    const predictions = await Promise.all(products.map(async (product, productIndex) => {
+        const productTensor = tf.tensor2d([[productIndex]]);
+        const prediction = model.predict([userTensor, productTensor]);
+        const score = (await prediction.data())[0];
+        return { product, score };
     }));
 
     predictions.sort((a, b) => b.score - a.score);
     return predictions.slice(0, 10).map(p => p.product);
 }
 
-// Lấy 10 sản phẩm được dự đoán phù hợp nhất cho một người dùng
-exports.getTopProducts= async (req, res) => {
+
+// Hàm lấy top sản phẩm phổ biến nhất từ đơn hàng nếu user chưa mua
+function getPopularProducts(orders, products) {
+    const productCount = {};
+
+    // Đếm số lần mỗi sản phẩm được mua
+    orders.forEach(order => {
+        productCount[order.productId] = (productCount[order.productId] || 0) + 1;
+    });
+
+    // Sắp xếp sản phẩm theo số lần mua giảm dần
+    return products.sort((a, b) => (productCount[b.id] || 0) - (productCount[a.id] || 0)).slice(0, 10);
+}
+
+// API lấy sản phẩm đề xuất cho người dùng
+exports.getTopProducts = async (req, res) => {
     try {
         const userId = req.params.userId;
         const data = await loadData();
         const preprocessedData = preprocessData(data);
-        const model = buildModel(data.users.length, data.products.length);
+        const { orders, users, products } = preprocessedData;
+
+        // Kiểm tra nếu user chưa mua hàng
+        const userOrders = orders.filter(order => String(order.userId) === String(userId));
+        if (userOrders.length === 0) {
+            console.log(`User ${userId} chưa có lịch sử mua hàng. Trả về sản phẩm phổ biến nhất.`);
+            const topProducts = getPopularProducts(orders, products);
+            return res.json(topProducts);
+        }
+
+        // Nếu có lịch sử, thực hiện gợi ý bằng mô hình AI
+        const model = buildModel(users.length, products.length);
         await trainModel(model, preprocessedData);
         const topProducts = await predictTopProducts(userId, model, preprocessedData);
+
         res.json(topProducts);
     } catch (error) {
         console.error('Error processing request:', error);
         res.status(500).send('Internal Server Error');
     }
-} 
+};
 
+// User mới chưa có lịch sử mua hàng 👉 nhận được top sản phẩm bán chạy nhất.
+// User có lịch sử mua hàng 👉 nhận được gợi ý cá nhân hóa từ AI.
+// Mỗi user sẽ nhận được 10 sản phẩm gợi ý dựa trên mô hình AI Deep Matrix Factorization.
+// Mô hình AI sẽ được huấn luyện trên dữ liệu đơn hàng từ database.

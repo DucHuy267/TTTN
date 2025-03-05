@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { routes } from './routes';
 import HomePageHeader from './components/HeaderComponents/HomePageHeader';
+import ChatWidget from './pages/ChatBot/ChatWidget';
 
 function Breadcrumb() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function App() {
   return (
     <Router>
       <AppContent />
+      <ChatWidget />
     </Router>
   );
 }

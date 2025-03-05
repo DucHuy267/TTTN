@@ -7,6 +7,7 @@ const orderRouters = require('./routes/orderRoutes');
 const brandRoutes = require('./routes/brandRoutes');
 const voucherRoutes = require('./routes/voucherRoutes');
 const charts = require('./routes/charts');
+const chatbot = require('./routes/Chatbot');
 const comments = require('./routes/comments');
 const dmf = require('./routes/DMF');
 const mongoose = require('mongoose');
@@ -58,6 +59,7 @@ app.use('/orders', orderRouters);
 app.use('/brands', brandRoutes);
 app.use('/vouchers', voucherRoutes);
 app.use('/charts', charts);
+app.use('/chatbot', chatbot)
 app.use('/comments', comments);
 app.use('/dmf', dmf);
 

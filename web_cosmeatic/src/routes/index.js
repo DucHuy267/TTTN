@@ -3,7 +3,6 @@ import SignupPage from "../components/Login-SignUp/SignupPage";
 import Page from "../pages/AdminPage/Page";
 import Brand from "../pages/BrandPage/Brand";
 import CartPage from "../pages/CartPage/CartPage";
-import Chatbot from "../pages/ChatBot/ChatBot";
 import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import CreateOrder from "../pages/Order/CreateOrder";
@@ -12,11 +11,11 @@ import ProductsPage from "../pages/ProductsPage/ProductsPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 
 export const routes = [
-    {
-        path: '/chat',
-        page: Chatbot,
-        showHeader: true
-    },
+    // {
+    //     path: '/chat',
+    //     page: Chatbot,
+    //     showHeader: true
+    // },
     {
         path: '/admin',
         page: Page,
