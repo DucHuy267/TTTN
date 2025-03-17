@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'; 
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { routes } from './routes';
 import HomePageHeader from './components/HeaderComponents/HomePageHeader';
 import ChatWidget from './pages/ChatBot/ChatWidget';
+import Footer from './components/FooterCompoments/Footer';
 
 function Breadcrumb() {
   const location = useLocation();
@@ -47,12 +48,24 @@ function AppContent() {
 }
 
 function App() {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin'); // Kiểm tra nếu đang ở trang /admin
+
+  return (
+    <>
+      <AppContent />
+      {!isAdminPage && <ChatWidget />} {/* Ẩn ChatWidget nếu là trang admin */}
+      <Footer />
+    </>
+  );
+}
+
+function Root() {
   return (
     <Router>
-      <AppContent />
-      <ChatWidget />
+      <App />
     </Router>
   );
 }
 
-export default App;
+export default Root;

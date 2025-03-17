@@ -101,7 +101,7 @@ const OrderHistory = () => {
         <Tabs.TabPane tab="Đang vận chuyển" key="44">
           <Table
             columns={orderHistoryColumns}
-            dataSource={filterOrdersByStatus('delivered')}
+            dataSource={filterOrdersByStatus('shipped')}
             rowKey="orderId"
             pagination={false}
             className="order-history-table"

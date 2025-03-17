@@ -2,6 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FaLeaf, FaRecycle } from "react-icons/fa";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const SkinCareContainer = styled.div`
   font-family: Arial, sans-serif;
@@ -99,38 +100,39 @@ const FeatureBox = styled.div`
 `;
 
 const SkinCare = () => {
+  const navigate = useNavigate();
   return (
     <SkinCareContainer>
       <HeroSection>
         <ImageWrapper>
           <img
           style={{marginLeft:60}}
-            src="https://s3-alpha-sig.figma.com/img/5cc8/c22a/854da1584516d6ea9a6e41ec6ab14e3d?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=c1pqGJZJHr6j13WAfKH-Md2HbYbvwM-ivphwIM22oWFDsEGdVuvRsUk7y0QGrFHAatoKsBWpSt-7kR1AXf5gszDsfY3Xasuxgh09yv5pzjdrKuVlzHc8z2iZdwkpEoIksIaOHEbeuj5CnaWMO7vMngPP8ooxAorDFG~aW7sImAP7ORmbkU4oRSRXqfzVpmsohO4fq4kxzelIcF5vQEYTfOQl~uXnzEJE5CGg9g2WeQOqPUaCLbWhb~hL1rrMXSRx4gZLTmeaxIWU7Y6nL9f-DO2QcTs8rvWZ~EwuBrTQWE7Nw~TY~nFcNpkDLQZLFeVt1DdiMc4I5FHVg~xrG3lU1Q__"
+            src="https://s3-alpha-sig.figma.com/img/5cc8/c22a/854da1584516d6ea9a6e41ec6ab14e3d?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=GuKQgbZnrjsrUQRDb~58nL4r2RkOuI0TqidxRpLfq3vbvxmil-UZYUNBxx-1BmWuNz4PKeYXwRORD3--RSWECz~mgjij4zWcXCMdNF2jv0XOeTD1UVcVYGDJpN8Aclx25s6fR8PEqe8f2tQK8jSYx22zhI9XJIwF8zTVcYjkWh3GyXx0fMhLkCBVFd7pec8VpUjFC9-dZYxMYz2TLkolR8F3k1kMfniWFycmeW02tBS3lvJ50ic5a2FGkI25Z6Wc~3NPcyUP-0jscAeQNTlyDDuQg-mkdOMB2wn8yBLny~LKp5o57wVAQLQPdpg5l0rd69zPyDG8mVAVTtJa~x6EPA__"
             alt="Healthy and glowing skin"
           />
         </ImageWrapper>
         <TextWrapper style={{ marginRight: 200, marginLeft: 50 }}>
-          <h1 style={{ fontSize: 80 , }}>The Secret to Healthy and Glowing Skin</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut.</p>
-          <button>Learn more →</button>
+          <h1 style={{ fontSize: 80 , }}>Bí quyết để có làn da khỏe mạnh và rạng rỡ</h1>
+          <p>Khám phá bí quyết chăm sóc da từ thiên nhiên, giúp da luôn khỏe mạnh, mịn màng và rạng rỡ mỗi ngày.</p>
+          <button  onClick={() => navigate("/learnmore")} >Tìm hiểu thêm →</button>
         </TextWrapper>
       </HeroSection>
 
       <FeaturesSection>
         <FeatureBox>
           <FaRecycle />
-          <h3>Eco Packaging</h3>
-          <p>Lorem ipsum dolor sit amet</p>
+          <h3>Thành phần thiên nhiên</h3>
+          <p>Chiết xuất từ thực vật và không chứa hóa chất độc hại, an toàn cho mọi loại da.</p>
         </FeatureBox>
         <FeatureBox>
           <FaLeaf />
-          <h3>Eco Packaging</h3>
-          <p>Lorem ipsum dolor sit amet</p>
+          <h3>Không thử nghiệm trên động vật</h3>
+          <p>Sản phẩm được phát triển mà không thử nghiệm trên động vật, hướng tới vẻ đẹp nhân văn.</p>
         </FeatureBox>
         <FeatureBox>
           <FaRecycle />
-          <h3>Eco Packaging</h3>
-          <p>Lorem ipsum dolor sit amet</p>
+          <h3>Bao bì thân thiện với môi trường</h3>
+          <p>Sử dụng vật liệu có thể tái chế, giảm thiểu tác động đến môi trường.</p>
         </FeatureBox>
       </FeaturesSection>
     </SkinCareContainer>

@@ -34,7 +34,7 @@ export const getAllUsers = async () => {
 // Thêm người dùng mới
 export const createUser = async (userData) => {
     try {
-        const response = await axios.post(`${API_URL}/register`, userData);
+        const response = await axios.post(`${API_URL}/createUser`, userData);
         return response.data;
     } catch (error) {
         throw error;

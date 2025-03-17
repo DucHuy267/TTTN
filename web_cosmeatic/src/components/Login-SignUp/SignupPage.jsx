@@ -39,7 +39,7 @@ function SignupPage({ onClose }) {
     try {
       await signup(formData);
       message.success("Đăng ký thành công! Hãy đăng nhập.");
-      navigate("/login");
+      openLoginModal();
     } catch (error) {
       message.error("Đăng ký thất bại. Vui lòng thử lại.");
     }
@@ -102,7 +102,8 @@ function SignupPage({ onClose }) {
             prefix={<LockOutlined style={{ fontSize: "20px" }} />}
           />
         </div>
-        <Button type="primary" htmlType="submit" block style={{ backgroundColor: "#1b5e20", height: "60px", fontSize: "20px" }}>
+        <Button type="primary" htmlType="submit" block
+         style={{ backgroundColor: "#1b5e20", height: "60px", fontSize: "20px" }}>
           Đăng ký
         </Button>
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "30px" }}>

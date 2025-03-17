@@ -350,7 +350,7 @@ exports.getOrdersByStatus = async (req, res) => {
       const { status } = req.params;
       
       // Kiểm tra trạng thái hợp lệ
-      const validStatuses = ['pending', 'processing', 'delivered', 'success', 'cancelled'];
+      const validStatuses = ['pending', 'processing', 'shipped', 'success', 'cancelled'];
       if (!validStatuses.includes(status)) {
         return res.status(400).json({ message: "Trạng thái đơn hàng không hợp lệ." });
       }

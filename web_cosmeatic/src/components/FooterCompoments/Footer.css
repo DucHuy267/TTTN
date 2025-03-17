@@ -1,0 +1,167 @@
+/* Định dạng chung */
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #166534;
+    color: white;
+    padding: 30px;
+  }
+  
+  @media (min-width: 768px) {
+    .footer {
+      flex-direction: row;
+    }
+  }
+  
+  /* Cột ảnh */
+  .footer-image {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .footer-image img {
+    width: 500%;
+    max-width: 600px;
+    border-radius: 8px;
+  }
+  
+  /* Cột nội dung */
+  .footer-content {
+    flex: 6;
+    padding: 20px;
+  }
+  
+  .footer-content h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  /* Ô nhập email */
+  .email-input {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .email-input input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    color: black;
+  }
+  
+  .email-input button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: #166534;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* Phần mô tả */
+  .footer-description {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin-bottom: 25px;
+  }
+  
+  /* Các danh mục */
+  .footer-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links div {
+    flex: 1;
+  }
+  
+  .footer-links h3 {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Phần Về Orinal */
+  .about-orinal {
+    margin-top: 20px;
+  }
+  
+  .about-orinal h3 {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .about-orinal ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .about-orinal li {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  .about-orinal a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .about-orinal a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Mạng xã hội */
+  .social-links {
+    margin-top: 20px;
+  }
+  
+  .social-links h3 {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .social-links ul {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .social-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .social-links a:hover {
+    text-decoration: underline;
+  }
+  

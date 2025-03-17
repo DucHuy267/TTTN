@@ -178,12 +178,12 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Đăng nhập
+// Đăng nhập với quyền user 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         // Kiểm tra email có tồn tại không
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email, role: 'user' });
         if (!user) {
             return res.status(400).json({ error: 'Email không tồn tại' });
         }
@@ -226,6 +226,31 @@ router.post('/login-shipper', async (req, res) => {
   }
 });
 
+// Đăng nhập theo quyền admin
+router.post('/login-admin', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+      // Kiểm tra email có tồn tại không
+      const user = await User
+        .findOne({ email, role: 'admin' });
+      if (!user) {
+          return res.status(400).json({ error: 'Email không tồn tại' });
+      }
+      // So sánh mật khẩu
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Mật khẩu không đúng' });
+      }
+      // Tạo token JWT
+      const token = jwt.sign({ userId: user._id }, 'jwt_secret_key', { expiresIn: '5h' });
+
+          res.status(200).json({ message: 'Đăng nhập thành công', token });
+  } catch (err) {
+      console.error('Login error:', err); // Log the full error in the server console
+      res.status(500).json({ error: 'Lỗi đăng nhập', details: err.message });
+  }
+});
+
 // Lấy tất cả người dùng
 router.get('/', async (req, res) => {
     try {
@@ -250,21 +275,43 @@ router.get('/:userId', async (req, res) => {
 });
 
 // Thêm người dùng mới
-router.post('/', async (req, res) => {
-    const { name, email, password, phone, address } = req.body;
-    try {
-        const newUser = new User({
-            name,
-            email,
-            password,
-            phone,
-            address
-        });
-        await newUser.save();
-        res.status(201).json(newUser);
-    } catch (err) {
-        res.status(500).json({ error: 'Lỗi khi thêm người dùng', details: err });
+router.post('/createUser', async (req, res) => {
+  const { name, email, password, phone, address, role } = req.body;
+
+  // Kiểm tra email hợp lệ
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Email không hợp lệ' });
+  }
+
+  try {
+    // Kiểm tra xem email đã tồn tại với bất kỳ vai trò nào chưa
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: `Email đã được sử dụng cho vai trò: ${existingUser.role}` });
     }
+
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tạo người dùng mới
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      address,
+      role // role có thể là 'user', 'admin', hoặc 'shipper'
+    });
+
+    // Lưu vào cơ sở dữ liệu
+    await newUser.save();
+    res.status(201).json({ message: 'Đăng ký thành công', user: newUser });
+
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Lỗi đăng ký', details: err.message });
+  }
 });
 
 // Sửa thông tin người dùng

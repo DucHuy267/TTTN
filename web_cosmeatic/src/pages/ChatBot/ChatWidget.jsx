@@ -13,7 +13,7 @@ const ChatWidget = () => {
           position: "fixed",
           bottom: "20px",
           right: "20px",
-          background: "#007bff",
+          background: "#1b5e20",
           color: "#fff",
           borderRadius: "50%",
           width: "60px",
@@ -21,6 +21,7 @@ const ChatWidget = () => {
           fontSize: "24px",
           border: "none",
           cursor: "pointer",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
           zIndex: 9999, // Đảm bảo nút luôn hiển thị trên các phần khác
         }}
       >
@@ -34,7 +35,7 @@ const ChatWidget = () => {
             position: "fixed",
             bottom: "80px",
             right: "20px",
-            width: "300px",
+            width: "400px",
             height: "400px",
             background: "#fff",
             borderRadius: "10px",

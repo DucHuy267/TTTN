@@ -84,13 +84,13 @@ const AdminOrder = () => {
                     case 'canceled':
                         statusText = 'Đã hủy';
                         break;
-                    case 'shipping':
+                    case 'shipped':
                         statusText = 'Đang giao hàng';
                         break;
                     case 'pending':
                         statusText = 'Chờ xác nhận';
                         break;
-                    case 'pendingPickup':
+                    case 'processing':
                         statusText = 'Chờ lấy hàng';
                         break; 
                     default:
@@ -98,7 +98,7 @@ const AdminOrder = () => {
                 }
         
                 return (
-                    <Tag color={status === 'success' ? 'green' : status === 'canceled' ? 'red' : status === 'shipping' ? 'orange' : 'gray'}>
+                    <Tag color={status === 'success' ? 'green' : status === 'canceled' ? 'red' : status === 'shipped' ? 'orange' : 'gray'}>
                         {statusText}
                     </Tag>
                 );
@@ -173,8 +173,8 @@ const AdminOrder = () => {
                     placeholder="Select a status"
                 >
                     <Option value="pending">Chờ xác nhận</Option>
-                    <Option value="pendingPickup">Chờ lấy hàng</Option>
-                    <Option value="shipping">Đang giao hàng</Option>
+                    <Option value="processing">Chờ lấy hàng</Option>
+                    <Option value="shipped">Đang giao hàng</Option>
                     <Option value="success">Giao hàng thành công</Option>
                     <Option value="canceled">Đã hủy</Option>
                 </Select>
