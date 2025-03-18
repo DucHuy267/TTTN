@@ -15,6 +15,12 @@ const brandSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    sections: [
+        {
+            title: { type: String, required: true, trim: true }, // Tiêu đề
+            content: { type: String, required: true, trim: true } // Nội dung
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now

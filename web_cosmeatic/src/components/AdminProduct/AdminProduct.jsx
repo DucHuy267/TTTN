@@ -172,7 +172,7 @@ const AdminProduct = () => {
                 />
             ),
         },
-        { title: 'Tên', dataIndex: 'name', sorter: (a, b) => a.name.length - b.name.length },
+        { title: 'Tên', dataIndex: 'name', sorter: (a, b) => a.name.length - b.name.length,  },
         { title: 'Giá', dataIndex: 'price', render: (price) => `${price.toLocaleString('vi-VN')} đ`, sorter: (a, b) => a.price - b.price },
         { title: 'Số lượng', dataIndex: 'quantity', sorter: (a, b) => a.quantity - b.quantity },
         { title: 'Mã loại', dataIndex: 'categoryId' },
@@ -304,7 +304,11 @@ const AdminProduct = () => {
                         rules={[{ required: true, message: 'Please input your ImageUrl!' }]}
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Input onChange={handleOnchangeDetails} name="imageUrl" style={{ flex: 1 }} />
+                            <Input 
+                            onChange={handleOnchangeDetails} 
+                            name="imageUrl"
+                            value={stateProductDetails.imageUrl || ''} 
+                            style={{ flex: 1 }} />
                             {stateProductDetails.imageUrl && (
                                 <img
                                     src={stateProductDetails.imageUrl}

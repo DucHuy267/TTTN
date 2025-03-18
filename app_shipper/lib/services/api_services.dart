@@ -72,10 +72,11 @@ class ApiService {
   }
 
   // Login function
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  /// Đăng nhập shipper
+  static Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/users/login'),
+        Uri.parse('$baseUrl/users/login-shipper'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}),
       );
@@ -83,18 +84,54 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         if (responseData['token'] != null) {
-          // Store the token for future use
-          // Use SharedPreferences or another secure storage method
           return {'token': responseData['token'], 'user': responseData['user']};
         } else {
-          return {'error': 'Token not found in response'};
+          return {'error': 'Token không hợp lệ'};
         }
       } else {
-        return {'error': 'Invalid email or password'};
+        return {'error': 'Email hoặc mật khẩu không đúng'};
       }
     } catch (e) {
-      return {'error': 'An error occurred during login'};
+      return {'error': 'Lỗi kết nối API: $e'};
     }
+  }
+
+  // profile
+ // Hàm lấy thông tin người dùng
+  static Future<Map<String, dynamic>> getUserById(String userId) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/users/$userId'));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Lỗi khi lấy thông tin người dùng: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Lỗi kết nối API: $error');
+    }
+  }
+
+
+  // Hàm cập nhật thông tin người dùng
+  static Future<bool> updateUser(String userId, Map<String, dynamic> userData) async {
+  try {
+  final response = await http.put(
+  Uri.parse('$baseUrl/users/$userId'),
+  headers: {"Content-Type": "application/json"},
+  body: jsonEncode(userData),
+  );
+
+  if (response.statusCode == 200) {
+  return true; // Cập nhật thành công
+  } else {
+  print('Lỗi cập nhật người dùng: ${response.statusCode}');
+  return false;
+  }
+  } catch (error) {
+  print('Lỗi kết nối API: $error');
+  return false;
+  }
   }
 
 

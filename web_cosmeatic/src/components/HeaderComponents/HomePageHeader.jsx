@@ -10,6 +10,7 @@ import CategoryDropdown from "./CategoryDropdown";
 import logo from "./logo.png"
 import DropdownMenu from "./DropdownMenu";
 import LoginPage from "../Login-SignUp/LoginPage"; // Import LoginPage component
+import { FaShoppingCart } from "react-icons/fa";
 
 const { Search } = Input;
 
@@ -135,15 +136,16 @@ const HomePageHeader = () => {
               onSearch={handleSearch} 
             />
             </Col>
-            <Col span={1} style={{ padding: "18px 0px" }}>
+            <Col span={1} style={{ padding: "22px 0px" }}>
             {!isCartPage && (
             <div onClick={() => navigate("/cart")}>
               <Badge count={cartQuantity}  size="small" >
-                <img
+                {/* <img
                   width={20}
                   src="https://cdn.icon-icons.com/icons2/494/PNG/512/cart_icon-icons.com_48341.png"
                   alt="Cart"
-                />
+                /> */}
+                <FaShoppingCart style={{fontSize: 25}} />
               </Badge>
             </div>
           )}

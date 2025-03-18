@@ -6,14 +6,18 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
   categoryId: { type: String }, 
-  subcategoryId: { type: String }, // Tham chiếu danh mục con
+  subcategoryName: { type: String }, // Tham chiếu danh mục con
   brand: { type: String }, // Thêm trường brand
-  imageUrls: [{ type: String }], // Thay đổi trường imageUrl để lưu trữ mảng các URL hình ảnh
+  imageUrl: { type: String }, // Thay đổi trường imageUrl để lưu trữ mảng các URL hình ảnh
   isVisible: { type: Boolean, default: true },
-  specifications: { type: Object }, // Thêm trường thông số kỹ thuật
-  tags: [{ type: String }], // Thêm trường tags dưới dạng mảng chuỗi
+  sections: [ // thành phần mô tả sản phẩm
+    {
+        title: { type: String, required: true, trim: true }, // Tiêu đề
+        content: { type: String, required: true, trim: true } // Nội dung
+    }
+],
 });
 
 const Product = mongoose.model('products', productSchema);
 
-module.exports = Product;
+module.exports = Product; 

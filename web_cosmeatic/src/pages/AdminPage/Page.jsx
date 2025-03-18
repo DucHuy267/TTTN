@@ -38,9 +38,9 @@ const AdminPage = () => {
                 ]),
                 getItem('Đơn hàng', 'order', <ShoppingOutlined />),
                 getItem('Quản lý thương hiệu ', 'brand', <ShoppingOutlined />),
-                getItem('Quan ly voucher', 'voucher', <ShoppingOutlined />),
-                getItem('Quan ly bài đăng', 'post', <ShoppingOutlined />),
-                getItem('Quan ly tin nhắn', 'message', <ShoppingOutlined />),
+                // getItem('Quan ly voucher', 'voucher', <ShoppingOutlined />),
+                // getItem('Quan ly bài đăng', 'post', <ShoppingOutlined />),
+                // getItem('Quan ly tin nhắn', 'message', <ShoppingOutlined />),
             ],
         },
         {

@@ -119,7 +119,7 @@ const AdminCategory = () => {
             setIsModalOpen(false);
             fetchCategories();
         } catch (error) {
-            console.error("Error adding category:", error);
+            message.error("Thêm danh mục thất bại");
         }
     };
 
@@ -228,6 +228,12 @@ const AdminCategory = () => {
                 />
             ),
         },
+        { 
+            title: 'Danh mục con', 
+            dataIndex: 'subcategories', 
+            render: (subcategories) => subcategories.map(item => item.subcategoryName).join(', '),
+            ellipsis: true 
+        },
         { title: 'Action', dataIndex: 'action', render: renderAction },
     ];
 
@@ -294,6 +300,7 @@ const AdminCategory = () => {
                         </div>
                     </Form.Item>
 
+                    <h1 style={{ marginLeft: '10px', fontSize: 14,  }}>Danh mục con</h1>
                     {/* Trường nhập danh mục con */}
                     {stateCategory.subcategories.map((subcategory, index) => (
                         <div key={index} style={{ marginBottom: '10px', border: '1px solid #ccc', padding: '10px 10px 0px 10px', borderRadius: '5px' }}>
@@ -360,36 +367,45 @@ const AdminCategory = () => {
                         </Form.Item>
                     ))}
                     <Form.Item
-                        label="Image"
+                        label="Image URL"
                         name="image"
-                        rules={[{ required: true, message: 'Please input your Image!' }]}
+                        rules={[{ required: true, message: 'Please input your Image URL!' }]}
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Input onChange={handleOnchangeDetails} name="image" style={{ flex: 1 }} />
+                            <Input 
+                                onChange={handleOnchangeDetails} 
+                                name="image" 
+                                value={stateCategoryDetails.image || ''} // Đảm bảo hiển thị giá trị cũ
+                                placeholder="Enter image URL..."
+                                style={{ flex: 1 }} 
+                            />
                             {stateCategoryDetails.image && (
                                 <img
                                     src={stateCategoryDetails.image}
-                                    alt="avatar"
+                                    alt="preview"
                                     style={{ height: '90px', width: '90px', borderRadius: '20%', marginLeft: '5px' }}
                                 />
                             )}
                         </div>
                     </Form.Item>
+                    <h1 style={{ marginLeft: '100px', fontSize: 14,  }}>Danh mục con</h1>
+
                     {stateCategoryDetails.subcategories.map((subcategory, index) => (
-                        <div style={{width:'80%', display: 'flex' , border: '1px solid #ccc', padding: '10px 10px 0px 10px', margin:'10px 90px ', borderRadius: '5px' }}>
-                            <div key={index} style={{ marginBottom: '10px', width: '95%' }}>         
-                                <Form.Item
-                                
-                                    label={` Name ${index + 1}`}
-                                    name={`subcategoryName${index}`}
-                                    rules={[{ required: true, message: 'Please input Subcategory Name!' }]}
-                                >
-                                    <Input
-                                        value={subcategory.subcategoryName}
-                                        onChange={(e) => handleSubcategoryChange(e, index, 'subcategoryName', true)}
-                                        name={`subcategoryName${index}`}
-                                    />
-                                </Form.Item>
+                        <div key={index} style={{ 
+                                width: '80%', display: 'flex', border: '1px solid #ccc', 
+                                padding: '10px 10px 0px 10px', margin: '10px 90px', borderRadius: '5px' 
+                            }}>                            
+                            <div style={{ marginBottom: '10px', width: '95%' }}>         
+                            <Form.Item
+                                label={`Name ${index + 1}`}
+                                name={['subcategories', index, 'subcategoryName']} // Sử dụng mảng để liên kết form
+                                rules={[{ required: true, message: 'Please input Subcategory Name!' }]}
+                            >
+                                <Input
+                                    defaultValue={subcategory.subcategoryName} // Hoặc dùng `value` với `setFieldsValue`
+                                    onChange={(e) => handleSubcategoryChange(e, index, 'subcategoryName', true)}
+                                />
+                            </Form.Item>
                                 </div>
                                 <div style={{ width: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     
@@ -398,17 +414,15 @@ const AdminCategory = () => {
                                             style={{  border: '1px solid #ccc', borderRadius: '5px' }}>
                                     
                                         </Button>
-                                   
                                 </div>
-                            
                         </div>
-                        
                     ))}
                     <Form.Item wrapperCol={{ offset: 4, span: 18 }}>
                         <Button type="dashed" onClick={() => addSubcategory(true)} style={{ width: '100%' }}>
                             + Thêm danh mục con
                         </Button>
                     </Form.Item>
+
                     <Form.Item wrapperCol={{ offset: 18, span: 18 }}>
                         <Button type="primary" htmlType="submit">
                             Submit

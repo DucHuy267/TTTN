@@ -26,7 +26,9 @@ const orderSchema = new mongoose.Schema(
         },
       ],
       totalPrice: { type: Number, required: true, min: 0 },
-      status: { type: String, default: 'pending' },
+      status: { type: String,
+        enum: ["pending", "processing", "shipped", "success", "canceled"],
+        default: 'pending' },
       paymentMethod: { type: String, default: 'Unknown' }, // Made it optional with a default value
       transactionNo: { type: String, unique: true, sparse: true },
       paymentDate: { type: Date, default: null },

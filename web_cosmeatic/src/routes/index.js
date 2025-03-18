@@ -5,6 +5,7 @@ import Brand from "../pages/BrandPage/Brand";
 import Cocoon from "../pages/BrandPage/cocoon";
 import CartPage from "../pages/CartPage/CartPage";
 import HomePage from "../pages/HomePage/HomePage";
+import LearnMore from "../pages/HomePage/SkincareLearnMore";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import CreateOrder from "../pages/Order/CreateOrder";
 import ProductDetailsPage from "../pages/ProductDetaislPage/ProductDetaislPage";
@@ -25,6 +26,11 @@ export const routes = [
     {
         path: '/',
         page: HomePage,
+        showHeader: true
+    },
+    {
+        path: '/learnmore',
+        page: LearnMore,
         showHeader: true
     },
     {

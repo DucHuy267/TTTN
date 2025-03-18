@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, Modal, message, AutoComplete } from "antd";
+import { Button, Form, Input, Modal, message, AutoComplete, Tag, Select } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../../services/UserSevices";
@@ -20,6 +20,7 @@ const AdminUser = () => {
         password: '',
         phone: '',
         address: '',
+        role: '',
     });
     const [stateUserDetails, setStateUserDetails] = useState({
         _id: '',
@@ -28,6 +29,7 @@ const AdminUser = () => {
         password: '',
         phone: '',
         address: '',
+        role: '',
     });
 
     const [users, setAllUsers] = useState([]);
@@ -44,6 +46,7 @@ const AdminUser = () => {
                 password: res?.password,
                 phone: res?.phone,
                 address: res?.address,
+                role: res?.role,
             });
         }
     };
@@ -114,10 +117,11 @@ const AdminUser = () => {
         try {
             await createUser(stateUser);
             message.success("Thêm người dùng thành công");
+            form.resetFields();
             setIsModalOpen(false);
             fetchUsers();
         } catch (error) {
-            console.error("Lỗi khi thêm người dùng:", error);
+            message.error("Lỗi khi thêm người dùng!");
         }
     };
 
@@ -187,7 +191,34 @@ const AdminUser = () => {
         { title: 'Tên', dataIndex: 'name', sorter: (a, b) => a.name.length - b.name.length },
         { title: 'Email', dataIndex: 'email' },
         { title: 'Số điện thoại', dataIndex: 'phone' },
-        { title: 'Địa chỉ', dataIndex: 'address' },
+        // { title: 'Địa chỉ', dataIndex: 'address' },
+        {
+            title: 'Vai trò',
+            dataIndex: 'role',
+            render: (role) => {
+                let roleText = '';
+                switch (role) {
+                    case 'user':
+                        roleText = 'user';
+                        break;
+                    case 'shipper':
+                        roleText = 'shipper';
+                        break;
+                    case 'admin':
+                        roleText = 'admin';
+                        break;
+                    
+                    default:
+                        roleText = 'Chưa xác định';
+                }
+        
+                return (
+                    <Tag color={role === 'user' ? 'green' : role === 'shipper' ? 'blue' : role === 'admin' ? 'orange' : 'gray'}>
+                        {roleText}
+                    </Tag>
+                );
+            },
+        }, 
         { title: 'Thao tác', dataIndex: 'action', render: renderAction },
     ];
 
@@ -226,7 +257,7 @@ const AdminUser = () => {
                     autoComplete="off"
                     form={form}
                 >
-                    {['name', 'email', 'password', 'phone'].map(field => (
+                    {['name', 'email', 'password'].map(field => (
                         <Form.Item
                             key={field}
                             label={field.charAt(0).toUpperCase() + field.slice(1)}
@@ -235,10 +266,20 @@ const AdminUser = () => {
                             <Input value={stateUser[field]} onChange={handleOnchange} name={field} />
                         </Form.Item>
                     ))}
-                    <Form.Item
-                        label="Địa chỉ"
-                        name="address"
-                        rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}>
+                    <Form.Item label="Số điện thoại" name="phone">
+                        <Input value={stateUser.phone} onChange={handleOnchange} name="phone" />
+                    </Form.Item>
+                    <Form.Item label="Vai trò" name="role">
+                        <Select 
+                            value={stateUser.role} 
+                            onChange={(value) => handleOnchange({ target: { name: "role", value } })}
+                        >
+                            <Select.Option value="user">Người dùng</Select.Option>
+                            <Select.Option value="shipper">Shipper</Select.Option>
+                            <Select.Option value="admin">Quản trị viên</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Địa chỉ" name="address">
                         <AutoComplete
                             value={stateUser.address}
                             onChange={(value) =>
@@ -247,12 +288,12 @@ const AdminUser = () => {
                             onSearch={fetchAddressSuggestions}
                             options={addressSuggestions}
                             style={{ 
-                                width: '100%', // Đảm bảo AutoComplete chiếm toàn bộ chiều rộng như Input
-                                height: '40px', // Chiều cao của ô nhập liệu giống Input
-                                borderRadius: '5px', // Viền bo góc như Input
-                                padding: '5px 10px', // Padding giống như Input
-                                fontSize: '14px', // Đảm bảo kích thước font giống Input
-                              }}
+                                width: '100%', 
+                                height: '40px', 
+                                borderRadius: '5px', 
+                                padding: '5px 10px', 
+                                fontSize: '14px', 
+                            }}
                         />
                     </Form.Item>
                     <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
@@ -272,7 +313,7 @@ const AdminUser = () => {
                     autoComplete="off"
                     form={form}
                 >
-                    {['name', 'email', 'password', 'phone'].map(field => (
+                    {['name', 'email', 'password'].map(field => (
                         <Form.Item
                             key={field}
                             label={field.charAt(0).toUpperCase() + field.slice(1)}
@@ -281,10 +322,20 @@ const AdminUser = () => {
                             <Input value={stateUserDetails[field]} onChange={handleOnchangeDetails} name={field} />
                         </Form.Item>
                     ))}
-                    <Form.Item
-                        label="Địa chỉ"
-                        name="address"
-                        rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}>
+                    <Form.Item label="Số điện thoại" name="phone">
+                        <Input value={stateUserDetails.phone} onChange={handleOnchangeDetails} name="phone" />
+                    </Form.Item>
+                    <Form.Item label="Vai trò" name="role">
+                        <Select 
+                            value={stateUserDetails.role} 
+                            onChange={(value) => handleOnchangeDetails({ target: { name: "role", value } })}
+                        >
+                            <Select.Option value="user">Người dùng</Select.Option>
+                            <Select.Option value="shipper">Shipper</Select.Option>
+                            <Select.Option value="admin">Quản trị viên</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Địa chỉ" name="address">
                         <AutoComplete
                             value={stateUserDetails.address}
                             onChange={(value) =>
@@ -293,14 +344,13 @@ const AdminUser = () => {
                             onSearch={fetchAddressSuggestions}
                             options={addressSuggestions}
                             style={{ 
-                                width: '100%', // Đảm bảo AutoComplete chiếm toàn bộ chiều rộng như Input
-                                height: '40px', // Chiều cao của ô nhập liệu giống Input
-                                borderRadius: '5px', // Viền bo góc như Input
-                                padding: '5px 10px', // Padding giống như Input
-                                fontSize: '14px', // Đảm bảo kích thước font giống Input
-                              }}
+                                width: '100%', 
+                                height: '40px', 
+                                borderRadius: '5px', 
+                                padding: '5px 10px', 
+                                fontSize: '14px', 
+                            }}
                         />
-
                     </Form.Item>
                     <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
                         <Button type="primary" htmlType="submit">

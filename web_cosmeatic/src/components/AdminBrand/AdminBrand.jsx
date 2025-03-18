@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { addBrand, deleteBrand, getAllBrand, getDetailBrand, updateBrand } from "../../services/BrandSevices";
@@ -15,11 +15,13 @@ const AdminBrand = () => {
         name: '',
         description: '',
         image: '',
+        sections: [],
     });
     const [stateBrandDetails, setStateBrandDetails] = useState({
         name: '',
         description: '',
         image: '',
+        sections: [],
     });
 
     const [brands, setAllBrands] = useState([]);
@@ -32,6 +34,7 @@ const AdminBrand = () => {
                 name: res?.name,
                 description: res?.description,
                 image: res?.image,
+                sections: res?.sections || [],
             });
         }
     };
@@ -56,11 +59,11 @@ const AdminBrand = () => {
     const onUpdateBrand = async () => {
         try {
             await updateBrand(stateBrandDetails.name, stateBrandDetails);
-            alert("Cập nhật thương hiệu thành công");
+            message.success("Cập nhật thương hiệu thành công");
             setIsOpenDrawer(false);
             fetchBrands();
         } catch (error) {
-            console.error("Error updating brand:", error);
+            message.error("Cập nhật thương hiệu thất bại");
         }
     };
 
@@ -69,7 +72,7 @@ const AdminBrand = () => {
             const res = await getAllBrand();
             setAllBrands(res.map(item => ({ ...item, key: item.name })));
         } catch (error) {
-            console.error("Failed to fetch brands:", error);
+            message.error("Failed to fetch brands");
         }
     };
 
@@ -89,23 +92,24 @@ const AdminBrand = () => {
     const handleDeleteBrand = async () => {
         try {
             await deleteBrand(stateBrandDetails.name);
-            alert("Xóa thương hiệu thành công");
+            message.success("Xóa thương hiệu thành công");
             setIsOpenDrawer(false);
             setIsModalOpenDelete(false);
             fetchBrands();
         } catch (error) {
-            console.error("Error deleting brand:", error);
+            message.error("Xóa thương hiệu thất bại");
         }
     };
 
     const onFinish = async () => {
         try {
             await addBrand(stateBrand);
-            alert("Thêm thương hiệu thành công");
+            message.success("Thêm thương hiệu thành công");
+            form.resetFields();
             setIsModalOpen(false);
             fetchBrands();
         } catch (error) {
-            console.error("Error adding brand:", error);
+            message.error("Thêm thương hiệu thất bại");
         }
     };
 
@@ -132,19 +136,91 @@ const AdminBrand = () => {
 
     const columns = [
         { title: 'Tên thương hiệu', dataIndex: 'name', sorter: (a, b) => a.name.length - b.name.length },
-        { title: 'Mô tả', dataIndex: 'description' },
+        { title: 'Mô tả', dataIndex: 'description', ellipsis: true  },
         {
             title: 'URL hình ảnh', dataIndex: 'image',
             render: (image) => (
                 <img
                     src={image}
                     alt="brand"
-                    style={{ height: '80px', width: '80px', borderRadius: '20%', marginLeft: '5px' }}
+                    style={{ height: '80px', width: '110px', borderRadius: '10%', marginLeft: '5px' }}
                 />
             ),
         },
         { title: 'Action', dataIndex: 'action', render: renderAction },
     ];
+
+    // Xử lý thêm một section mới
+    const handleAddSection = (isDetail = false) => {
+        if (isDetail) {
+            setStateBrandDetails(prevState => ({
+                ...prevState,
+                sections: [
+                    ...prevState.sections,
+                    { title: '', content: '' }
+                ]
+            }));
+        } else {
+            setStateBrand(prevState => ({
+                ...prevState,
+                sections: [
+                    ...prevState.sections,
+                    { title: '', content: '' }
+                ]
+            }));
+        }
+    };
+
+    // Xử lý thay đổi giá trị trong section
+    const handleSectionChange = (e, index, field, isDetail = false) => {
+        const { value } = e.target;
+        if (isDetail) {
+            setStateBrandDetails(prevState => {
+                const newSections = [...prevState.sections];
+                newSections[index] = {
+                    ...newSections[index],
+                    [field]: value,
+                };
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        } else {
+            setStateBrand(prevState => {
+                const newSections = [...prevState.sections];
+                newSections[index] = {
+                    ...newSections[index],
+                    [field]: value,
+                };
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        }
+    };
+
+    // Xử lý xóa một section
+    const handleRemoveSection = (index, isDetail = false) => {
+        if (isDetail) {
+            setStateBrandDetails(prevState => {
+                const newSections = prevState.sections.filter((_, i) => i !== index);
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        } else {
+            setStateBrand(prevState => {
+                const newSections = prevState.sections.filter((_, i) => i !== index);
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        }
+    };
 
     return (
         <div>
@@ -161,7 +237,7 @@ const AdminBrand = () => {
             <div style={{ marginTop: '20px' }}>
                 <TableComponent columns={columns} data={brands}
                     onRow={(record) => ({
-                        onClick: () => setRowSelected(record.name),
+                        onClick: () => setRowSelected(record._id),
                     })}
                 />
             </div>
@@ -234,7 +310,9 @@ const AdminBrand = () => {
                         rules={[{ required: true, message: 'Please input your Image!' }]}
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Input onChange={handleOnchangeDetails} name="image" style={{ flex: 1 }} />
+                            <Input onChange={handleOnchangeDetails} 
+                            name="image" style={{ flex: 1 }}
+                            value={stateBrandDetails.image || ''}  />
                             {stateBrandDetails.image && (
                                 <img
                                     src={stateBrandDetails.image}
@@ -244,6 +322,55 @@ const AdminBrand = () => {
                             )}
                         </div>
                     </Form.Item>
+
+                    {/* Sections */}
+                    <div style={{width: '85%', display: 'flex', flexDirection: 'column', 
+                        alignItems: 'center', border: '1px solid #ccc',
+                        margin: '10px 90px',  borderRadius: '5px'}}>
+                        <h3>Câu chuyện thương hiệu</h3>
+                    
+                        {stateBrandDetails.sections.map((section, index) => (
+                            <div key={index} 
+                            style={{ 
+                                width: '80%', display: 'flex',
+                                padding: '10px 10px 0px 10px', 
+                            }}
+                            >
+                            <div style={{ marginBottom: '10px', width: '95%' }}>
+                                <Form.Item label={`Title ${index + 1}`}>
+                                    <Input
+                                        value={section.title}
+                                        onChange={(e) => handleSectionChange(e, index, "title", true)}
+                                        placeholder="Enter section title"
+                                    />
+                                </Form.Item>
+                                <Form.Item label={`Content ${index + 1}`}>
+                                    <Input.TextArea
+                                        value={section.content}
+                                        onChange={(e) => handleSectionChange(e, index, "content", true)}
+                                        placeholder="Enter section content"
+                                    />
+                                </Form.Item>
+                            </div>  
+                                
+                                <div style={{ width: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Button danger onClick={() => handleRemoveSection(index, true)}   
+                                        icon={<DeleteOutlined style={{ color: 'red'}} />}
+                                        style={{  border: '1px solid #ccc', borderRadius: '5px' }}>
+                                    </Button>
+                                </div>
+                            
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Add Section Button */}
+                    <Form.Item wrapperCol={{ offset: 4, span: 18 }}>
+                        <Button type="dashed" onClick={() => handleAddSection(true)} style={{ width: '100%' }}>
+                            + Thêm câu chuyện thương hiệu
+                        </Button>
+                    </Form.Item>
+
                     <Form.Item wrapperCol={{ offset: 18, span: 18 }}>
                         <Button type="primary" htmlType="submit">
                             Submit
