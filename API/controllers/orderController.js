@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
 const moment = require('moment');
 const querystring = require('qs');
 const crypto = require('crypto');
@@ -350,7 +351,7 @@ exports.getOrdersByStatus = async (req, res) => {
       const { status } = req.params;
       
       // Kiểm tra trạng thái hợp lệ
-      const validStatuses = ['pending', 'processing', 'shipped', 'success', 'cancelled'];
+      const validStatuses = ['pending', 'processing', 'shipped', 'success', 'canceled'];
       if (!validStatuses.includes(status)) {
         return res.status(400).json({ message: "Trạng thái đơn hàng không hợp lệ." });
       }
@@ -399,7 +400,8 @@ exports.getOrderById = async (req, res) => {
 
         const order = await Order.findById(id)
             .populate('userId', 'name email') // Chỉ lấy trường name và email của user
-            .populate('products.productId', 'name price'); // Chỉ lấy trường name và price của product
+            .populate('products.productId', 'name price') // Chỉ lấy trường name và price của product
+            .populate('shipper.shipperId', 'name phone'); // Chỉ lấy trường name và phone của shipper
 
         if (!order) {
             return res.status(404).json({
@@ -503,6 +505,102 @@ exports.updateOrderStatus = async (req, res) => {
             message: 'Lỗi khi cập nhật trạng thái đơn hàng.',
             error: error.message,
         });
+    }
+};
+
+// API để shipper xác nhận đơn hàng được giao 
+exports.confirmShipment = async (req, res) => {
+    try {
+        const { orderId, shipperId } = req.params;
+
+        // Kiểm tra shipper có tồn tại và có quyền giao hàng không
+        const shipper = await User.findById(shipperId);
+        if (!shipper || shipper.role !== 'shipper') {
+            return res.status(403).json({ message: "Người dùng không có quyền xác nhận giao hàng." });
+        }
+
+        // Cập nhật trạng thái đơn hàng và thêm thông tin shipper
+        const updatedOrder = await Order.findOneAndUpdate(
+            { _id: orderId, status: "processing" }, // Chỉ cập nhật nếu trạng thái là "processing"
+            {
+                $set: {
+                    status: "shipped",
+                    shipper: {
+                        shipperId: shipper._id,
+                        name: shipper.name,
+                        phone: shipper.phone,
+                    },
+                    deliveryConfirmedAt: new Date() // Ghi lại thời gian xác nhận
+                }
+            },
+            { new: true } // Trả về đơn hàng đã cập nhật
+        );
+
+        if (!updatedOrder) {
+            return res.status(400).json({ message: "Không thể xác nhận giao hàng. Kiểm tra trạng thái đơn hàng." });
+        }
+
+        res.status(200).json({ message: "Đơn hàng đã được shipper xác nhận giao hàng.", order: updatedOrder });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+};
+
+// API để xác nhận đơn hàng đã được giao
+exports.confirmDelivery = async (req, res) => {
+    try {
+        const { orderId, shipperId } = req.params;
+
+        // Kiểm tra shipper có tồn tại và có quyền giao hàng không
+        const shipper = await User.findById(shipperId);
+        if (!shipper || shipper.role !== 'shipper') {
+            return res.status(403).json({ message: "Người dùng không có quyền xác nhận giao hàng." });
+        }
+
+        // Cập nhật trạng thái đơn hàng và thêm thông tin shipper
+        const updatedOrder = await Order.findOneAndUpdate(
+            { _id: orderId, status: "shipped", "shipper.shipperId": shipper._id }, // Chỉ cập nhật nếu trạng thái là "shipped" và shipperId khớp
+            {
+                $set: {
+                    status: "success",
+                    deliveryConfirmedAt: new Date() // Ghi lại thời gian xác nhận
+                }
+            },
+            { new: true } // Trả về đơn hàng đã cập nhật
+        );
+
+        if (!updatedOrder) {
+            return res.status(400).json({ message: "Không thể xác nhận giao hàng. Kiểm tra trạng thái đơn hàng." });
+        }
+
+        res.status(200).json({ message: "Đơn hàng đã được xác nhận giao hàng thành công.", order: updatedOrder });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi server", error: error.message });
+    }
+};
+
+// Lấy danh sách đơn hàng theo trạng thái và id shipper
+exports.getOrdersByStatusAndShipperId = async (req, res) => {
+    try {
+        const { status, shipperId } = req.params;
+        
+        // Kiểm tra trạng thái hợp lệ
+        const validStatuses = ['pending', 'processing', 'shipped', 'success', 'canceled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: "Trạng thái đơn hàng không hợp lệ." });
+        }
+    
+        const orders = await Order.find({ status, 'shipper.shipperId': shipperId })
+            .populate('products.productId', 'name price imageUrl')
+            .populate('userId', 'name phone');
+    
+        if (orders.length === 0) {
+            return res.status(404).json({ message: "Không có đơn hàng nào trong trạng thái này." });
+        }
+    
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi khi lấy danh sách đơn hàng", error: error.message });
     }
 };
 

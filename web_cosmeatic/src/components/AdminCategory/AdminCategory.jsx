@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
+import { PlusOutlined, DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { addCategory, deleteCategory, getAllCategory, getDetailCategory, updateCategory } from "../../services/CategorySevices";
 import DrawerCompoment from "../DrawerComponent/DrawerComponent";
 
 const AdminCategory = () => {
+    const [showSubcategories, setShowSubcategories] = useState(false); // Ẩn ban đầu danh sách danh mục con
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [rowSelected, setRowSelected] = useState('');
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -68,12 +69,12 @@ const AdminCategory = () => {
     const onUpdateCategory = async () => {
         try {
             await updateCategory(stateCategoryDetails.categoryId, stateCategoryDetails);
-            alert("Cập nhật danh mục thành công");
+            message.success("Cập nhật danh mục thành công");
             setIsOpenDrawer(false);
             fetchGetDetailCategory(rowSelected);
             fetchCategories();
         } catch (error) {
-            console.error("Error updating category:", error);
+            message.error("Cập nhật danh mục thất bại");
         }
     };
 
@@ -137,8 +138,6 @@ const AdminCategory = () => {
         });
     };
 
-   
-
     const handleSubcategoryChange = (e, index, field, isDetail = false) => {
         const { value } = e.target;
         if (isDetail) {
@@ -186,9 +185,11 @@ const AdminCategory = () => {
                 };
             });
         }
+    
     };
     
     const addSubcategory = (isDetail = false) => {
+        setShowSubcategories(true); // Khi bấm thêm, hiển thị form danh mục con
         if (isDetail) {
             setStateCategoryDetails(prevState => ({
                 ...prevState,
@@ -319,11 +320,19 @@ const AdminCategory = () => {
                                 />
                             </Form.Item>
                             <Form.Item wrapperCol={{ offset: 22, span: 10 }}>
-                                <Button type="danger" onClick={() => removeSubcategory(index)} 
-                                icon={<DeleteOutlined style={{ color: 'red'}} />}
-                                style={{  border: '1px solid #ff0000', borderRadius: '5px' }}>
-                                 
-                                </Button>
+                                
+                                <Popconfirm 
+                                        title="Bạn có chắc chắn muốn xóa không?" 
+                                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                                        onConfirm= {() => removeSubcategory(index)} // Add your delete handler here
+                                        okText="Có"
+                                        cancelText="Không"
+                                    >
+                                        <Button
+                                            icon={<DeleteOutlined style={{ color: 'red' }} />}
+                                            style={{ marginRight: 5 }}
+                                        />
+                                    </Popconfirm>
                             </Form.Item>
                                 
                         </div>
