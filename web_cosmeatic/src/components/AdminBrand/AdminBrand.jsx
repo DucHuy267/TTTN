@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { WrapperHeader } from "./style";
-import { Button, Form, Input, message, Modal } from "antd";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
+import { PlusOutlined, DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
 import { addBrand, deleteBrand, getAllBrand, getDetailBrand, updateBrand } from "../../services/BrandSevices";
 import DrawerCompoment from "../DrawerComponent/DrawerComponent";
@@ -12,16 +12,22 @@ const AdminBrand = () => {
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [stateBrand, setStateBrand] = useState({
+        _id: '',
         name: '',
         description: '',
         image: '',
-        sections: [],
+        sections: [
+            { title: '', content: '' },
+        ],
     });
     const [stateBrandDetails, setStateBrandDetails] = useState({
+        _id: '',
         name: '',
         description: '',
         image: '',
-        sections: [],
+        sections: [
+            { title: '', content: '' },
+        ],
     });
 
     const [brands, setAllBrands] = useState([]);
@@ -31,6 +37,7 @@ const AdminBrand = () => {
         const res = await getDetailBrand(rowSelected);
         if (res) {
             setStateBrandDetails({
+                _id: res?._id,
                 name: res?.name,
                 description: res?.description,
                 image: res?.image,
@@ -58,7 +65,13 @@ const AdminBrand = () => {
 
     const onUpdateBrand = async () => {
         try {
-            await updateBrand(stateBrandDetails.name, stateBrandDetails);
+            await updateBrand(stateBrandDetails._id, {
+                ...stateBrandDetails,
+                sections: stateBrandDetails.sections.map(section => ({
+                    title: section.title,
+                    content: section.content,
+                })),
+            });
             message.success("Cập nhật thương hiệu thành công");
             setIsOpenDrawer(false);
             fetchBrands();
@@ -91,7 +104,7 @@ const AdminBrand = () => {
 
     const handleDeleteBrand = async () => {
         try {
-            await deleteBrand(stateBrandDetails.name);
+            await deleteBrand(stateBrandDetails._id);
             message.success("Xóa thương hiệu thành công");
             setIsOpenDrawer(false);
             setIsModalOpenDelete(false);
@@ -334,19 +347,24 @@ const AdminBrand = () => {
                             style={{ 
                                 width: '80%', display: 'flex',
                                 padding: '10px 10px 0px 10px', 
-                            }}
-                            >
+                            }}>
                             <div style={{ marginBottom: '10px', width: '95%' }}>
-                                <Form.Item label={`Title ${index + 1}`}>
+                                <Form.Item 
+                                    label={`Title ${index + 1}`}
+                                    name={['sections', index, 'title']} // Sử dụng mảng để liên kết form
+                                    rules={[{ required: true, message: 'Please input title' }]}>
                                     <Input
-                                        value={section.title}
+                                        defaultValue={section.title}
                                         onChange={(e) => handleSectionChange(e, index, "title", true)}
                                         placeholder="Enter section title"
                                     />
                                 </Form.Item>
-                                <Form.Item label={`Content ${index + 1}`}>
+                                <Form.Item 
+                                label={`Content ${index + 1}`}
+                                name={['sections', index, 'content']}
+                                rules={[{ required: true, message: 'Please input content' }]}>
                                     <Input.TextArea
-                                        value={section.content}
+                                        defaultValue={section.content}
                                         onChange={(e) => handleSectionChange(e, index, "content", true)}
                                         placeholder="Enter section content"
                                     />
@@ -354,10 +372,19 @@ const AdminBrand = () => {
                             </div>  
                                 
                                 <div style={{ width: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button danger onClick={() => handleRemoveSection(index, true)}   
-                                        icon={<DeleteOutlined style={{ color: 'red'}} />}
-                                        style={{  border: '1px solid #ccc', borderRadius: '5px' }}>
-                                    </Button>
+                                    
+                                    <Popconfirm 
+                                        title="Bạn có chắc chắn muốn xóa không?" 
+                                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                                        onConfirm= {() => handleRemoveSection(index, true)} // Add your delete handler here
+                                        okText="Có"
+                                        cancelText="Không"
+                                    >
+                                        <Button
+                                            icon={<DeleteOutlined style={{ color: 'red' }} />}
+                                            style={{ marginRight: 5 }}
+                                        />
+                                    </Popconfirm>
                                 </div>
                             
                             </div>

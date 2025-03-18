@@ -10,7 +10,10 @@ const {
     getOrdersByUserId,
     getOrdersByStatus,
     createPaymentUrl,
-    vnpayReturn
+    vnpayReturn,
+    confirmShipment,
+    confirmDelivery,
+    getOrdersByStatusAndShipperId
 } = require('../controllers/orderController');
 
 const router = express.Router();
@@ -33,9 +36,17 @@ router.post('/create_order', create_order);
 router.post('/create_order_receive', create_order_receive);
 // lấy order theo User
 router.get('/userId/:userId', getOrdersByUserId);
+
 // thanh toán vnpay
 router.post('/create_payment_url', createPaymentUrl);
 // trả về thông báo
 router.get('/vnpay_return', vnpayReturn);
+
+// API để shipper xác nhận giao hàng
+router.put('/confirmShipment/:orderId/:shipperId', confirmShipment);
+// API để xác nhận đơn hàng đã được giao
+router.put('/confirmDelivery/:orderId/:shipperId', confirmDelivery);
+// Lấy danh sách đơn hàng theo trạng thái và id shipper
+router.get('/status/:status/shipper/:shipperId', getOrdersByStatusAndShipperId);
 
 module.exports = router;

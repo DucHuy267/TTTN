@@ -36,25 +36,15 @@ export async function getAllProduct() {
     }
 }
 
-export async function addProduct(newProduct) {
-    // Loại bỏ _id nếu có trong newProduct
-    const { _id, ...productData } = newProduct;
-
+export const addProduct = async (productData) => {
     try {
-        const response = await axios.post(`${API_URL}/addProduct`, productData, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        if (response.status === 200) {
-            return response.data;
-        }
+        const response = await axios.post(`${API_URL}/addProduct`, productData);
+        return response.data;
     } catch (error) {
-        console.error('Error adding product:', error.response ? error.response.data : error.message);
-        return [];
+        console.error("Error adding product:", error.response.data);
+        throw error.response.data;
     }
-}
+};
 
 
 export async function getDetailProduct(_id) {

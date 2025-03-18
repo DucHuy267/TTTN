@@ -11,11 +11,7 @@ const AdminProduct = () => {
     const [rowSelected, setRowSelected] = useState('')
     const [isOpenDrawer, setIsOpenDrawer] = useState(false)
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
-    const [isHidden, setIsHidden] = useState(false);
 
-    const toggleVisibility = () => {
-        setIsHidden(!isHidden);
-    };
     const [stateProduct, setStateProduct] = useState({
         _id: '',
         name: '',
@@ -26,6 +22,9 @@ const AdminProduct = () => {
         subcategoryName:'',
         brand:'',
         imageUrl: '',
+        sections: [
+            { title: '', content: '' },
+        ],
     });
     const [stateProductDetails, setStateProductDetails] = useState({
         _id: '',
@@ -37,6 +36,9 @@ const AdminProduct = () => {
         brand:'',
         subcategoryName:'',
         imageUrl: '',
+        sections: [
+            { title: '', content: '' },
+        ],
     });
 
     const [product, setAllProduct] = useState([]);
@@ -55,6 +57,7 @@ const AdminProduct = () => {
                 categoryId: res?.categoryId,
                 subcategoryName: res?.subcategoryName,
                 imageUrl: res?.imageUrl,
+                sections: res?.sections || [],
             });
         }
     }
@@ -79,18 +82,6 @@ const AdminProduct = () => {
         console.log('rowSeleted', rowSelected)
     };
 
-    const onUpdateProduct = async () => {
-        try {
-            await updateProduct(stateProductDetails._id, stateProductDetails);
-            message.success("Cập nhật sản phẩm thành công");
-            setIsOpenDrawer(false);
-            fetchGetDetailProduct(rowSelected); // Làm mới chi tiết sau khi cập nhật
-            fetchProducts(); // Làm mới danh sách sản phẩm
-        } catch (error) {
-            console.error("Error updating product:", error);
-        }
-    };
-
     const handleToggleVisibility = async (productId, currentVisibility) => {
         try {
             await updateProduct(productId, { isVisible: !currentVisibility });
@@ -107,7 +98,7 @@ const AdminProduct = () => {
             const res = await getAllProduct();
             setAllProduct(res.map(item => ({ ...item, key: item._id })));
         } catch (error) {
-            console.error("Failed to fetch products:", error);
+            message.error("Failed to fetch products");
         }
     };
 
@@ -126,26 +117,39 @@ const AdminProduct = () => {
     const handleDeleteProduct = async () => {
         try {
             await deleteProduct(stateProductDetails._id, stateProductDetails);
-            alert("Xóa sản phẩm thành công");
+            message.success("Xóa sản phẩm thành công");
             setIsOpenDrawer(false);
             setIsModalOpenDelete(false)
             fetchGetDetailProduct(rowSelected); // Làm mới chi tiết sau khi cập nhật
             fetchProducts(); // Làm mới danh sách sản phẩm
         } catch (error) {
-            console.error("Error updating product:", error);
+            message.error("Xóa sản phẩm thất bại");
         }
     }
 
     const onFinish = async () => {
         try {
             await addProduct(stateProduct);
-            alert("Thêm sản phẩm thành công");
+            message.success("Thêm sản phẩm thành công");
+            form.resetFields();
             setIsModalOpen(false);
             fetchProducts(); // Làm mới danh sách sản phẩm
         } catch (error) {
-            console.error("Error adding product:", error);
+            message.error("Thêm sản phẩm thất bại");
         }
     };
+
+    const onUpdateProduct = async () => {
+            try {
+                await updateProduct(stateProductDetails._id, stateProductDetails);
+                message.success("Cập nhật sản phẩm thành công");
+                setIsOpenDrawer(false);
+                fetchGetDetailProduct(rowSelected); // Làm mới chi tiết sau khi cập nhật
+                fetchProducts(); // Làm mới danh sách sản phẩm
+            } catch (error) {
+                message.error("Cập nhật sản phẩm thất bại");
+            }
+        };
 
     const handleOnchange = (e) => {
         setStateProduct({
@@ -159,6 +163,75 @@ const AdminProduct = () => {
             ...stateProductDetails,
             [e.target.name]: e.target.value
         });
+    };
+
+    const handleAddSection = (isDetail = false) => {
+        if (isDetail) {
+            setStateProductDetails(prevState => ({
+                ...prevState,
+                sections: [
+                    ...prevState.sections,
+                    { title: '', content: '' }
+                ]
+            }));
+        } else {
+            setStateProduct(prevState => ({
+                ...prevState,
+                sections: [
+                    ...prevState.sections,
+                    { title: '', content: '' }
+                ]
+            }));
+        }
+    };
+    
+    const handleSectionChange = (e, index, field, isDetail = false) => {
+        const { value } = e.target;
+        if (isDetail) {
+            setStateProductDetails(prevState => {
+                const newSections = [...prevState.sections];
+                newSections[index] = {
+                    ...newSections[index],
+                    [field]: value,
+                };
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        } else {
+            setStateProduct(prevState => {
+                const newSections = [...prevState.sections];
+                newSections[index] = {
+                    ...newSections[index],
+                    [field]: value,
+                };
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        }
+    };
+    
+    const handleRemoveSection = (index, isDetail = false) => {
+        if (isDetail) {
+            setStateProductDetails(prevState => {
+                const newSections = prevState.sections.filter((_, i) => i !== index);
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        } else {
+            setStateProduct(prevState => {
+                const newSections = prevState.sections.filter((_, i) => i !== index);
+                return {
+                    ...prevState,
+                    sections: newSections,
+                };
+            });
+        }
     };
 
     const columns = [
@@ -223,7 +296,7 @@ const AdminProduct = () => {
                     <PlusOutlined style={{ fontSize: '40px' }} />
                 </Button>
             </div>
-
+    
             <div style={{ marginTop: '20px' }}>
                 <TableComponent columns={columns} data={product}
                     onRow={(record, rowIndex) => {
@@ -231,11 +304,11 @@ const AdminProduct = () => {
                             onClick: event => {
                                 setRowSelected(record._id)
                             }, // click row
-
+    
                         };
                     }} />
             </div>
-
+    
             <Modal title="Tạo sản phẩm" open={isModalOpen} onCancel={handleCancel} footer={null}>
                 <Form
                     name="basic"
@@ -271,6 +344,7 @@ const AdminProduct = () => {
                             )}
                         </div>
                     </Form.Item>
+    
                     <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
                         <Button type="primary" htmlType="submit">
                             Submit
@@ -278,7 +352,7 @@ const AdminProduct = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-
+    
             <DrawerCompoment title="Chi tiết sản phẩm" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="80%">
                 <Form
                     name="basic"
@@ -304,11 +378,7 @@ const AdminProduct = () => {
                         rules={[{ required: true, message: 'Please input your ImageUrl!' }]}
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Input 
-                            onChange={handleOnchangeDetails} 
-                            name="imageUrl"
-                            value={stateProductDetails.imageUrl || ''} 
-                            style={{ flex: 1 }} />
+                            <Input onChange={handleOnchangeDetails} name="imageUrl" value={stateProductDetails.imageUrl || ''} style={{ flex: 1 }} />
                             {stateProductDetails.imageUrl && (
                                 <img
                                     src={stateProductDetails.imageUrl}
@@ -318,6 +388,61 @@ const AdminProduct = () => {
                             )}
                         </div>
                     </Form.Item>
+    
+                    {/* Sections */}
+                    <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid #ccc', margin: '10px 90px', borderRadius: '5px' }}>
+                        <h3>Chi tiết sản phẩm</h3>
+                        {stateProductDetails.sections.map((section, index) => (
+                            <div key={index} style={{ width: '80%', display: 'flex', padding: '10px 10px 0px 10px' }}>
+                                <div style={{ marginBottom: '10px', width: '95%' }}>
+                                    <Form.Item
+                                        label={`Title ${index + 1}`}
+                                        name={['sections', index, 'title']}
+                                        rules={[{ required: true, message: 'Please input title' }]}
+                                    >
+                                        <Input
+                                            defaultValue={section.title}
+                                            onChange={(e) => handleSectionChange(e, index, "title", true)}
+                                            placeholder="Enter section title"
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={`Content ${index + 1}`}
+                                        name={['sections', index, 'content']}
+                                        rules={[{ required: true, message: 'Please input content' }]}
+                                    >
+                                        <Input.TextArea
+                                            defaultValue={section.content}
+                                            onChange={(e) => handleSectionChange(e, index, "content", true)}
+                                            placeholder="Enter section content"
+                                        />
+                                    </Form.Item>
+                                </div>
+                                <div style={{ width: '5%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                     <Popconfirm 
+                                        title="Bạn có chắc chắn muốn xóa không?" 
+                                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                                        onConfirm= {() => handleRemoveSection(index, true)} // Add your delete handler here
+                                        okText="Có"
+                                        cancelText="Không"
+                                        >
+                                        <Button
+                                            icon={<DeleteOutlined style={{ color: 'red' }} />}
+                                            style={{ marginRight: 5 }}
+                                        />
+                                    </Popconfirm>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+    
+                    {/* Add Section Button */}
+                    <Form.Item wrapperCol={{ offset: 4, span: 18 }}>
+                        <Button type="dashed" onClick={() => handleAddSection(true)} style={{ width: '100%' }}>
+                            + Thêm thành phần sản phẩm
+                        </Button>
+                    </Form.Item>
+    
                     <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
                         <Button type="primary" htmlType="submit">
                             Apply
@@ -325,11 +450,12 @@ const AdminProduct = () => {
                     </Form.Item>
                 </Form>
             </DrawerCompoment>
-
+    
             <Modal title="Xóa sản phẩm" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeleteProduct}>
                 <div>Bạn có chắc chắn xóa sản phẩm này không ?</div>
             </Modal>
         </div>
     );
-};
-export default AdminProduct;
+    };
+    
+    export default AdminProduct;

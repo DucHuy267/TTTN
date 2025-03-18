@@ -32,6 +32,13 @@ const orderSchema = new mongoose.Schema(
       paymentMethod: { type: String, default: 'Unknown' }, // Made it optional with a default value
       transactionNo: { type: String, unique: true, sparse: true },
       paymentDate: { type: Date, default: null },
+      // Thêm thông tin shipper
+      shipper: {
+        shipperId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }, // ID của shipper (là một user có role 'shipper')
+        name: { type: String }, // Tên shipper
+        phone: { type: String } // Số điện thoại shipper
+      },
+      deliveryConfirmedAt: { type: Date }, // Thời gian shipper xác nhận đã giao hàng
     },
     {
       timestamps: true, 
