@@ -18,7 +18,7 @@ function Breadcrumb() {
         const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
         return (
           <span key={name}>
-            <span style={{color:'#a7a7a7'}} >{ ' > '} </span>
+            <span style={{color:'#a7a7a7'}}>{' > '}</span>
             <a href={routeTo} style={{color:'#a7a7a7'}}>{name}</a>
           </span>
         );
@@ -38,9 +38,7 @@ function AppContent() {
       <Routes>
         {routes.map((route) => {
           const Page = route.page;
-          return (
-            <Route key={route.path} path={route.path} element={<Page />} />
-          );
+          return <Route key={route.path} path={route.path} element={<Page />} />;
         })}
       </Routes>
     </Fragment>
@@ -50,13 +48,22 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
-      <ChatWidget />
-      {/* import file đó vô đây  */}
-      <Footer/>
+      <MainApp />
     </Router>
   );
 }
 
-export default App;
+function MainApp() {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin'); // Kiểm tra nếu là trang admin
 
+  return (
+    <>
+      <AppContent />
+      {!isAdminPage && <ChatWidget />}
+      {!isAdminPage && <Footer />}
+    </>
+  );
+}
+
+export default App;

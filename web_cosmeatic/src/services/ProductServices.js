@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:4000/products/";
+const API_URL = "http://localhost:4000/products";
 
 // all trừ sp bị ẩn
 export async function getAllProductTrue() {
@@ -36,15 +36,22 @@ export async function getAllProduct() {
     }
 }
 
-export const addProduct = async (productData) => {
+export async function addProduct(productData) {
     try {
-        const response = await axios.post(`${API_URL}/addProduct`, productData);
-        return response.data;
+        const response = await axios.post(`${API_URL}/addProduct`, productData, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.status === 200) {
+            return response.data;
+        }
     } catch (error) {
-        console.error("Error adding product:", error.response.data);
-        throw error.response.data;
+        console.log(error?.message);
+        return [];
     }
-};
+}
 
 
 export async function getDetailProduct(_id) {

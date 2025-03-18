@@ -13,7 +13,6 @@ const AdminProduct = () => {
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
 
     const [stateProduct, setStateProduct] = useState({
-        _id: '',
         name: '',
         price: '',
         description: '',
@@ -22,9 +21,7 @@ const AdminProduct = () => {
         subcategoryName:'',
         brand:'',
         imageUrl: '',
-        sections: [
-            { title: '', content: '' },
-        ],
+        sections: [],
     });
     const [stateProductDetails, setStateProductDetails] = useState({
         _id: '',

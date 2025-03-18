@@ -103,13 +103,18 @@ exports.getProductsByCategoryId = async (req, res) => {
 // Hàm thêm sản phẩm mới vào cơ sở dữ liệu
 exports.addProduct = async (req, res) => {
     try {
+        // console.log("Dữ liệu nhận từ frontend:", req.body); 
+
         const product = new Product(req.body);
         await product.save();
+
         res.status(200).json({ message: 'Sản phẩm đã được thêm thành công', product });
     } catch (err) {
-        res.status(500).json({ error: 'Lỗi khi thêm sản phẩm', details: err });
+        console.error("❌ Lỗi khi thêm sản phẩm:", err.message); // In lỗi backend ra console
+        res.status(500).json({ error: 'Lỗi khi thêm sản phẩm', details: err.message });
     }
 };
+
 // Hàm cập nhật sản phẩm trong cơ sở dữ liệu
 exports.updateProduct = async (req, res) => {
     try {
