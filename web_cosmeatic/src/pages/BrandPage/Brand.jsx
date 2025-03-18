@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HomePageHeader from "../../components/HeaderComponents/HomePageHeader";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:4000/brands/getAll"; // Đường dẫn API lấy danh sách brands
 
 const Brand = () => {
+  const navigate = useNavigate(); // Hook điều hướng
   const [brands, setBrands] = useState([]); // State để lưu danh sách thương hiệu
   const [loading, setLoading] = useState(true); // State hiển thị loading khi fetch data
 
@@ -76,6 +78,7 @@ const Brand = () => {
                   borderRadius: "20px",
                   cursor: "pointer",
                 }}
+                onClick={() =>navigate("/cocoon")}
               >
                 See More →
               </button>

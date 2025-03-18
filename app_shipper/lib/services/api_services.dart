@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://192.168.0.103:4000';
+  static const String baseUrl = 'http://192.168.0.102:4000';
 
   // Hàm lấy danh sách đơn hàng theo trạng thái
   static Future<List<Map<String, dynamic>>> getOrdersByStatus(String status) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/orders/status/$status'));
+      final response = await http.get   (Uri.parse('$baseUrl/orders/status/$status'));
 
       if (response.statusCode == 200) {
         return List<Map<String, dynamic>>.from(json.decode(response.body));

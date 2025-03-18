@@ -2,6 +2,7 @@ import LoginPage from "../components/Login-SignUp/LoginPage";
 import SignupPage from "../components/Login-SignUp/SignupPage";
 import Page from "../pages/AdminPage/Page";
 import Brand from "../pages/BrandPage/Brand";
+import Cocoon from "../pages/BrandPage/cocoon";
 import CartPage from "../pages/CartPage/CartPage";
 import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
@@ -64,6 +65,11 @@ export const routes = [
     {
         path: '/profile',
         page: ProfilePage,
+        showHeader: true
+    },
+    {
+        path: '/cocoon',
+        page:Cocoon ,
         showHeader: true
     },
     {

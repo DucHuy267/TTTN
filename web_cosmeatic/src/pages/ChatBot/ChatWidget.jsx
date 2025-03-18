@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Chatbot from "./Chatbot";
+import Chatbot from "./ChatBot";
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);

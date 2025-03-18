@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { routes } from './routes';
 import HomePageHeader from './components/HeaderComponents/HomePageHeader';
 import ChatWidget from './pages/ChatBot/ChatWidget';
+import Footer from './components/FooterCompoments/Footer';
 
 function Breadcrumb() {
   const location = useLocation();
@@ -51,6 +52,8 @@ function App() {
     <Router>
       <AppContent />
       <ChatWidget />
+      {/* import file đó vô đây  */}
+      <Footer/>
     </Router>
   );
 }
