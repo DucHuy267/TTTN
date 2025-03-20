@@ -7,8 +7,6 @@ import { TextHeader, WrapperHeader, AccoutHeader, ContentPopup, Span, } from "./
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import CategoryDropdown from "./CategoryDropdown";
-import logo from "./logo.png"
-import DropdownMenu from "./DropdownMenu";
 import LoginPage from "../Login-SignUp/LoginPage"; // Import LoginPage component
 import { FaShoppingCart } from "react-icons/fa";
 
@@ -126,7 +124,9 @@ const HomePageHeader = () => {
                 src={logo}
                 alt="Logo"
               /> */}
-              <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>Audora</h2>
+              <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>
+                Audora
+              </h2>
             </Col>
             <Col span={15} style={{ padding: "18px 0px" }}>
             <Search 
@@ -176,7 +176,7 @@ const HomePageHeader = () => {
             <div style={{ display: "flex" }}>
               <TextHeader style={{ marginLeft: 5, fontWeight: "bold"  }}>
                 <CategoryDropdown/>
-                {/* <DropdownMenu /> */}
+                {/* Danh mục */}
               </TextHeader>
             </div>
             <div>

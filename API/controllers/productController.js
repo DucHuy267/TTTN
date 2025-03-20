@@ -26,11 +26,18 @@ exports.getProductsByCategoryIdTrue = async (req, res) => {
     }
 };
 
-// Hàm lấy sản phẩm theo subcategoryId (chỉ hiển thị sản phẩm có isVisible = true)
-exports.getProductsBySubcategoryIdTrue = async (req, res) => {
+// Hàm lấy sản phẩm theo subcategoryName (chỉ hiển thị sản phẩm có isVisible = true)
+exports.getProductsBySubcategoryNameTrue = async (req, res) => {
     try {
-        const subcategoryId = req.params.subcategoryId;
-        const products = await Product.find({ subcategoryId: subcategoryId }, { isVisible: true });
+        const subcategoryName = req.params.subcategoryName;
+        
+        console.log("Received subcategoryName:", subcategoryName); // Debug
+
+        // Tìm sản phẩm có subcategoryName tương ứng và isVisible = true
+        const products = await Product.find({ 
+            subcategoryName: { $regex: new RegExp(subcategoryName, "i") }, 
+            isVisible: true  // Lọc isVisible đúng cách
+        });
 
         if (products.length > 0) {
             res.status(200).json(products);
@@ -41,6 +48,7 @@ exports.getProductsBySubcategoryIdTrue = async (req, res) => {
         res.status(500).json({ error: 'Lỗi khi lấy sản phẩm theo danh mục con', details: err });
     }
 };
+
 
 // Hàm lấy sản phẩm theo subcategoryId 
 exports.getProductsBySubcategoryId = async (req, res) => {

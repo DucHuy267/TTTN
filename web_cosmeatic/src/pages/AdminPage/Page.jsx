@@ -108,12 +108,15 @@ const AdminPage = () => {
         <div className="admin-container">
             <div className="sidebar">
                 <div className="logo-header">
-                    <img
+                    {/* <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKVT29aD5GiiyNvC-qcl_1-8mldGfUXZSX-A&s"
                         alt="logo"
                         className="logo-image"
                     />
-                    <div className="profile-header">Cocoon Original</div>
+                    <div className="profile-header">Cocoon Original</div> */}
+                    <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>
+                        Audora
+                    </h2>
                 </div>
 
                 <Menu

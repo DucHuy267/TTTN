@@ -9,7 +9,7 @@ const {
     searchProductsByName,
     deleteProduct,
     getProductsBySubcategoryId,
-    getProductsBySubcategoryIdTrue
+    getProductsBySubcategoryNameTrue
 } = require('../controllers/productController');
 
 const router = express.Router();
@@ -29,8 +29,8 @@ router.get('/getDetail/:productId', getProductById);
 // Route để lấy danh sách sản phẩm theo categoryId
 router.get('/category/:categoryId', getProductsByCategoryId);
 
-// Route để lấy danh sách sản phẩm theo subcategoryId (chỉ hiển thị sản phẩm có isVisible = true)
-router.get('/subcategoryTrue/:subcategoryId', getProductsBySubcategoryIdTrue);
+// Route để lấy danh sách sản phẩm theo subcategoryName (chỉ hiển thị sản phẩm có isVisible = true)
+router.get('/subcategoryTrue/:subcategoryName', getProductsBySubcategoryNameTrue);
 
 // Route để lấy danh sách sản phẩm theo subcategoryId
 router.get('/subcategory/:subcategoryId', getProductsBySubcategoryId);

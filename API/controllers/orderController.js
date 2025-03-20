@@ -190,7 +190,7 @@ exports.vnpayReturn = async (req, res) => {
     }
 };
 
-// xóa ản phẩm đả thanh toán
+// xóa sản phẩm đả thanh toán
 const removeItemsFromCart = async (userId, paidProductIds) => {
     try {
         // Cập nhật giỏ hàng của người dùng, xóa các sản phẩm đã thanh toán
@@ -290,7 +290,7 @@ exports.create_order_receive = async (req, res) => {
                 total: item.total,
             })),
             totalPrice: amount,
-            status: 'success', // Khởi tạo với trạng thái success
+            status: 'pending', // Khởi tạo với trạng thái pending
             paymentMethod: payment || 'COD', // Mặc định là COD nếu không cung cấp
         });
 

@@ -3,7 +3,7 @@ import { WrapperHeader } from "./style";
 import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
-import { addCategory, deleteCategory, getAllCategory, getDetailCategory, updateCategory } from "../../services/CategorySevices";
+import { addCategory, deleteCategory, getAllCategory, getDetailCategory, updateCategory } from "../../services/CategoryServices";
 import DrawerCompoment from "../DrawerComponent/DrawerComponent";
 
 const AdminCategory = () => {

@@ -4,8 +4,9 @@ import { Table, Button, Input, Modal, notification } from 'antd';
 import { PlusOutlined, DeleteOutlined, MinusOutlined, LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import LoginPage from '../../components/Login-SignUp/LoginPage';
 
-const CartPage = () => {
+const CartPage = ({ onClose }) => {
     const [cartProducts, setCartProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [selectedProducts, setSelectedProducts] = useState([]);
@@ -35,6 +36,13 @@ const CartPage = () => {
         }
     };
 
+      const [isLoginOpen, setIsLoginOpen] = useState(false);
+      
+  const openSignupModal = () => {
+    setIsLoginOpen(false);
+    onClose();
+  };
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
@@ -45,7 +53,10 @@ const CartPage = () => {
                         message: 'Phiên đã hết hạn',
                         description: 'Vui lòng đăng nhập lại.',
                     });
-                    navigate('/login');
+                    // navigate('/login');
+                        <Modal title="Đăng nhập" open={isLoginOpen} onCancel={() => setIsLoginOpen(false)} footer={null}>
+                            <LoginPage onClose={openSignupModal} />
+                        </Modal>
                     return;
                 }
                 const userId = decoded.userId;

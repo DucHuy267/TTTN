@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Menu, message, Dropdown } from "antd";
-import { getAllProductTrue, getProductByCate } from "../../services/ProductServices";
+import { getAllProductTrue, getProductByCate, getProductBySubcategory } from "../../services/ProductServices";
 import { useNavigate } from "react-router-dom";
-import { getAllCategory } from "../../services/CategorySevices";
+import { getAllCategory } from "../../services/CategoryServices"; 
 import { TextHeader } from "./style";
-import { DownOutlined } from "@ant-design/icons";
 
 const CategoryDropdown = () => {
   const navigate = useNavigate();
@@ -47,6 +46,17 @@ const CategoryDropdown = () => {
     }
   };
 
+  const fetchGetDetailSubcategoryName = async (subcategoryName) => {
+    try {
+      const res = await getProductBySubcategory(subcategoryName);
+      if (res) {
+        navigate("/products", { state: { products: res } });
+      }
+    } catch (error) {
+      message.error("Failed to load product details. Please try again.");
+    }
+  };
+
   // Render menu
   const renderMenu = (
     <Menu
@@ -59,32 +69,25 @@ const CategoryDropdown = () => {
         padding: "10px 0",
       }}
     >
-      <Menu.Item
-        key="all"
-        style={{ fontWeight: "bold"}}
-        onClick={fetchProducts}
-      >
+      <Menu.Item key="all" style={{ fontWeight: "bold" }} onClick={fetchProducts}>
         Tất cả sản phẩm
       </Menu.Item>
       {categories.map((category) => (
         <Menu.SubMenu
           key={category.categoryId}
-          title=
-            <span>
-              {category.categoryName}
-            </span>
-            onClick={() => fetchGetDetailProduct(category.categoryId)}
+          title={<span onClick={() => fetchGetDetailProduct(category.categoryId)}>{category.categoryName}</span>}
         >
           {category.subcategories &&
             category.subcategories.map((subcategory) => (
+              console.log(subcategory),
               <Menu.Item
-                key={subcategory.subcategoryId}
+                key={subcategory.subcategoryName}
                 style={{
                   padding: "8px 20px",
                   color: "#555",
                   fontSize: "14px",
                 }}
-                onClick={() => fetchGetDetailProduct(subcategory.subcategoryId)}
+                onClick={() => fetchGetDetailSubcategoryName(subcategory.subcategoryName)}
               >
                 {subcategory.subcategoryName}
               </Menu.Item>
@@ -98,7 +101,7 @@ const CategoryDropdown = () => {
     <div>
       <Dropdown overlay={renderMenu} trigger={["click"]}>
         <TextHeader>
-          DANH MỤC
+          DANH MỤC 
         </TextHeader>
       </Dropdown>
     </div>

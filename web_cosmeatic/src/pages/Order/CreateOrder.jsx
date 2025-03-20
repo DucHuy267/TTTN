@@ -104,6 +104,8 @@ const CreateOrder = () => {
         }
 
         const { orderId, paymentUrl } = orderResponse.data;
+        console.log("VNPay Payment URL:", paymentUrl);
+
 
         // Chuyển hướng đến URL thanh toán của VNPay
         if (paymentUrl) {

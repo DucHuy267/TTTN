@@ -1,7 +1,7 @@
 
 import { message, Card } from "antd";
 import React, { useEffect, useState } from "react";
-import { getAllCategory } from "../../services/CategorySevices";
+import { getAllCategory } from "../../services/CategoryServices";
 import './style.css'
 
 function BottomLeft() {

@@ -16,7 +16,7 @@ const HeaderComponent = () => {
     return (
         <div className="Topbar">
             <div className="topbarleft">
-                <h1 ><b>Welcome to Cocoon Original.</b></h1>
+                <h1 ><b>Welcome to Audora.</b></h1>
                 <small style={{ fontWeight: 600, color: "grey" }}>
                     Hello Admin, Welcome Back!
                 </small>

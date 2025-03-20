@@ -3,7 +3,7 @@ import { WrapperHeader } from "./style";
 import { Button, Form, Input, message, Modal, Popconfirm } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import TableComponent from "../TableComponent/TableComponent";
-import { addBrand, deleteBrand, getAllBrand, getDetailBrand, updateBrand } from "../../services/BrandSevices";
+import { addBrand, deleteBrand, getAllBrand, getDetailBrand, updateBrand } from "../../services/BrandServices";
 import DrawerCompoment from "../DrawerComponent/DrawerComponent";
 
 const AdminBrand = () => {
