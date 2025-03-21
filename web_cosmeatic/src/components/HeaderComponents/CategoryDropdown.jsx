@@ -8,6 +8,7 @@ import { TextHeader } from "./style";
 const CategoryDropdown = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [hoveredSubcategory, setHoveredSubcategory] = useState(null);
 
   useEffect(() => {
     fetchCategories();
@@ -57,7 +58,6 @@ const CategoryDropdown = () => {
     }
   };
 
-  // Render menu
   const renderMenu = (
     <Menu
       style={{
@@ -79,18 +79,35 @@ const CategoryDropdown = () => {
         >
           {category.subcategories &&
             category.subcategories.map((subcategory) => (
-              console.log(subcategory),
-              <Menu.Item
+              <Menu.SubMenu
                 key={subcategory.subcategoryName}
-                style={{
-                  padding: "8px 20px",
-                  color: "#555",
-                  fontSize: "14px",
-                }}
-                onClick={() => fetchGetDetailSubcategoryName(subcategory.subcategoryName)}
+                title={subcategory.subcategoryName}
+                onTitleMouseEnter={() => setHoveredSubcategory(subcategory.subcategoryName)}
+                onTitleMouseLeave={() => setHoveredSubcategory(null)}
               >
-                {subcategory.subcategoryName}
-              </Menu.Item>
+                <Menu.Item
+                  style={{
+                    padding: "8px 20px",
+                    color: "#555",
+                    fontSize: "14px",
+                  }}
+                  onClick={() => fetchGetDetailSubcategoryName(subcategory.subcategoryName)}
+                >
+                  Xem tất cả {subcategory.subcategoryName}
+                </Menu.Item>
+
+                {/* Menu con hiển thị khi hover */}
+                {hoveredSubcategory === subcategory.subcategoryName && (
+                  <>
+                    <Menu.Item key={`${subcategory.subcategoryName}-related-1`} style={{ padding: "8px 20px", color: "#888" }}>
+                      Sản phẩm nổi bật
+                    </Menu.Item>
+                    <Menu.Item key={`${subcategory.subcategoryName}-related-2`} style={{ padding: "8px 20px", color: "#888" }}>
+                      Sản phẩm giảm giá
+                    </Menu.Item>
+                  </>
+                )}
+              </Menu.SubMenu>
             ))}
         </Menu.SubMenu>
       ))}

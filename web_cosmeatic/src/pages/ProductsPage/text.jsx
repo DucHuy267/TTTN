@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, message, Card, Modal, Spin, Rate } from 'antd';
+import { Button, message, Card, Modal, Spin } from 'antd';
 import { LeftOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -103,49 +103,38 @@ const ProductsPage = () => {
                     {products.length > 0 ? (
                         products.map((product) => (
                             <Card
-                            hoverable
-                            style={{ width: '260px', margin: '0 5px' }}
-                            cover={
-                                product.imageUrl && (
-                                    <img
-                                        src={product.imageUrl}
-                                        alt={product.name}
-                                        style={{
-                                            height: '240px',
-                                            objectFit: 'cover',
-                                            borderRadius: '8px 8px 0 0',
-                                        }}
-                                    />
-                                )
-                            }
-                            onClick={() => goToProductDetail(product._id)}
-                        >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ width: '100%' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{product.name}</div>
-                                    <div style={{ fontSize: '14px', color: '#888' }}>
-                                        {`${product.price.toLocaleString('vi-VN')} đ`}
-                                    </div>
-                                    <div>{product.totalSold} đã bán</div>
-                                    <Rate disabled value={product.rating} />
-                                </div>
-                                <Button
-                                    icon={<ShoppingOutlined />}
-                                    onClick={(e) => handleAddToCart(product._id, product.quantity, e)}
-                                    style={{
-                                        marginTop: '30px',
-                                        width: '38px',
-                                        backgroundColor: '#D0EFC4',
-                                        color: '#000',
-                                        border: 'none',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                    size="middle"
+                                key={product._id}
+                                hoverable
+                                style={{ width: 220 }}
+                                cover={
+                                    product.imageUrl && (
+                                        <img
+                                            src={product.imageUrl}
+                                            alt={product.name}
+                                            style={{
+                                                marginLeft: '5%',
+                                                marginTop: '5%',
+                                                height: '240px',
+                                                width: '90%',
+                                                objectFit: 'cover',
+                                            }}
+                                        />
+                                    )
+                                }
+                                onClick={() => goToProductDetail(product._id)}
+                            >
+                                <Card.Meta
+                                    title={product.name}
+                                    description={`${product.price.toLocaleString('vi-VN')} đ`}
                                 />
-                            </div>
-                        </Card>
+                                <Button
+                                    icon={<ShoppingOutlined style={{ color: '#08c' }} />}
+                                    onClick={(e) => handleAddToCart(product._id, product.quantity, e)}
+                                    style={{ marginTop: '10px' }}
+                                >
+                                    Thêm vào giỏ hàng
+                                </Button>
+                            </Card>
                         ))
                     ) : (
                         <p>Không có sản phẩm để hiển thị.</p>

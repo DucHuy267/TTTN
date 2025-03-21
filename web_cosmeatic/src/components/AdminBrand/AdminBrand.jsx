@@ -12,13 +12,10 @@ const AdminBrand = () => {
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [stateBrand, setStateBrand] = useState({
-        _id: '',
         name: '',
         description: '',
         image: '',
-        sections: [
-            { title: '', content: '' },
-        ],
+        sections: [],
     });
     const [stateBrandDetails, setStateBrandDetails] = useState({
         _id: '',

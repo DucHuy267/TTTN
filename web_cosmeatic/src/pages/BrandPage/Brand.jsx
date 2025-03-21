@@ -78,7 +78,7 @@ const Brand = () => {
                   borderRadius: "20px",
                   cursor: "pointer",
                 }}
-                onClick={() =>navigate("/cocoon")}
+                onClick={() => navigate(`/brands/${brand._id}`)}
               >
                 See More →
               </button>

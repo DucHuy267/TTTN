@@ -84,6 +84,48 @@ const HomePageHeader = () => {
     }
 };
 
+// bán chạy
+const fetchProducts = async () => {
+  try {
+      const res = await axios.get(`http://localhost:4000/dmf/hot-selling-products`);
+      if (res.data) {
+          // Lấy đánh giá cho từng sản phẩm
+          const productsWithRatings = await Promise.all(
+              res.data.map(async (product) => {
+                  try {
+                      const rating = await fetchRating(product.product._id);
+                      return { ...product, rating };
+                  } catch (error) {
+                      console.error(`Lỗi khi lấy đánh giá sản phẩm ${product.product._id}:`, error);
+                      return { ...product, rating: 0 }; // Nếu lỗi, đặt rating = 0
+                  }
+              })
+          );
+
+          // Điều hướng với dữ liệu đã xử lý
+          navigate("/products", { state: { products: productsWithRatings } });
+      }
+  } catch (error) {
+      message.error("Không thể tải danh sách sản phẩm.");
+      console.error("Lỗi khi tải sản phẩm:", error);
+  }
+};
+
+const fetchRating = async (productId) => {
+  try {
+      const response = await axios.get(`http://localhost:4000/comments/getCommentsByProductId/${productId}`);
+      const comments = response.data.data.comments || [];
+
+      return comments.length > 0 
+          ? comments.reduce((sum, comment) => sum + comment.rating, 0) / comments.length 
+          : 0;
+  } catch (error) {
+      console.error(`Lỗi khi lấy đánh giá sản phẩm ${productId}:`, error);
+      return 0;
+  }
+};
+
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken("");
@@ -185,7 +227,7 @@ const HomePageHeader = () => {
               </TextHeader>
             </div>
             <div>
-              <TextHeader style={{ marginLeft: 50 , fontWeight: "bold" }} onClick={() => navigate("/")}>
+              <TextHeader style={{ marginLeft: 50 , fontWeight: "bold" }} onClick={() => (fetchProducts)}>
                 BÁN CHẠY 
               </TextHeader>
             </div>

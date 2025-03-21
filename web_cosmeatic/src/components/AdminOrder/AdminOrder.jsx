@@ -98,7 +98,7 @@ const AdminOrder = () => {
                 }
         
                 return (
-                    <Tag color={status === 'success' ? 'green' : status === 'canceled' ? 'red' : status === 'shipped' ? 'orange' : 'gray'}>
+                    <Tag color={status === 'success' ? 'green' : status === 'processing' ? 'blue' : status === 'canceled' ? 'red' : status === 'shipped' ? 'orange' : 'gray'}>
                         {statusText}
                     </Tag>
                 );
@@ -185,6 +185,7 @@ const AdminOrder = () => {
                 visible={isDetailModalVisible}
                 onClose={() => setIsDetailModalVisible(false)}
                 order={selectedOrder}
+                onConfirm={fetchOrders} // Pass fetchOrders as onConfirm prop
             />
         </div>
     );

@@ -246,8 +246,8 @@ const AdminProduct = () => {
         { title: 'Giá', dataIndex: 'price', render: (price) => `${price.toLocaleString('vi-VN')} đ`, sorter: (a, b) => a.price - b.price },
         { title: 'Số lượng', dataIndex: 'quantity', sorter: (a, b) => a.quantity - b.quantity },
         { title: 'Mã loại', dataIndex: 'categoryId' },
-        { title: 'Thương hiệu', dataIndex: 'brand'},
-        { title: 'Mã danh mục', dataIndex: 'subcategoryName' },
+        { title: 'Thương hiệu', dataIndex: 'brand', sorter: (a, b) => a.brand.length - b.brand.length, },
+        { title: 'Mã danh mục', dataIndex: 'subcategoryName', sorter: (a, b) => a.subcategoryName.length - b.subcategoryName.length,  },
         {
             title: 'Action',
             dataIndex: 'action',

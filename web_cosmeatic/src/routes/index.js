@@ -2,7 +2,7 @@ import LoginPage from "../components/Login-SignUp/LoginPage";
 import SignupPage from "../components/Login-SignUp/SignupPage";
 import Page from "../pages/AdminPage/Page";
 import Brand from "../pages/BrandPage/Brand";
-import Cocoon from "../pages/BrandPage/cocoon";
+import Cocoon from "../pages/BrandPage/brand-title";
 import CartPage from "../pages/CartPage/CartPage";
 import HomePage from "../pages/HomePage/HomePage";
 import LearnMore from "../pages/HomePage/SkincareLearnMore";
@@ -74,7 +74,7 @@ export const routes = [
         showHeader: true
     },
     {
-        path: '/cocoon',
+        path: '/brands/:id',
         page:Cocoon ,
         showHeader: true
     },

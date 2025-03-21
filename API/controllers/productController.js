@@ -49,6 +49,19 @@ exports.getProductsBySubcategoryNameTrue = async (req, res) => {
     }
 };
 
+// Lấy 3 sản phẩm theo subcategoryName
+exports.getBySubcategory = async (req, res) => {
+    try {
+        const { subcategoryName } = req.params;
+        const products = await Product.find({ subcategoryName, isVisible: true })
+                                      .limit(3)
+                                      .select('name price imageUrl');
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching products' });
+    }
+};
+
 
 // Hàm lấy sản phẩm theo subcategoryId 
 exports.getProductsBySubcategoryId = async (req, res) => {

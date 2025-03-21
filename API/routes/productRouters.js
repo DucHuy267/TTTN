@@ -9,7 +9,8 @@ const {
     searchProductsByName,
     deleteProduct,
     getProductsBySubcategoryId,
-    getProductsBySubcategoryNameTrue
+    getProductsBySubcategoryNameTrue,
+    getBySubcategory
 } = require('../controllers/productController');
 
 const router = express.Router();
@@ -43,5 +44,8 @@ router.put('/updateProduct/:productId', updateProduct);
 
 // Route để xóa sản phẩm
 router.delete('/deleteProduct/:productId', deleteProduct);
+
+// Route để lấy 3 sản phẩm theo subcategoryName
+router.get('/getBySubcategory/:subcategoryName', getBySubcategory);
 
 module.exports = router;

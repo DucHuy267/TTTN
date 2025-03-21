@@ -20,6 +20,7 @@ const CartPage = ({ onClose }) => {
             const response = await axios.get(`http://localhost:4000/carts/${userId}`);
             if (response.status === 200) {
                 const products = response.data?.products || [];
+                console.log('Cart products:', products);
                 setCartProducts(products);
                 const initialQuantities = {};
                 products.forEach(product => {

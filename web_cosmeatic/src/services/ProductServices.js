@@ -109,6 +109,24 @@ export async function getProductBySubcategory(subcategoryName) {
     }
 }
 
+// lấy 3 spsp
+export async function getBySubcategory(subcategoryName) {
+    try {
+        const response = await axios.get(`${API_URL}/getBySubcategory/${encodeURIComponent(subcategoryName)}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log('response.data', response.data)
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error fetching products by subcategory:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
 export async function updateProduct(_id, updatedData) {
     try {
         const response = await axios.put(`${API_URL}/updateProduct/${_id}`, updatedData, {
