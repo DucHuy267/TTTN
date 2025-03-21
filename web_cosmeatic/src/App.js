@@ -10,7 +10,7 @@ function Breadcrumb() {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <div style={{ padding: '10px'}}>
+    <div style={{ padding: '10px', backgroundColor: '#fdfff8'}}>
       <>
         <a href="/" style={{color:'#a7a7a7'}}>Home</a>
       </>
@@ -38,7 +38,7 @@ function AppContent() {
       <Routes>
         {routes.map((route) => {
           const Page = route.page;
-          return <Route key={route.path} path={route.path} element={<Page />} />;
+          return <Route style={{ backgroundColor: '#fdfff8' }} key={route.path} path={route.path} element={<Page />} />;
         })}
       </Routes>
     </Fragment>
@@ -59,7 +59,7 @@ function MainApp() {
 
   return (
     <>
-      <AppContent />
+      <AppContent  />
       {!isAdminPage && <ChatWidget />}
       {!isAdminPage && <Footer />}
     </>

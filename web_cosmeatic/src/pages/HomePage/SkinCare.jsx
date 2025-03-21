@@ -106,8 +106,8 @@ const SkinCare = () => {
       <HeroSection>
         <ImageWrapper>
           <img
-          style={{marginLeft:60}}
-            src="https://s3-alpha-sig.figma.com/img/5cc8/c22a/854da1584516d6ea9a6e41ec6ab14e3d?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=GuKQgbZnrjsrUQRDb~58nL4r2RkOuI0TqidxRpLfq3vbvxmil-UZYUNBxx-1BmWuNz4PKeYXwRORD3--RSWECz~mgjij4zWcXCMdNF2jv0XOeTD1UVcVYGDJpN8Aclx25s6fR8PEqe8f2tQK8jSYx22zhI9XJIwF8zTVcYjkWh3GyXx0fMhLkCBVFd7pec8VpUjFC9-dZYxMYz2TLkolR8F3k1kMfniWFycmeW02tBS3lvJ50ic5a2FGkI25Z6Wc~3NPcyUP-0jscAeQNTlyDDuQg-mkdOMB2wn8yBLny~LKp5o57wVAQLQPdpg5l0rd69zPyDG8mVAVTtJa~x6EPA__"
+          style={{marginLeft:60, width: 400, height: 400, borderRadius: '50%'}}  
+            src="https://i.pinimg.com/474x/07/a8/25/07a825b5b4276b22f0ed679d1d9242a3.jpg"
             alt="Healthy and glowing skin"
           />
         </ImageWrapper>

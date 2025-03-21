@@ -6,14 +6,14 @@ const Footer = () => {
       {/* Cột bên trái: Hình ảnh */}
       <div className="footer-image">
         <img
-          src="https://s3-alpha-sig.figma.com/img/82ae/a0a5/19417a1f39f243d4090c62c2c9b56415?Expires=1742169600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=NSa~puOwQ0UffAwlu37CU82GyF9QNc9sVJSEG5xxruNW-3nAd1w4aAbkGgP0L1z4~AvebG7DCm~1ROXweXnsHvtfWfvAdyPHOkmp~l3p1iFlm~Ah69lMk7TIfkOGd0KnoXthvtq1ubaoH7WQnmqMaGE9jTM20hon2zs~eJDsUafpzJmEW2P3FmBn6sTgW8rpbVZVgjsxAvCn7YT799Td3oDUrUCEx9Y7YZACddotGWLstpzqP0V~lqfhm5NDFRa1XP48S6c4lhPEOGNDHQYAnkWLGDzwPcEnhJqOEd8DGYaATqvB1nUSlov7NEGPWv4GkccBitB-WtW2219~dONwLg__"
+          src="https://i.pinimg.com/474x/7d/53/e9/7d53e9c677009cd88a9f69ce63a335d6.jpg"
           alt="Couple Skincare"
         />
       </div>
 
       {/* Cột bên phải: Nội dung */}
       <div className="footer-content">
-        <h2>Đăng ký để nhận thông tin khuyến mãi sớm nhất từ......</h2>
+        <h2 style={{fontSize: 30, fontFamily: '-moz-initial'}}>Đăng ký để nhận thông tin khuyến mãi sớm nhất từ......</h2>
 
         {/* Ô nhập email */}
         <div className="email-input">

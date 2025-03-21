@@ -4,7 +4,7 @@
     flex-direction: column;
     background-color: #166534;
     color: white;
-    padding: 30px;
+    
   }
   
   @media (min-width: 768px) {
@@ -19,13 +19,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+
   }
   
   .footer-image img {
     width: 500%;
     max-width: 600px;
-    border-radius: 8px;
+
   }
   
   /* Cột nội dung */

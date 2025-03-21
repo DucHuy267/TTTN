@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Spin, message, Col, Row, Modal, Card } from 'antd';
-import { ShoppingOutlined, PlusOutlined, MinusOutlined, LeftOutlined } from '@ant-design/icons';
+import { Button, Spin, message, Col, Row, Modal } from 'antd';
+import { ShoppingOutlined, PlusOutlined, MinusOutlined, } from '@ant-design/icons';
 import { getDetailProduct } from '../../services/ProductServices';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Comments from './Comments';
 import { Span } from '../../components/HeaderComponents/style';
 import Suggest from './Suggest';
+import Ingredient from './Ingredient';
 
 const ProductDetailsPage = () => {
     const { _id } = useParams();
@@ -117,7 +118,7 @@ const ProductDetailsPage = () => {
     if (!product) return <p>Product not found.</p>;
 
     return (
-        <div>
+        <div style={{ backgroundColor: '#fdfff8' }}>
             {/* // chi tiết */}
             <div style={{ padding: 20, margin: '0 auto' }}>
                 <div style={{ flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
@@ -128,48 +129,61 @@ const ProductDetailsPage = () => {
                                     <img
                                         src={product.imageUrl}
                                         alt="product"
-                                        style={{ width: '400px', height: '400px', maxWidth: '700px', borderRadius: '5%' }}
+                                        style={{ width: '400px', height: '430px', maxWidth: '700px', maxHeight: '700px' }}
                                     />
                                 )}
                             </div>
                         </Col>
                         <Col span={14}>
-                            <div style={{ maxWidth: '400px', marginLeft: '100px' }}>
+                            <div className='top' style={{  maxWidth: '550px',  marginLeft: '100px', 
+                                display: 'flex', flexDirection: 'column', height: '100%' 
+                            }}>
                                 <h1 style={{ fontSize: '24px', fontWeight: 'bold', fontFamily: '-moz-initial' }}>{product.name}</h1>
                                 <p style={{ fontSize: '20px', color: 'red', fontFamily: '-moz-initial' }}>{`${product.price.toLocaleString('vi-VN')} đ`}</p>
-                                <p style={{ fontSize: '16px', fontFamily: '-moz-initial' }}>kho: {product.quantity}</p>
-                                <p style={{ fontSize: '16px', fontFamily: '-moz-initial' }}>{product.description}</p>
+                                <p style={{ fontSize: '18px', fontFamily: '-moz-initial' }}>kho: {product.quantity}</p>
+                                <p style={{ fontSize: '18px', fontFamily: '-moz-initial' }}>{product.description}</p>
 
-                                <div>
-                                    <div>Số lượng</div>
-                                    <div style={{ marginTop: 5, width: '110px', gap: 4, border: '1px solid #ccc', borderRadius: '4px', display: 'flex', alignItems: 'center' }}>
-                                        <Button style={{ width: 30, height: 30, border: 'none' }} onClick={() => handleQuantityChange(quantity - 1)}>
-                                            <MinusOutlined />
-                                        </Button>
-                                        <input
-                                            value={quantity}
-                                            onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-                                            size='small'
-                                            style={{ textAlign: 'center', width: '40px', height: 30,}}
-                                        />
-                                        <Button style={{ width: 30, height: 30, border: 'none' }} onClick={() => handleQuantityChange(quantity + 1)}>
-                                            <PlusOutlined />
+                                <div className='bottom' style={{ display: 'flex', 
+                                    alignItems: 'center', gap: '20px', marginTop: 'auto' 
+                                }}>
+                                    <div className='quantity'>
+                                        <div style={{  width: '150px', border: '1px solid #ccc', 
+                                            display: 'flex', alignItems: 'center' 
+                                        }}>
+                                            <Button style={{ width: 50, height: 50, border: 'none', }} onClick={() => handleQuantityChange(quantity - 1)}>
+                                                <MinusOutlined />
+                                            </Button>
+                                            <input
+                                                value={quantity}
+                                                onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                                                size='small'
+                                                style={{ textAlign: 'center', width: 50, height: 50 , fontSize: 18, border: 'none' }}
+                                            />
+                                            <Button style={{ width: 50, height: 50, border: 'none',  }} onClick={() => handleQuantityChange(quantity + 1)}>
+                                                <PlusOutlined />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                    <div style={{marginLeft: 40}}>
+                                        <Button
+                                            type="primary"
+                                            icon={<ShoppingOutlined />}
+                                            style={{ width: '320px', height: '50px', background: '#000', fontFamily: '-moz-initial' }}
+                                            onClick={handleAddToCart}
+                                        >
+                                            <span style={{ fontSize: '18px', color: '#fff' }}>Thêm vào giỏ hàng</span>
                                         </Button>
                                     </div>
                                 </div>
-
-                                <Button
-                                    type="primary"
-                                    icon={<ShoppingOutlined />}
-                                    style={{ width: '320px', height: '50px', marginTop: '20px', background: '#000' }}
-                                    onClick={handleAddToCart}
-                                >
-                                    <Span style={{ fontSize: '18px',color:'#fff' }}>Thêm vào giỏ hàng</Span>
-                                </Button>
                             </div>
                         </Col>
+
                     </Row>
                 </div>
+            </div>
+
+            <div style={{ marginLeft: 30, marginRight: 30 }}>
+                <Ingredient sections={product.sections} />
             </div>
 
             <div style={{ marginLeft: 30, marginRight: 30 }}>
