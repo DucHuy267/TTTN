@@ -65,7 +65,7 @@ function LoginPage({ onClose }) {
   return (
     <div style={{ margin: "40px 20px", justifyContent: "center", alignItems: "center", backgroundColor: "#fdfff8" }}>  
       <p style={{ fontWeight: "bold", fontSize: "25px", fontFamily: "serif", margin: 0 }}>
-        Audora chào bạn trở lại
+        Adora chào bạn trở lại
       </p>
       <div style={{ display: "flex" }}>
         <p style={{ padding: "5px 0", color: "#b8b6af" }}>Bạn chưa có tài khoản?</p>

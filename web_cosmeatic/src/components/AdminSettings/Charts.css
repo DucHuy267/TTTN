@@ -22,7 +22,7 @@
 .chart-container {
   background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   flex: 1; /* Ensure equal width for each chart */
   display: flex;
@@ -35,6 +35,7 @@
 .chart-container h4 {
   margin-bottom: 20px;
   color: #4e73df;
+  
 }
 
 /* Bar chart container styling */
@@ -45,6 +46,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Bar chart title styling */
@@ -67,4 +70,19 @@
   .bar-chart-container {
     width: 100%;
   }
+}
+
+.chart-scrollable-container {
+  overflow-x: auto; /* Cho phép cuộn ngang */
+  white-space: nowrap; /* Ngăn xuống dòng */
+  padding: 10px;
+  margin: 20px 0;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-scrollable-container canvas {
+  display: inline-block; /* Đảm bảo biểu đồ không bị co lại */
+  min-width: 600px; /* Đặt chiều rộng tối thiểu cho biểu đồ */
 }

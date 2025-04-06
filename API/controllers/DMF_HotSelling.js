@@ -1,6 +1,6 @@
 const Order = require('../models/orderModel');
 
-const getHotSellingProducts = async (req, res) => {
+const  getHotSellingProducts = async (req, res) => {
     try {
         const hotSellingProducts = await Order.aggregate([
             { $unwind: '$products' },

@@ -123,18 +123,12 @@ const CreateOrder = () => {
   };
 
   return (
-    <div className="CreateOrder" style={{ backgroundColor: '#fefbf4' }}>
+    <div className="CreateOrder" style={{ backgroundColor: '#fdfff8' }}>
       <header className="checkout-header" style={{ marginBottom: '20px' }}>
         <div className="header-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <img
-            src="https://cocoonvietnam.com/_nuxt/img/logo-left.b10676c.svg"
-            alt="Logo"
-            style={{
-              width: '100px', 
-              height: 'auto',  
-              marginRight: '10px', 
-            }}
-          />
+          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>
+              Adora
+          </h2>
           <h1 style={{
              fontSize: '30px',
              fontFamily: '-moz-initial',

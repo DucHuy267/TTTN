@@ -13,13 +13,13 @@ function MidBar() {
                     </video>
                 </div>
 
-                <h2 style={{ fontWeight: 'bold', fontSize: '16px' }}>Create and sell extraordinary products</h2>
+                <h2 style={{ fontWeight: 'bold', fontSize: '16px' }}>Tạo và bán các sản phẩm đặc biệt</h2>
 
                 <p>
-                    The world's fast growing industry todey are natural made products!
+                    Ngành công nghiệp đang phát triển nhanh chóng trên thế giới là sản phẩm được làm từ tự nhiên!
                 </p>
                 <div className="midbarbtndiv">
-                    <button className="midbarexploreBTN">Explore More</button>
+                    <button className="midbarexploreBTN">Khám phá thêm</button>
                     <button
                         className="midbarsellersBTN"
                         style={{
@@ -28,7 +28,7 @@ function MidBar() {
                             border: "2px solid white"
                         }}
                     >
-                        Top Sellers
+                        Bán chạy nhất
                     </button>
                 </div>
             </div>
@@ -37,11 +37,11 @@ function MidBar() {
                 <h2>My Stat</h2>
                 <div className="statmid">
                     <div className="statmidleft">
-                        <p>Today</p>
+                        <p>Hôm nay </p>
                         <p style={{ color: "rgb(110, 141, 64)" }}>4 Orders</p>{" "}
                     </div>
                     <div className="statmidright">
-                        <p>This Mount</p>
+                        <p>Tháng này </p>
                         <p style={{ color: "rgb(110, 141, 64)" }}>175 Orders</p>
                     </div>
                 </div>

@@ -141,7 +141,7 @@ const ProductDetailsPage = () => {
                                 <h1 style={{ fontSize: '24px', fontWeight: 'bold', fontFamily: '-moz-initial' }}>{product.name}</h1>
                                 <p style={{ fontSize: '20px', color: 'red', fontFamily: '-moz-initial' }}>{`${product.price.toLocaleString('vi-VN')} đ`}</p>
                                 <p style={{ fontSize: '18px', fontFamily: '-moz-initial' }}>kho: {product.quantity}</p>
-                                <p style={{ fontSize: '18px', fontFamily: '-moz-initial' }}>{product.description}</p>
+                                <p style={{ fontSize: '18px', fontFamily: '-moz-initial', color: '#595454', }}>{product.description}</p>
 
                                 <div className='bottom' style={{ display: 'flex', 
                                     alignItems: 'center', gap: '20px', marginTop: 'auto' 
@@ -181,20 +181,23 @@ const ProductDetailsPage = () => {
                     </Row>
                 </div>
             </div>
-
-            <div style={{ marginLeft: 30, marginRight: 30 }}>
+            
+            {/* Thanh phan */}
+            <div style={{ margin: '10px 0' }}>
                 <Ingredient sections={product.sections} />
             </div>
-
+            
+            {/* binh luan */}
             <div style={{ marginLeft: 30, marginRight: 30 }}>
                 <Comments productId={_id} userId={userId}  />
             </div>
 
             <hr style={{ margin: 20, }}></hr>
 
+            {/* goi y san pham */}
             <Suggest productId={_id} userId={userId} />
 
-            {/* Modal for login prompt */}
+            {/* hien thi thong bao login */}
             <Modal
                 title="Login Required"
                 visible={isModalVisible}

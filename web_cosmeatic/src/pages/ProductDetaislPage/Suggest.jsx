@@ -9,18 +9,39 @@ const Suggest = ({ userId }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchRelatedProducts = async () => {
+        const fetchData = async () => {
             if (!userId) return;
             try {
-                const response = await axios.get(`http://localhost:4000/dmf/top-products/${userId}`);
-                setRelatedProducts(response.data || []);
+                const [relatedRes, countRes] = await Promise.all([
+                    axios.get(`http://localhost:4000/dmf/top-products/${userId}`),
+                    axios.get(`http://localhost:4000/dmf/productCountsAll`)
+                ]);
+        
+                // Mảng sản phẩm liên quan
+                const relatedProductsData = relatedRes.data || [];
+                // Mảng số lượng sản phẩm đã bán
+                const productCountsData = countRes.data || [];
+        
+                // Tạo một đối tượng để kết hợp dữ liệu sản phẩm và số lượng
+                const combinedProducts = relatedProductsData.map(product => {
+                    const productCount = productCountsData.find(count => count._id === product._id);
+                    return {
+                        ...product,
+                        count: productCount ? productCount.count : 0 // Nếu không tìm thấy, mặc định count = 0
+                    };
+                });
+    
+                setRelatedProducts(combinedProducts);
+                console.log("Sản phẩm đã bán:", combinedProducts);
             } catch (error) {
-                console.error("Failed to fetch related products:", error);
-                message.error("Không thể tải sản phẩm gợi ý. Vui lòng thử lại.");
+                console.error("Failed to fetch data:", error);
+                message.error("Không thể tải dữ liệu. Vui lòng thử lại.");
             }
         };
-        fetchRelatedProducts();
-    }, [userId]);
+    
+        fetchData();
+    }, [userId]);    
+    
 
     const handleAddToCart = async (productId, quantity, e) => {
         e.preventDefault();
@@ -91,7 +112,7 @@ const Suggest = ({ userId }) => {
                                             <div style={{ fontSize: '14px', color: '#888' }}>
                                                 {`${product.price.toLocaleString('vi-VN')} đ`}
                                             </div>
-                                            <div>{product.totalSold} đã bán</div>
+                                            <div>{product.count} đã bán</div>
                                             <Rate disabled value={product.rating} />
                                         </div>
                                         <Button

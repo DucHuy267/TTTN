@@ -92,6 +92,23 @@ export async function getProductByCate(categoryId) {
     }
 }
 
+export async function getProductsByCategoryIdTrue(categoryId) {
+    try {
+        const response = await axios.get(`${API_URL}/categoryTrue/${categoryId}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log('categoryTrue.data', response.data)
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('Error fetching products by category:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
 export async function getProductBySubcategory(subcategoryName) {
     try {
         const response = await axios.get(`${API_URL}/subcategoryTrue/${encodeURIComponent(subcategoryName)}`, {

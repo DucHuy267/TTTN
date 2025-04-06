@@ -20,7 +20,7 @@ const Chatbot = () => {
             message: "Phiên đã hết hạn",
             description: "Vui lòng đăng nhập lại.",
           });
-          navigate("/login");
+          
         }
       } catch (error) {
         console.error("Lỗi khi giải mã token:", error);
@@ -79,7 +79,7 @@ const Chatbot = () => {
                 <Card
                   key={idx}
                   hoverable
-                  cover={<img alt={product.name} src={product.imageUrls} style={{ height: "150px", objectFit: "cover" }} />}
+                  cover={<img alt={product.name} src={product.imageUrl} style={{ height: "80px", objectFit: "cover" }} />}
                   onClick={() => goToProductDetail(product._id)}
                 >
                   <Card.Meta title={product.name} description={`💰 ${product.price}`} />

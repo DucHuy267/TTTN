@@ -1,7 +1,9 @@
 const order = require('../models/orderModel');
 const product = require('../models/productModel');
 const user = require('../models/userModel'); 
-const tf = require('@tensorflow/tfjs');
+// const tf = require('@tensorflow/tfjs');
+const tf = require('@tensorflow/tfjs-node');
+console.log('dmf',tf.getBackend()); // Nên in ra "tensorflow"
 
 // Tải dữ liệu từ database
 async function loadData() {
@@ -11,7 +13,7 @@ async function loadData() {
         const users = await user.find();
         return { orders, products, users };
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Lỗi khi tải dữ liệu:', error);
         throw error;
     }
 }
@@ -22,11 +24,12 @@ function createUserProductMatrix(orders, users, products) {
 
     orders.forEach(order => {
         const userIndex = users.findIndex(user => String(user.id) === String(order.userId));
-        const productIndex = products.findIndex(product => String(product.id) === String(order.productId));
-        
-        if (userIndex !== -1 && productIndex !== -1) {
-            matrix[userIndex][productIndex] += 1;
-        }
+        order.products.forEach(p => {
+            const productIndex = products.findIndex(product => String(product.id) === String(p.productId));
+            if (userIndex !== -1 && productIndex !== -1) {
+                matrix[userIndex][productIndex] += p.quantity;
+            }
+        });
     });
 
     return matrix;
@@ -103,11 +106,17 @@ async function trainModel(model, data) {
     const productTestTensor = tf.tensor1d(testData.map(d => d[1]), 'int32');
     const testLabelsTensor = tf.tensor1d(testLabels);
 
+    const startTime = Date.now();
+
     await model.fit([userTrainTensor, productTrainTensor], trainLabelsTensor, {
         epochs: 10,
         batchSize: 32,
         validationData: [[userTestTensor, productTestTensor], testLabelsTensor],
     });
+
+    const endTime = Date.now();
+    console.log(`Thời gian huấn luyện: ${(endTime - startTime) / 1000} giây`);
+
 
     // Giải phóng bộ nhớ để tránh memory leak
     userTrainTensor.dispose();
@@ -118,14 +127,13 @@ async function trainModel(model, data) {
     testLabelsTensor.dispose();
 }
 
-
 // Dự đoán 10 sản phẩm phù hợp nhất
 async function predictTopProducts(userId, model, data) {
     const { products, users } = data;
     
     const userIndex = users.findIndex(user => String(user.id) === String(userId));
     if (userIndex === -1) {
-        throw new Error("User not found");
+        throw new Error("Không tìm thấy người dùng");
     }
 
     const userTensor = tf.tensor2d([[userIndex]]); // Chuyển userId thành chỉ số ma trận
@@ -141,14 +149,15 @@ async function predictTopProducts(userId, model, data) {
     return predictions.slice(0, 10).map(p => p.product);
 }
 
-
 // Hàm lấy top sản phẩm phổ biến nhất từ đơn hàng nếu user chưa mua
 function getPopularProducts(orders, products) {
     const productCount = {};
 
     // Đếm số lần mỗi sản phẩm được mua
     orders.forEach(order => {
-        productCount[order.productId] = (productCount[order.productId] || 0) + 1;
+        order.products.forEach(p => {
+            productCount[p.productId] = (productCount[p.productId] || 0) + p.quantity;
+        });
     });
 
     // Sắp xếp sản phẩm theo số lần mua giảm dần
@@ -178,12 +187,64 @@ exports.getTopProducts = async (req, res) => {
 
         res.json(topProducts);
     } catch (error) {
-        console.error('Error processing request:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Lỗi xử lý yêu cầu:', error);
+        res.status(500).send('Lỗi máy chủ nội bộ');
     }
 };
 
 // User mới chưa có lịch sử mua hàng 👉 nhận được top sản phẩm bán chạy nhất.
 // User có lịch sử mua hàng 👉 nhận được gợi ý cá nhân hóa từ AI.
 // Mỗi user sẽ nhận được 10 sản phẩm gợi ý dựa trên mô hình AI Deep Matrix Factorization.
-// Mô hình AI sẽ được huấn luyện trên dữ liệu đơn hàng từ database.
+// Mô hình sẽ được huấn luyện mỗi khi có yêu cầu từ client, không cần lưu mô hình vào file hay database.
+// Điều này giúp tiết kiệm bộ nhớ và đảm bảo mô hình luôn được cập nhật với dữ liệu mới nhất.
+
+// lấy tên sản phẩm và số lượng sản phẩm trong tất cả đơn hàng của user
+exports.getProductCountInOrders = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const orders = await order.find({ userId }).populate('products.productId', 'name '); // Lấy tên sản phẩm (và giá price imageUrl )
+        const productCounts = {};
+
+        orders.forEach(order => {
+            order.products.forEach(p => {
+                if (productCounts[p.productId._id]) {
+                    productCounts[p.productId._id].count += p.quantity;
+                } else {
+                    productCounts[p.productId._id] = { ...p.productId._doc, count: p.quantity };
+                }
+            });
+        });
+
+        res.json(Object.values(productCounts));
+    } catch (error) {
+        console.error('Lỗi khi lấy số lượng sản phẩm trong đơn hàng:', error);
+        res.status(500).send('Lỗi máy chủ nội bộ');
+    }
+};
+
+// lấy số lượng của từng sản phẩm đả bán của tất cả đơn hàng của tất cả user
+exports.getProductCountInOrdersAll = async (req, res) => {
+    try {
+        const orders = await order.find().populate('products.productId', 'name '); // Lấy tên sản phẩm (và giá price imageUrl )
+        const productCounts = {};
+
+        orders.forEach(order => {
+            order.products.forEach(p => {
+                if (productCounts[p.productId._id]) {
+                    productCounts[p.productId._id].count += p.quantity;
+                } else {
+                    productCounts[p.productId._id] = { ...p.productId._doc, count: p.quantity };
+                }
+            });
+        });
+
+        res.json(Object.values(productCounts));
+    } catch (error) {
+        console.error('Lỗi khi lấy số lượng sản phẩm trong đơn hàng:', error);
+        res.status(500).send('Lỗi máy chủ nội bộ');
+    }
+};
+
+
+
+

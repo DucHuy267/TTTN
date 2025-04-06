@@ -22,11 +22,26 @@ const OrderHistory = () => {
       dataIndex: 'products',
       key: 'products',
       render: (products) =>
-        products.map((product, index) => (
-          <div key={index}>
-            {product.productId.name} - Số lượng: {product.quantity}
-          </div>
-        )),
+        products.map((product, index) => {
+          const { productId, quantity } = product; // Destructuring để lấy productId và quantity
+          const { imageUrl, name } = productId;  // Destructuring productId
+          return (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', flex: 2 }}>
+              <div>
+                {imageUrl && (
+                <img src={imageUrl} alt={name} style={{ width: '50px', height: '50px', margin: "5px 0" }} />
+              )}
+              </div>
+              <div style={{ marginLeft: '10px', fontSize: '14px', color: '#595454' ,  
+                          whiteSpace: "normal", // Cho phép chữ xuống dòng
+                          wordWrap: "break-word", // Tự động xuống dòng khi quá dài
+                          maxWidth: "300px"  }}>
+                {name} - Số lượng: {quantity}
+              </div>
+
+            </div>
+          );
+        }),
     },
     {
       title: 'Tổng tiền',

@@ -47,7 +47,7 @@ function SignupPage({ onClose }) {
 
   return (
     <div style={{ margin: "40px 20px", justifyContent: "center", alignItems: "center", backgroundColor: "#fdfff8" }}>
-      <p style={{ fontWeight: "bold", fontSize: "25px", fontFamily: "serif", margin: 0 }}>Chào mừng đến với Audora</p>
+      <p style={{ fontWeight: "bold", fontSize: "25px", fontFamily: "serif", margin: 0 }}>Chào mừng đến với Adora</p>
       <div style={{ display: "flex" }}>
         <p style={{ padding: "5px 0", color: "#b8b6af" }}>Bạn đã có tài khoản?</p>
         <Button style={{ color: "#1b5e20", padding: "0 5px" }} type="link" onClick={openLoginModal}>

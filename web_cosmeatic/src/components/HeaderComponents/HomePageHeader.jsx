@@ -17,9 +17,7 @@ const HomePageHeader = () => {
   const location = useLocation();
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // Thêm trạng thái cho CategoryDropdown
   const [isModalVisible, setIsModalVisible] = useState(false); // State to manage modal visibility
 
   // Fetch user information
@@ -104,6 +102,7 @@ const fetchProducts = async () => {
 
           // Điều hướng với dữ liệu đã xử lý
           navigate("/products", { state: { products: productsWithRatings } });
+          console.log("Sản phẩm bán chạy:", productsWithRatings);
       }
   } catch (error) {
       message.error("Không thể tải danh sách sản phẩm.");
@@ -167,7 +166,7 @@ const fetchRating = async (productId) => {
                 alt="Logo"
               /> */}
               <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>
-                Audora
+                Adora
               </h2>
             </Col>
             <Col span={15} style={{ padding: "18px 0px" }}>
@@ -227,7 +226,7 @@ const fetchRating = async (productId) => {
               </TextHeader>
             </div>
             <div>
-              <TextHeader style={{ marginLeft: 50 , fontWeight: "bold" }} onClick={() => (fetchProducts)}>
+              <TextHeader style={{ marginLeft: 50 , fontWeight: "bold" }} onClick={fetchProducts}>
                 BÁN CHẠY 
               </TextHeader>
             </div>

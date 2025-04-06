@@ -43,7 +43,7 @@ export async function getDetailCategory(productId) {
                 "Content-Type": "application/json",
             },
         });
-        console.log('response.data', response.data)
+        console.log('responsecate.data', response.data)
         if (response.status === 200) {
             return response.data;
         }

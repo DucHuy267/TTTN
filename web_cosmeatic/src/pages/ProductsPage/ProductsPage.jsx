@@ -14,11 +14,51 @@ const ProductsPage = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (location.state?.products) {
-            setProducts(location.state.products);
-        }
-    }, [location.state]);
+        // Lấy số lượng sản phẩm đã bán và đánh giá sao
+        const fetchProductData = async () => {
+            try {
+                const response = await axios.get('http://localhost:4000/dmf/productCountsAll');
+                const productCountsData = response.data || [];
 
+                // Kết hợp số lượng và đánh giá sao vào sản phẩm
+                const updatedProducts = await Promise.all(
+                    products.map(async (product) => {
+                        const productCount = productCountsData.find(count => count._id === product._id);
+                        const rating = await fetchRating(product._id); // Lấy đánh giá sao
+                        return {
+                            ...product,
+                            count: productCount ? productCount.count : 0,
+                            rating, // Thêm đánh giá sao
+                        };
+                    })
+                );
+
+                setProducts(updatedProducts); // Cập nhật lại state products
+            } catch (error) {
+                console.error("Failed to fetch product data:", error);
+            }
+        };
+
+        if (products.length > 0) {
+            fetchProductData();
+        }
+    }, [products]);
+
+        // Hàm lấy đánh giá sao
+        const fetchRating = async (productId) => {
+            try {
+                const response = await axios.get(`http://localhost:4000/comments/getCommentsByProductId/${productId}`);
+                const comments = response.data.data.comments || [];
+                if (comments.length > 0) {
+                    const averageRating = comments.reduce((sum, comment) => sum + comment.rating, 0) / comments.length;
+                    return averageRating;
+                }
+                return 0; // Mặc định là 0 nếu không có bình luận
+            } catch (error) {
+                console.error('Lỗi khi tải đánh giá:', error);
+                return 0;
+            }
+        };
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -126,7 +166,7 @@ const ProductsPage = () => {
                                     <div style={{ fontSize: '14px', color: '#888' }}>
                                         {`${product.price.toLocaleString('vi-VN')} đ`}
                                     </div>
-                                    <div>{product.totalSold} đã bán</div>
+                                    <div>{product.count} đã bán</div>
                                     <Rate disabled value={product.rating} />
                                 </div>
                                 <Button

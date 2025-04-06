@@ -1,8 +1,9 @@
 
 import React from "react";
 import styled from "styled-components";
-import { FaLeaf, FaRecycle } from "react-icons/fa";
-import { Navigate, useNavigate } from "react-router-dom";
+import { FaLeaf, FaRecycle, FaRedoAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import skincare from "./images/skincare.png"
 
 const SkinCareContainer = styled.div`
   font-family: Arial, sans-serif;
@@ -54,7 +55,7 @@ const TextWrapper = styled.div`
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.25rem;
     transition: background-color 0.3s ease;
 
     &:hover {
@@ -77,10 +78,10 @@ const FeaturesSection = styled.div`
 const FeatureBox = styled.div`
   text-align: center;
   background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+  border: 3px solid #2e7d32;
+  border-radius: 20px;
   padding: 20px;
-  max-width: 200px;
+  max-width: 350px;
 
   svg {
     font-size: 2rem;
@@ -89,14 +90,11 @@ const FeatureBox = styled.div`
   }
 
   h3 {
+    font-weight: bold;
     font-size: 1.2rem;
     margin-bottom: 10px;
   }
 
-  p {
-    font-size: 0.9rem;
-    color: #555;
-  }
 `;
 
 const SkinCare = () => {
@@ -106,14 +104,14 @@ const SkinCare = () => {
       <HeroSection>
         <ImageWrapper>
           <img
-          style={{marginLeft:60, width: 400, height: 400, borderRadius: '50%'}}  
-            src="https://i.pinimg.com/474x/07/a8/25/07a825b5b4276b22f0ed679d1d9242a3.jpg"
+          style={{marginLeft:30, width: 500, height: 500, borderRadius: '50%'}}  
+            src={skincare}
             alt="Healthy and glowing skin"
           />
         </ImageWrapper>
         <TextWrapper style={{ marginRight: 200, marginLeft: 50 }}>
-          <h1 style={{ fontSize: 80 , }}>Bí quyết để có làn da khỏe mạnh và rạng rỡ</h1>
-          <p>Khám phá bí quyết chăm sóc da từ thiên nhiên, giúp da luôn khỏe mạnh, mịn màng và rạng rỡ mỗi ngày.</p>
+          <h1 style={{ fontSize: 80, fontFamily:'-moz-initial' }}>Nâng niu làn da, tôn vinh vẻ đẹp thuần khiết</h1>
+          <p style={{ fontSize: 16, padding: '0 80px'}}>Khám phá bí quyết chăm sóc da từ thiên nhiên, giúp da luôn khỏe mạnh, mịn màng và rạng rỡ mỗi ngày.</p>
           <button  onClick={() => navigate("/learnmore")} >Tìm hiểu thêm →</button>
         </TextWrapper>
       </HeroSection>
@@ -130,7 +128,7 @@ const SkinCare = () => {
           <p>Sản phẩm được phát triển mà không thử nghiệm trên động vật, hướng tới vẻ đẹp nhân văn.</p>
         </FeatureBox>
         <FeatureBox>
-          <FaRecycle />
+          <FaRedoAlt />
           <h3>Bao bì thân thiện với môi trường</h3>
           <p>Sử dụng vật liệu có thể tái chế, giảm thiểu tác động đến môi trường.</p>
         </FeatureBox>

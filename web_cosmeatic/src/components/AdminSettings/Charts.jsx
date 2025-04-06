@@ -30,6 +30,7 @@ ChartJS.register(
 
 const Charts = () => {
   const [chartData, setChartData] = useState(null);
+  const [productData, setProductData] = useState([]);
 
   // Định nghĩa bảng màu sáng
   const lightColors = [
@@ -72,14 +73,44 @@ const Charts = () => {
       });
   }, []);  // Chỉ chạy khi component được mount
 
+  useEffect(() => {
+    // Fetch dữ liệu số lượng sản phẩm từ API
+    const fetchProductData = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/dmf/productCountsAll');
+            const data = await response.json();
+            setProductData(data);
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+        }
+    };
+      fetchProductData();
+  }, []);
+
+// Chuẩn bị dữ liệu cho biểu đồ
+  const chartDataProducts = {
+    labels: productData.map(product => product.name),  // Tên sản phẩm
+    datasets: [
+        {
+            label: 'Biểu đồ số lượng sản phẩm đã bán',
+            data: productData.map(product => product.count), // Số lượng sản phẩm đã bán
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }
+    ]
+  };
+
   // Trả về thông báo loading nếu dữ liệu chưa có
   if (!chartData) {
     return <div>Đang tải...</div>;
   }
 
+
   return (
     <div className="charts-container">
-      <h2 style={{ margin: '10px 50px', fontSize: 20, color:'#000', fontWeight:'bold'}} className="charts-title">The Cocoon Original</h2>
+      <h2 style={{ margin: '10px 50px', fontSize: 20, color:'#000', fontWeight:'bold'}} className="charts-title">
+        Doanh thu</h2>
 
       <div className="charts">
         {/* Biểu đồ Tròn (bên trái) */}
@@ -99,6 +130,10 @@ const Charts = () => {
       <div className="bar-chart-container">
         <h4>Biểu Đồ Cột</h4>
         <Bar data={chartData} />
+      </div>
+
+      <div className="chart-scrollable-container">
+            <Bar data={chartDataProducts} />
       </div>
     </div>
   );

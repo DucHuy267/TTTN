@@ -21,7 +21,7 @@ function BottomRight() {
     return (
         <div className="BottomRight">
             <div className="bottomlefttop">
-                <h2 style={{marginLeft: 10}}>Recent Activity</h2>
+                <h2 style={{marginLeft: 10}}>Hoạt động gần đây</h2>
                 <div>
                     See All
                     <span className="material-symbols-outlined">arrow_forward</span>

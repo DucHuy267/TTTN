@@ -16,7 +16,7 @@ import HeaderComponent from '../../components/HeaderComponents/HeaderComponent';
 // Import useNavigate from react-router-dom
 import { useNavigate } from 'react-router-dom';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
-import Charts from '../../components/Settings/Charts';
+import Charts from '../../components/AdminSettings/Charts';
 import AdminBrand from '../../components/AdminBrand/AdminBrand';
 import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
 
@@ -36,8 +36,8 @@ const AdminPage = () => {
                     getItem('Danh mục', 'category', <AppstoreOutlined />),
                     getItem('Sản phẩm', 'product', <ProductOutlined />),
                 ]),
-                getItem('Đơn hàng', 'order', <ShoppingOutlined />),
                 getItem('Quản lý thương hiệu ', 'brand', <ShoppingOutlined />),
+                getItem('Đơn hàng', 'order', <ShoppingOutlined />),
                 // getItem('Quan ly voucher', 'voucher', <ShoppingOutlined />),
                 // getItem('Quan ly bài đăng', 'post', <ShoppingOutlined />),
                 // getItem('Quan ly tin nhắn', 'message', <ShoppingOutlined />),
@@ -115,7 +115,7 @@ const AdminPage = () => {
                     />
                     <div className="profile-header">Cocoon Original</div> */}
                     <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#357D18', margin:'0px', fontFamily:'-moz-initial' }}>
-                        Audora
+                        Adora
                     </h2>
                 </div>
 

@@ -16,9 +16,9 @@ const HeaderComponent = () => {
     return (
         <div className="Topbar">
             <div className="topbarleft">
-                <h1 ><b>Welcome to Audora.</b></h1>
+                <h1 ><b>Chào mừng bạn đến với Adora.</b></h1>
                 <small style={{ fontWeight: 600, color: "grey" }}>
-                    Hello Admin, Welcome Back!
+                Xin chào quản trị viên, chào mừng trở lại!
                 </small>
             </div>
 

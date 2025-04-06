@@ -23,7 +23,7 @@ function BottomLeft() {
     return (
         <div className="BottomLeft">
             <div className="bottomlefttop">
-                <h2 style={{ fontWeight: 'bold', fontSize: '15px' }}>My Listings</h2>
+                <h2 style={{ fontWeight: 'bold', fontSize: '15px' }}>Danh sách của tôi</h2>
 
             </div>
 

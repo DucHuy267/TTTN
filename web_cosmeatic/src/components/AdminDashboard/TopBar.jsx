@@ -16,8 +16,8 @@ function TopBar() {
             </div>
 
             <div className="topbarright">
-                <span className="material-symbols-outlined">bubble_chart</span>
-                <span className="material-symbols-outlined">notifications</span>
+                <span className="material-symbols-outlined">biểu đồ bong bóng</span>
+                <span className="material-symbols-outlined">Thông báo</span>
                 <img
                     style={{ width: 50, height: 50, borderRadius: 10 }}
                     src="https://static.vecteezy.com/system/resources/thumbnails/002/002/403/small/man-with-beard-avatar-character-isolated-icon-free-vector.jpg"

@@ -14,7 +14,7 @@ exports.getAllProductsTrue = async (req, res) => {
 exports.getProductsByCategoryIdTrue = async (req, res) => {
     try {
         const categoryId = req.params.categoryId;
-        const products = await Product.find({ categoryId: categoryId }, { isVisible: true });
+        const products = await Product.find({  categoryId: categoryId, isVisible: true  });
 
         if (products.length > 0) {
             res.status(200).json(products);

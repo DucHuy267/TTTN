@@ -8,7 +8,7 @@
   .account-title {
     font-size: 15px;
     font-weight: bold;
-    color: #cc8d5e;
+    color: #2C6C15;
     margin-bottom: 20px;
   }
   
@@ -20,16 +20,16 @@
   }
   
   .account-tabs .ant-tabs-tab:hover {
-    color: #8b4513; /* Hover color */
+    color: #2C6C15; /* Hover color */
   }
   
   .account-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    color: #8b4513; /* Active tab color */
+    color: #2C6C15; /* Active tab color */
     font-weight: bold; /* Highlight active tab */
   }
   
   .account-tabs .ant-tabs-ink-bar {
-    background-color: #8b4513; /* Underline color for active tab */
+    background-color: #2C6C15; /* Underline color for active tab */
   }
   
   /* Grid layout */
@@ -42,7 +42,7 @@
   .grid-item label {
     font-size: 14px;
     font-weight: 600;
-    color: #8b4513;
+    color: #2C6C15;
   }
   
   .input-disabled {
@@ -65,8 +65,8 @@
   }
   
   .cancel-button:hover {
-    background-color: #c7a580;
-    border-color: #b59374;
+    background-color: #2C6C15;
+    border-color: #2C6C15;
     color: white;
   }
   
@@ -78,13 +78,13 @@
   }
   
   .save-button:hover {
-    background-color: #8b4513;
+    background-color: #2C6C15;
     color: white;
   }
   
   /* Order history table styling */
   .order-history-table .ant-table-thead > tr > th {
-    background-color: #c3aa52;
+    background-color: #2C6C15;
     color: white;
     font-size: 16px;
   }
@@ -96,7 +96,7 @@
   
   /* Inputs and selects */
   .ant-input, .ant-picker, .ant-select-selector {
-    border: 1px solid #8b4513;
+    border: 1px solid #2C6C15;
     border-radius: 4px;
     transition: border-color 0.3s ease;
   }
@@ -104,7 +104,7 @@
   .ant-input:focus,
   .ant-picker-focused,
   .ant-select-focused .ant-select-selector {
-    border-color: #c7a580;
+    border-color: #2C6C15;
     box-shadow: 0 0 5px rgba(199, 165, 128, 0.5);
   }
   

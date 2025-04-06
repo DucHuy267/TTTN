@@ -114,7 +114,6 @@ const AccountInfo = () => {
           <Tabs.TabPane tab="Thông tin tài khoản" key="1">
             <div className="account-info">
               <section className="account-section">
-                <h2>Thông tin tài khoản</h2>
                 <div className="grid-container">
                   <div className="grid-item">
                     <label>Email</label>
