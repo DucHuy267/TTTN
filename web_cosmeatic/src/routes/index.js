@@ -6,6 +6,7 @@ import Cocoon from "../pages/BrandPage/brand-title";
 import CartPage from "../pages/CartPage/CartPage";
 import HomePage from "../pages/HomePage/HomePage";
 import LearnMore from "../pages/HomePage/SkincareLearnMore";
+import HotSelling from "../pages/HotSellingPage.jsx/HotSelling";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import CreateOrder from "../pages/Order/CreateOrder";
 import ProductDetailsPage from "../pages/ProductDetaislPage/ProductDetaislPage";
@@ -51,6 +52,11 @@ export const routes = [
     {
         path: '/products',
         page: ProductsPage,
+        showHeader: true
+    },
+    {
+        path: '/hotselling',
+        page: HotSelling,
         showHeader: true
     },
     {

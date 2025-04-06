@@ -91,7 +91,7 @@ const fetchProducts = async () => {
           const productsWithRatings = await Promise.all(
               res.data.map(async (product) => {
                   try {
-                      const rating = await fetchRating(product.product._id);
+                      const rating = await fetchRating(product._id);
                       return { ...product, rating };
                   } catch (error) {
                       console.error(`Lỗi khi lấy đánh giá sản phẩm ${product.product._id}:`, error);
@@ -101,7 +101,7 @@ const fetchProducts = async () => {
           );
 
           // Điều hướng với dữ liệu đã xử lý
-          navigate("/products", { state: { products: productsWithRatings } });
+          navigate("/hotselling", { state: { products: productsWithRatings } });
           console.log("Sản phẩm bán chạy:", productsWithRatings);
       }
   } catch (error) {
