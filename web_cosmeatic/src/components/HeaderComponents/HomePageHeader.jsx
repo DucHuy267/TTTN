@@ -74,10 +74,6 @@ const HomePageHeader = () => {
             setCartQuantity(totalQuantity); // Assuming you're using React's useState for the count
         }
     } catch (error) {
-        notification.error({
-            message: 'Error',
-            description: `Error displaying cart products: ${error}`,
-        });
         console.error(error);
     }
 };

@@ -156,13 +156,13 @@ const Comments = ({ productId, userId }) => {
                                 placeholder="Viết đánh giá..."
                                 rows={4}
                             />
-                            <input
+                            {/* <input
                                 type="file"
                                 accept="image/*"
                                 multiple
                                 onChange={handleImageUpload}
                                 style={{ marginTop: 20 }}
-                            />
+                            /> */}
                             {selectedImages.length > 0 && (
                                 <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                                     {selectedImages.map((image, index) => (

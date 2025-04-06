@@ -75,16 +75,30 @@ const Chatbot = () => {
         renderItem={(msg, index) =>
           msg.products ? (
             <div key={index} style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {msg.products.map((product, idx) => (
-                <Card
-                  key={idx}
-                  hoverable
-                  cover={<img alt={product.name} src={product.imageUrl} style={{ height: "80px", objectFit: "cover" }} />}
-                  onClick={() => goToProductDetail(product._id)}
-                >
-                  <Card.Meta title={product.name} description={`💰 ${product.price}`} />
-                </Card>
+              {msg.products.map((product) => (
+                
+                <div key={index}  onClick={() => goToProductDetail(product._id)}
+                  style={{ display: 'flex', alignItems: 'center', flex: 2, border: '1px solid #f0f0f0', borderRadius: '10px', padding: '10px', cursor: 'pointer' }}>
+                <div>
+                  {product.imageUrl && (
+                  <img src={product.imageUrl} alt={product.name} style={{ width: '60px', height: '60px', margin: "5px 0" }} />
+                )}
+                </div>
+                <div style={{ marginLeft: '10px', fontSize: '14px', color: '#595454' ,  
+                           }}>
+                    <p style={{ fontSize: "16px", fontWeight: "bold", whiteSpace: "normal", // Cho phép chữ xuống dòng
+                            wordWrap: "break-word", // Tự động xuống dòng khi quá dài
+                            maxWidth: "300px" }}>
+                    {product.name}
+                    </p>
+                    <p>
+                      💰 {product.price}
+                    </p>
+
+                </div>
+              </div>
               ))}
+              
             </div>
           ) : (
             <List.Item key={index} style={{ textAlign: msg.user ? "right" : "left" }}>

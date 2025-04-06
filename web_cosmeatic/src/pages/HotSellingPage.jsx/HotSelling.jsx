@@ -14,38 +14,34 @@ const HotSelling = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Lấy số lượng sản phẩm đã bán và đánh giá sao
         const fetchProductData = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/dmf/productCountsAll');
-                const productCountsData = response.data || [];
-
-                // Kết hợp số lượng và đánh giá sao vào sản phẩm
-                const updatedProducts = await Promise.all(
-                    products.map(async (product) => {
-                        const productCount = productCountsData.find(count => count._id === product._id);
-                        const rating = await fetchRating(product.product._id); // Lấy đánh giá sao
-                        return {
-                            ...product,
-                            count: productCount ? productCount.count : 0,
-                            rating, // Thêm đánh giá sao
-                        };
+                const res = await axios.get(`http://localhost:4000/dmf/hot-selling-products`);
+            if (res.data) {
+                // Lấy đánh giá cho từng sản phẩm
+                const productsWithRatings = await Promise.all(
+                    res.data.map(async (product) => {
+                        const rating = await fetchRating(product.product._id);
+                        return { ...product, rating };
                     })
                 );
-
-                setProducts(updatedProducts); // Cập nhật lại state products
+                setProducts(productsWithRatings);
+                console.log('productsWithRatings',productsWithRatings);
+            }
             } catch (error) {
                 console.error("Failed to fetch product data:", error);
             }
         };
-
-        if (products.length > 0) {
-            fetchProductData();
-        }
-    }, [products]);
+        fetchProductData();
+    }, []);
 
         // Hàm lấy đánh giá sao
         const fetchRating = async (productId) => {
+            if (!productId) {
+                console.error('Product ID is undefined');
+                return 0; // Trả về mặc định nếu productId không hợp lệ
+            }
+        
             try {
                 const response = await axios.get(`http://localhost:4000/comments/getCommentsByProductId/${productId}`);
                 const comments = response.data.data.comments || [];
@@ -55,7 +51,7 @@ const HotSelling = () => {
                 }
                 return 0; // Mặc định là 0 nếu không có bình luận
             } catch (error) {
-                console.error('Lỗi khi tải đánh giá:', error);
+                console.error(`Lỗi khi tải đánh giá sản phẩm ${productId}:`, error);
                 return 0;
             }
         };
@@ -166,7 +162,7 @@ const HotSelling = () => {
                                         {`${item.product.price.toLocaleString('vi-VN')} đ`}
                                     </div>
                                     <div>{item.totalSold} đã bán</div>
-                                    <Rate disabled value={item.product.rating} />
+                                    <Rate disabled value={item.rating} />
                                 </div>
                                 <Button
                                     icon={<ShoppingOutlined />}

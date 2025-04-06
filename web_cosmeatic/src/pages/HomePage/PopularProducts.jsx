@@ -120,7 +120,7 @@ const PopularProducts = () => {
                 <div style={{ flex: '3', overflowX: 'auto', margin: '0 50px' }}>
                     {products.length > 0 ? (
                         <div style={{ display: 'flex' }}>
-                            {products.map((item) => (
+                         {products.slice(0, 10).map((item) => (  
                                 <div key={item.product._id} style={{ marginRight: '16px', flexShrink: 0 }}>
                                     <Card
                                         hoverable

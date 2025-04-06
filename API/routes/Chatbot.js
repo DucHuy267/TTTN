@@ -38,7 +38,7 @@ router.post("/chat", async (req, res) => {
                   _id : p._id,
                   name: p.name,
                   price: p.price.toLocaleString("vi-VN") + "đ",
-                  imageUrls: p.image || "https://via.placeholder.com/150",
+                  imageUrl: p.imageUrl || "https://via.placeholder.com/150",
               }));
 
               return res.json({ products: response });

@@ -6,6 +6,7 @@ const  getHotSellingProducts = async (req, res) => {
             { $unwind: '$products' },
             { $group: { _id: '$products.productId', totalSold: { $sum: '$products.quantity' } } },
             { $sort: { totalSold: -1 } },
+            { $limit: 20 },
             {
                 $lookup: {
                     from: 'products',
