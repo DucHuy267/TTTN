@@ -1,6 +1,7 @@
 import 'package:app_shipper/screens/orderdetail/order_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_shipper/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WorkingScreen extends StatefulWidget {
   const WorkingScreen({super.key});
@@ -20,8 +21,16 @@ class _WorkingScreenState extends State<WorkingScreen> {
   }
 
   Future<void> fetchOrders() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('user_id');
+
+    if (userId == null) {
+      print('Không tìm thấy user_id trong SharedPreferences');
+      return;
+    }
+
     try {
-      List<Map<String, dynamic>> data = await ApiService.getOrdersByStatus("delivered");
+      List<Map<String, dynamic>> data = await ApiService.getOrdersByStatusAndShipper("shipped", userId);
       if (mounted) {
         setState(() {
           orders = data;
@@ -37,6 +46,7 @@ class _WorkingScreenState extends State<WorkingScreen> {
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,14 +190,8 @@ class _WorkingScreenState extends State<WorkingScreen> {
   // Chuyển đổi trạng thái đơn hàng sang tiếng Việt
   String getOrderStatus(String status) {
     switch (status.toLowerCase()) {
-      case 'pending':
-        return 'Chờ xác nhận';
-      case 'processing':
-        return 'Đang xử lý';
-      case 'delivered':
+      case 'shipped':
         return 'Đang giao hàng';
-      case 'success':
-        return 'Đã giao thành công';
       default:
         return 'Không xác định';
     }
@@ -196,14 +200,8 @@ class _WorkingScreenState extends State<WorkingScreen> {
   // Màu sắc cho từng trạng thái
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'pending':
-        return Colors.orange;
-      case 'processing':
-        return Colors.blue;
-      case 'delivered':
+      case 'shipped':
         return Colors.purple;
-      case 'success':
-        return Colors.green;
       default:
         return Colors.grey;
     }

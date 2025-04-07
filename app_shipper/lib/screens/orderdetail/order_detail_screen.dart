@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_shipper/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetailScreen extends StatefulWidget {
@@ -42,20 +43,38 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   // Hàm cập nhật trạng thái đơn hàng
-  Future<void> _updateOrderStatus(String newStatus) async {
+  Future<void> _updateOrderStatus(String action) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? shipperId = prefs.getString('user_id');
+
+    if (shipperId == null) {
+      print('Không tìm thấy user_id trong SharedPreferences');
+      return;
+    }
+
     setState(() => isUpdating = true);
+
     try {
-      final success = await ApiService.updateOrderStatus(widget.orderId, newStatus);
+      bool success = false;
+      if (action == 'shipped') {
+        success = await ApiService.confirmShipment(widget.orderId, shipperId);
+      } else if (action == 'success') {
+        success = await ApiService.confirmDelivery(widget.orderId, shipperId);
+      }
+
       if (success && mounted) {
         setState(() {
-          order!['status'] = newStatus;
+          order!['status'] = action;
         });
-      } else {
+
+      }
+      else {
         print('Lỗi cập nhật trạng thái đơn hàng');
       }
     } catch (error) {
       print('Lỗi cập nhật trạng thái: $error');
     }
+
     if (mounted) setState(() => isUpdating = false);
   }
 
@@ -89,9 +108,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               const Center(child: CircularProgressIndicator())
             else if (order!['status'] == 'processing')
               _buildConfirmButton('Nhận đơn', Colors.orange, () {
-                _updateOrderStatus('delivered');
+                _updateOrderStatus('shipped');
               })
-            else if (order!['status'] == 'delivered')
+            else if (order!['status'] == 'shipped')
                 _buildConfirmButton('Đã giao hàng', Colors.green, () {
                   _updateOrderStatus('success');
                 }),
@@ -213,7 +232,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   String getOrderStatus(String status) {
     switch (status.toLowerCase()) {
       case 'processing': return 'Chờ lấy hàng';
-      case 'delivered': return 'Đang giao hàng';
+      case 'shipped': return 'Đang giao hàng';
       case 'success': return 'Đã giao thành công';
       default: return 'Không xác định';
     }
@@ -222,7 +241,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'processing': return Colors.blue;
-      case 'delivered': return Colors.purple;
+      case 'shipped': return Colors.purple;
       case 'success': return Colors.green;
       default: return Colors.grey;
     }

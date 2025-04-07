@@ -1,6 +1,7 @@
 import 'package:app_shipper/screens/orderdetail/order_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_shipper/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CompletedScreen extends StatefulWidget {
   const CompletedScreen({super.key});
@@ -20,8 +21,15 @@ class _CompletedScreenState extends State<CompletedScreen> {
   }
 
   Future<void> fetchOrders() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('user_id');
+
+    if (userId == null) {
+      print('Không tìm thấy user_id trong SharedPreferences');
+      return;
+    }
     try {
-      List<Map<String, dynamic>> data = await ApiService.getOrdersByStatus("success");
+      List<Map<String, dynamic>> data = await ApiService.getOrdersByStatusAndShipper("success", userId);
       if (mounted) {
         setState(() {
           orders = data;

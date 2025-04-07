@@ -28,14 +28,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _isLoading = true;
       _errorMessage = null;
     });
-
     try {
       final prefs = await SharedPreferences.getInstance();
-      String? userId = prefs.getString('user_id'); // 🔥 Đúng: lấy 'user_id' thay vì 'token'
-
+      String? userId = prefs.getString('user_id');
       if (userId != null) {
         final response = await ApiService.getUserById(userId);
-
         if (response != null && response.isNotEmpty) {
           setState(() {
             userData = response;

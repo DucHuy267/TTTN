@@ -23,27 +23,20 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
       _errorMessage = null;
     });
-
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-
     final response = await ApiService.login(email, password);
-
     setState(() {
       _isLoading = false;
     });
-
     if (response.containsKey('token')) {
       final token = response['token'];
-
       // Giải mã token để lấy userId
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       final userId = decodedToken['userId']; // Lấy userId từ token
-
       // Lưu userId vào SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_id', userId);
-
       // Điều hướng đến MainScreen
       Navigator.pushReplacement(
         context,

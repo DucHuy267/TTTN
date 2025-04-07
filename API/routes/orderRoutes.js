@@ -47,6 +47,6 @@ router.put('/confirmShipment/:orderId/:shipperId', confirmShipment);
 // API để xác nhận đơn hàng đã được giao
 router.put('/confirmDelivery/:orderId/:shipperId', confirmDelivery);
 // Lấy danh sách đơn hàng theo trạng thái và id shipper
-router.get('/status/:status/shipper/:shipperId', getOrdersByStatusAndShipperId);
+router.get('/getOrdersByStatusAndShipperId/:status/:shipperId', getOrdersByStatusAndShipperId);
 
 module.exports = router;

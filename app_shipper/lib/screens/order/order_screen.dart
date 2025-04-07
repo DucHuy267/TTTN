@@ -184,7 +184,7 @@ class _OrderScreenState extends State<OrderScreen> {
         return 'Chờ xác nhận';
       case 'processing':
         return 'Đang xử lý';
-      case 'delivered':
+      case 'shipper':
         return 'Đang giao hàng';
       case 'success':
         return 'Đã giao thành công';

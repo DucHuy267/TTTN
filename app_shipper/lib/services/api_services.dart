@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://192.168.0.102:4000';
+  static const String baseUrl = 'http://192.168.0.119:4000';
 
   // Hàm lấy danh sách đơn hàng theo trạng thái
   static Future<List<Map<String, dynamic>>> getOrdersByStatus(String status) async {
     try {
-      final response = await http.get   (Uri.parse('$baseUrl/orders/status/$status'));
+      final response = await http.get(Uri.parse('$baseUrl/orders/status/$status'));
 
       if (response.statusCode == 200) {
         return List<Map<String, dynamic>>.from(json.decode(response.body));
@@ -18,6 +18,25 @@ class ApiService {
       throw Exception('Lỗi kết nối API: $error');
     }
   }
+
+  // Hàm lấy danh sách đơn hàng theo trạng thái và IdShipper
+  static Future<List<Map<String, dynamic>>> getOrdersByStatusAndShipper(String status, String shipperId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/orders/getOrdersByStatusAndShipperId/$status/$shipperId'),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(json.decode(response.body));
+      } else {
+        throw Exception('Lỗi khi lấy danh sách đơn hàng: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Lỗi kết nối API: $error');
+    }
+  }
+
 
   // Lấy chi tiết đơn hàng theo ID
   static Future<Map<String, dynamic>> getOrderById(String orderId) async {
@@ -34,18 +53,59 @@ class ApiService {
     }
   }
 
-  static Future<bool> updateOrderStatus(String orderId, String newStatus) async {
+  // hàm cập nhật trạng thái
+  // static Future<bool> updateOrderStatus(String orderId, String newStatus) async {
+  //   try {
+  //     final response = await http.put(
+  //       Uri.parse('$baseUrl/orders/status/$orderId'),
+  //       headers: {"Content-Type": "application/json"},
+  //       body: json.encode({"status": newStatus}),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       return true;
+  //     } else {
+  //       print('Lỗi cập nhật trạng thái: ${response.statusCode}');
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     print('Lỗi kết nối API: $error');
+  //     return false;
+  //   }
+  // }
+
+  // Hàm shipper xác nhận đang giao hàng
+  static Future<bool> confirmShipment(String orderId, String shipperId) async {
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/orders/status/$orderId'),
+        Uri.parse('$baseUrl/orders/confirmShipment/$orderId/$shipperId'),
         headers: {"Content-Type": "application/json"},
-        body: json.encode({"status": newStatus}),
       );
 
       if (response.statusCode == 200) {
         return true;
       } else {
-        print('Lỗi cập nhật trạng thái: ${response.statusCode}');
+        print('Lỗi xác nhận giao hàng: ${response.statusCode}');
+        return false;
+      }
+    } catch (error) {
+      print('Lỗi kết nối API: $error');
+      return false;
+    }
+  }
+
+  // Hàm shipper xác nhận đã giao hàng
+  static Future<bool> confirmDelivery(String orderId, String shipperId) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/orders/confirmDelivery/$orderId/$shipperId'),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print('Lỗi xác nhận đơn hàng đã giao: ${response.statusCode}');
         return false;
       }
     } catch (error) {
@@ -55,7 +115,7 @@ class ApiService {
   }
 
 
-  // Register function
+  //register
   Future<Map<String, dynamic>> register(String name, String email, String password, String phone, String address) async {
     final response = await http.post(
       Uri.parse('$baseUrl/users/register'),
@@ -71,7 +131,6 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
-  // Login function
   /// Đăng nhập shipper
   static Future<Map<String, dynamic>> login(String email, String password) async {
     try {
@@ -115,16 +174,16 @@ class ApiService {
 
   // Hàm cập nhật thông tin người dùng
   static Future<bool> updateUser(String userId, Map<String, dynamic> userData) async {
-  try {
-  final response = await http.put(
-  Uri.parse('$baseUrl/users/$userId'),
-  headers: {"Content-Type": "application/json"},
-  body: jsonEncode(userData),
+    try {
+    final response = await http.put(
+      Uri.parse('$baseUrl/users/$userId'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(userData),
   );
 
-  if (response.statusCode == 200) {
-  return true; // Cập nhật thành công
-  } else {
+    if (response.statusCode == 200) {
+        return true; // Cập nhật thành công
+      } else {
   print('Lỗi cập nhật người dùng: ${response.statusCode}');
   return false;
   }

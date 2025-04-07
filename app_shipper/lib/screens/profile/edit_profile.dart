@@ -55,27 +55,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   // Hàm cập nhật thông tin người dùng
   Future<void> _updateProfile() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isSaving = true);
-
     final prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('user_id');
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lỗi: Không tìm thấy userId')));
       return;
     }
-
     final userData = {
       'name': _nameController.text.trim(),
       'phone': _phoneController.text.trim(),
       'email': _emailController.text.trim(),
       'address': _locationController.text.trim(),
     };
-
     final success = await ApiService.updateUser(userId, userData);
-
     setState(() => _isSaving = false);
-
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cập nhật thành công')));
       Navigator.pop(context, true);

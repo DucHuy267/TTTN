@@ -520,7 +520,7 @@ exports.confirmShipment = async (req, res) => {
         }
 
         // Cập nhật trạng thái đơn hàng và thêm thông tin shipper
-        const updatedOrder = await Order.findOneAndUpdate(
+        const updatedOrder = await Order.findByIdAndUpdate(
             { _id: orderId, status: "processing" }, // Chỉ cập nhật nếu trạng thái là "processing"
             {
                 $set: {
@@ -558,8 +558,8 @@ exports.confirmDelivery = async (req, res) => {
         }
 
         // Cập nhật trạng thái đơn hàng và thêm thông tin shipper
-        const updatedOrder = await Order.findOneAndUpdate(
-            { _id: orderId, status: "shipped", "shipper.shipperId": shipper._id }, // Chỉ cập nhật nếu trạng thái là "shipped" và shipperId khớp
+        const updatedOrder = await Order.findByIdAndUpdate(
+            { _id: orderId, status: "shipper", "shipper.shipperId": shipper._id }, // Chỉ cập nhật nếu trạng thái là "shipped" và shipperId khớp
             {
                 $set: {
                     status: "success",
