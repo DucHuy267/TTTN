@@ -21,8 +21,8 @@
 }
 
 .comments-container button {
-    background-color: #ffcc00;
-    color: #333;
+    background-color: #005d0b;
+    color: #fff;
     border: none;
     padding: 10px;
     border-radius: 4px;
@@ -31,7 +31,7 @@
 }
 
 .comments-container button:hover {
-    background-color: #e6b800;
+    background-color: #005d0b;
 }
 
 .comments-container ul {

@@ -226,11 +226,11 @@ const fetchRating = async (productId) => {
                 BÁN CHẠY 
               </TextHeader>
             </div>
-            <div>
+            {/* <div>
               <TextHeader style={{ marginLeft: 50 , fontWeight: "bold" }} onClick={() => navigate("")}>
                 HOT DEALS 
               </TextHeader>
-            </div>
+            </div> */}
       </div>
 
       

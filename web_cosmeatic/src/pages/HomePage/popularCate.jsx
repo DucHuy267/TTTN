@@ -206,7 +206,7 @@ const PopularCate = ({ categoryId }) => {
                                                                 <div style={{ fontSize: '12px' }}>
                                                                     {`${product.price.toLocaleString('vi-VN')} đ`}
                                                                 </div>
-                                                                <div>{product.totalSold} đã bán</div>
+                                                                <div>{product.count} đã bán</div>
                                                                 <Rate disabled value={product.rating} />
                                                             </div>
                                                             <Button

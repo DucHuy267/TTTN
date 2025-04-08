@@ -9,8 +9,9 @@ const router = express.Router();
 
 // Lấy tất cả các bình luận
 router.get('/', getAllComments);
+// Lấy tất cả các bình luận theo productId
 router.get('/getCommentsByProductId/:productId', getCommentsByProductId);
-router.get('/getCommentsByUserId/:userIduserId', getCommentsByUserId);
+router.get('/getCommentsByUserId/:userId', getCommentsByUserId);
 // Lấy bình luận theo ID
 router.get('/:id', getCommentById);
 // Tạo mới một bình luận

@@ -124,7 +124,7 @@ const Comments = ({ productId, userId }) => {
                                 <div style={{ width:'300px', background: '#e0e0e0', margin: '0 10px', height: '20px', borderRadius: '10px', overflow: 'hidden' }}>
                                     <div style={{
                                         width: `${(comments.filter(comment => comment.rating === star).length / comments.length) * 100}%`,
-                                        background: '#1890ff',
+                                        background: '#2c6c15',
                                         height: '100%'
                                     }}></div>
                                 </div>

@@ -9,7 +9,7 @@ import Img3 from "./img3";
 const HomePage = () => {
     return (
         <div>
-            <div style={{ marginTop: "20px" }}>
+            <div>
               
                 <SkinCare />
                <img src="https://i.pinimg.com/736x/4e/8a/ce/4e8ace833c19ff6cf1eb486f930300db.jpg" alt="banner" style={{width: "60%", margin:" 0 20%"}}/>
@@ -84,9 +84,9 @@ const HomePage = () => {
                     <PopularCate categoryId={3} />
                 </div>
 
-                <div>
+                {/* <div>
                     <Img3/>
-                </div>
+                </div> */}
 
             </div>
         </div>

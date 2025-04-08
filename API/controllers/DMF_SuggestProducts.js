@@ -19,6 +19,7 @@ async function loadData() {
 }
 
 // Tạo ma trận người dùng - sản phẩm từ đơn hàng
+// vd matrix[0][2] = 5 // nghĩa là user 0 đã mua 5 sản phẩm số 2
 function createUserProductMatrix(orders, users, products) {
     const matrix = Array(users.length).fill(null).map(() => Array(products.length).fill(0));
 
@@ -35,7 +36,7 @@ function createUserProductMatrix(orders, users, products) {
     return matrix;
 }
 
-// Chuẩn hóa ma trận
+// Chuẩn hóa ma trận (Chuẩn hóa các giá trị về khoảng từ 0 đến 1 để mô hình dễ học.)
 function normalizeMatrix(matrix) {
     const maxValue = Math.max(...matrix.flat());
     return matrix.map(row => row.map(value => value / maxValue));
@@ -49,7 +50,7 @@ function preprocessData(data) {
     return { normalizedMatrix, orders, users, products };
 }
 
-// Chia dữ liệu thành tập huấn luyện và kiểm tra
+// Chia dữ liệu thành tập huấn luyện (80%) và kiểm tra (20%)
 function splitData(matrix) {
     const trainData = [];
     const trainLabels = [];
@@ -76,12 +77,16 @@ function buildModel(numUsers, numProducts) {
     const userInput = tf.input({ shape: [1], dtype: 'int32' });
     const productInput = tf.input({ shape: [1], dtype: 'int32' });
 
+    // Sử dụng embedding chuyển ID (dạng số nguyên) như userId, productId thành vector nhiều chiều ( 50 chiều )
     const userEmbedding = tf.layers.embedding({ inputDim: numUsers, outputDim: 50 }).apply(userInput);
     const productEmbedding = tf.layers.embedding({ inputDim: numProducts, outputDim: 50 }).apply(productInput);
 
+    // làm phẳng biến tensor nhiều chiều → một chiều
     const userVec = tf.layers.flatten().apply(userEmbedding);
     const productVec = tf.layers.flatten().apply(productEmbedding);
 
+    // Concatenate Layers ghép vector của user và product thành 1 vector chung.
+    // sử dụng các lớp Dense (fully connected) để học các đặc trưng phức tạp hơn từ dữ liệu.
     const concat = tf.layers.concatenate().apply([userVec, productVec]);
     const dense1 = tf.layers.dense({ units: 128, activation: 'relu' }).apply(concat);
     const dense2 = tf.layers.dense({ units: 64, activation: 'relu' }).apply(dense1);
@@ -128,6 +133,7 @@ async function trainModel(model, data) {
 }
 
 // Dự đoán 10 sản phẩm phù hợp nhất
+// Hàm này sẽ nhận vào userId và trả về 10 sản phẩm phù hợp nhất cho người dùng đó.
 async function predictTopProducts(userId, model, data) {
     const { products, users } = data;
     
@@ -149,7 +155,7 @@ async function predictTopProducts(userId, model, data) {
     return predictions.slice(0, 10).map(p => p.product);
 }
 
-// Hàm lấy top sản phẩm phổ biến nhất từ đơn hàng nếu user chưa mua
+// Hàm lấy top sản phẩm phổ biến nhất từ đơn hàng nếu user không có lịch sử mua hàng
 function getPopularProducts(orders, products) {
     const productCount = {};
 

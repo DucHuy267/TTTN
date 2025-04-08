@@ -26,7 +26,7 @@ const Ingredient = ({ sections }) => {
             </div>
                 
             <div className='right-content' style={{ width: '50%' }}>
-                <img src="https://i.pinimg.com/474x/3a/21/51/3a2151b4f918aacf1b8f16a194916c6e.jpg" alt="ingredient" 
+                <img src="https://i.pinimg.com/736x/45/4a/33/454a330ab8ef77c379920c50a196b3bc.jpg" alt="ingredient" 
                     style={{ width: '650px', height: '500px', padding: 20}} 
                 />
             </div> 

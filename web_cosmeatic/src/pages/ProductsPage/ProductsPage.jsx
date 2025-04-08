@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, message, Card, Modal, Spin, Rate } from 'antd';
+import { Button, message, Card, Modal, Spin, Rate, Pagination } from 'antd';
 import { LeftOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -134,63 +134,91 @@ const ProductsPage = () => {
         }
     };
 
+    // Phân trang
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 20; // Số sản phẩm trên mỗi trang
+
+    // Tính sản phẩm theo trang hiện tại
+    const indexOfLastProduct = currentPage * pageSize;
+    const indexOfFirstProduct = indexOfLastProduct - pageSize;
+    const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo(0, 0); // Tùy chọn: cuộn lên đầu trang khi đổi trang
+    };
+
     return (
-        <div>
-            {loading ? (
+        <div style={{ backgroundColor: "#fdfff8"}}>
+             {loading ? (
                 <Spin size="large" />
             ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '25px', padding: '20px' }}>
-                    {products.length > 0 ? (
-                        products.map((product) => (
-                            <Card
-                            hoverable
-                            style={{ width: '260px', margin: '0 5px' }}
-                            cover={
-                                product.imageUrl && (
-                                    <img
-                                        src={product.imageUrl}
-                                        alt={product.name}
-                                        style={{
-                                            height: '240px',
-                                            objectFit: 'cover',
-                                            borderRadius: '8px 8px 0 0',
-                                        }}
-                                    />
-                                )
-                            }
-                            onClick={() => goToProductDetail(product._id)}
-                        >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ width: '100%' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{product.name}</div>
-                                    <div style={{ fontSize: '14px', color: '#888' }}>
-                                        {`${product.price.toLocaleString('vi-VN')} đ`}
+                <>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '25px', padding: '20px' }}>
+                        {currentProducts.length > 0 ? (
+                            currentProducts.map((product) => (
+                                <Card
+                                    hoverable
+                                    key={product._id}
+                                    style={{ width: '260px', margin: '0 5px' }}
+                                    cover={
+                                        product.imageUrl && (
+                                            <img
+                                                src={product.imageUrl}
+                                                alt={product.name}
+                                                style={{
+                                                    height: '240px',
+                                                    objectFit: 'cover',
+                                                    borderRadius: '8px 8px 0 0',
+                                                }}
+                                            />
+                                        )
+                                    }
+                                    onClick={() => goToProductDetail(product._id)}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div style={{ width: '100%' }}>
+                                            <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{product.name}</div>
+                                            <div style={{ fontSize: '14px', color: '#888' }}>
+                                                {`${product.price.toLocaleString('vi-VN')} đ`}
+                                            </div>
+                                            <div>{product.count} đã bán</div>
+                                            <Rate disabled value={product.rating} />
+                                        </div>
+                                        <Button
+                                            icon={<ShoppingOutlined />}
+                                            onClick={(e) => handleAddToCart(product._id, product.quantity, e)}
+                                            style={{
+                                                marginTop: '30px',
+                                                width: '38px',
+                                                backgroundColor: '#D0EFC4',
+                                                color: '#000',
+                                                border: 'none',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}
+                                            size="middle"
+                                        />
                                     </div>
-                                    <div>{product.count} đã bán</div>
-                                    <Rate disabled value={product.rating} />
-                                </div>
-                                <Button
-                                    icon={<ShoppingOutlined />}
-                                    onClick={(e) => handleAddToCart(product._id, product.quantity, e)}
-                                    style={{
-                                        marginTop: '30px',
-                                        width: '38px',
-                                        backgroundColor: '#D0EFC4',
-                                        color: '#000',
-                                        border: 'none',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                    size="middle"
-                                />
-                            </div>
-                        </Card>
-                        ))
-                    ) : (
-                        <p>Không có sản phẩm để hiển thị.</p>
-                    )}
-                </div>
+                                </Card>
+                            ))
+                        ) : (
+                            <p>Không có sản phẩm để hiển thị.</p>
+                        )}
+                    </div>
+
+                    {/* Phân trang */}
+                    <div style={{ textAlign: 'right', marginBottom: '30px',marginLeft: 1100 }}>
+                        <Pagination
+                            current={currentPage}
+                            pageSize={pageSize}
+                            total={products.length}
+                            onChange={handlePageChange}
+                            showSizeChanger={false}
+                        />
+                    </div>
+                </>
             )}
 
             <Modal
