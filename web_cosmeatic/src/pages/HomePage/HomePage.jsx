@@ -5,6 +5,7 @@ import PopularCate from "./popularCate";
 import Img1 from "./img1";
 import Img2 from "./img2";
 import Img3 from "./img3";
+import hinh1 from "./images/1.png";
 
 const HomePage = () => {
     return (
@@ -44,8 +45,8 @@ const HomePage = () => {
                             </p>
                         
                         </div>
-                        <div class="div3" style={{ width: 400, height: 400}}>
-                            <img src="https://i.pinimg.com/736x/31/c9/1d/31c91d2f66bde519a84cefb61e5cbf9c.jpg"/>
+                        <div class="div3" style={{ width: 400,}}>
+                            <img src={hinh1} style={{  height: 420}}/>
                         </div>
                     </div>
                 </div>
@@ -62,7 +63,7 @@ const HomePage = () => {
                         textTransform: 'uppercase',
                         marginTop: '20px',
                     }}>
-                        Mỹ phẩm 100% thuần chay cho nết đẹp thuận việt
+                        Mỹ phẩm 100% thuần chay cho nét đẹp thuần việt
                     </h3>
                     <div>
                         <PopularCate categoryId={1} />

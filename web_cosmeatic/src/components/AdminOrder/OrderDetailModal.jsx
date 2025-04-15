@@ -5,12 +5,13 @@ import axios from "axios";
 const OrderDetailModal = ({ visible, onClose, order, onConfirm }) => {
     const columns = [
         {
-            title: "Hình ảnh & Sản phẩm",
+            title: "Sản phẩm",
+            // title: "Hình ảnh & Sản phẩm",
             dataIndex: "name",
             key: "name",
             render: (name, record) => (
                 <div style={{ display: "flex", alignItems: "center" }}>
-                    <img
+                    {/* <img
                         src={record.imageUrl}
                         alt="product"
                         style={{
@@ -20,7 +21,7 @@ const OrderDetailModal = ({ visible, onClose, order, onConfirm }) => {
                             marginRight: "10px",
                             objectFit: "cover",
                         }}
-                    />
+                    /> */}
                     <span>{name}</span>
                 </div>
             ),

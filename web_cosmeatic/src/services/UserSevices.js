@@ -21,6 +21,16 @@ export const login = async (data) => {
     }
 };
 
+// đặng nhập admin 
+export const loginAdmin = async (data) => {
+    try {
+        const response = await axios.post(`${API_URL}/login-admin`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Lấy tất cả người dùng
 export const getAllUsers = async () => {
     try {

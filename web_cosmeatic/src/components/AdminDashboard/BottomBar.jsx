@@ -2,11 +2,11 @@ import React from "react";
 import BottomLeft from "./BottomLeft";
 import BottomRight from "./BottomRight";
 
-function BottomBar() {
+function BottomBar({onGoToUsers}) {
     return (
         <div className="BottomBar">
             <BottomLeft />
-            <BottomRight />
+            <BottomRight onGoToUsers={onGoToUsers}/>
         </div>
     );
 }

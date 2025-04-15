@@ -175,15 +175,10 @@ const AdminUser = () => {
     const renderAction = () => {
         return (
             <div>
-                <DeleteOutlined
-                    style={{ color: 'red', fontSize: '20px', cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => setIsModalOpenDelete(true)}
-                />
-                <EditOutlined
-                    style={{ color: 'orange', fontSize: '20px', cursor: 'pointer' }}
-                    onClick={handleUserDetails}
-                />
+                    <Button icon={<DeleteOutlined style={{ color: 'red'}} />} onClick={() => setIsModalOpenDelete(true)} style={{marginRight: 5}} />
+                    <Button icon={<EditOutlined style={{ color: 'orange'}} />} onClick={handleUserDetails} />
             </div>
+            
         );
     };
 

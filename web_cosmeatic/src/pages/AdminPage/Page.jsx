@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Menu } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Menu, message } from "antd";
 import { getItem } from "../../utils";
-import {
-    UserOutlined, ProductOutlined, AppstoreOutlined, ShoppingOutlined, LayoutOutlined,
-    LineChartOutlined, AreaChartOutlined, ContactsOutlined, DollarOutlined
-} from '@ant-design/icons';
+import { UserOutlined, ProductOutlined, AppstoreOutlined, ShoppingOutlined, LayoutOutlined,
+    LineChartOutlined, AreaChartOutlined, ContactsOutlined, DollarOutlined } from '@ant-design/icons';
 import { LogoutOutlined } from '@ant-design/icons';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminCategory from '../../components/AdminCategory/AdminCategory';
@@ -12,17 +10,40 @@ import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import './style.css';
 import AdminDashboard from '../../components/AdminDashboard/AdminDashboard';
 import HeaderComponent from '../../components/HeaderComponents/HeaderComponent';
-
 // Import useNavigate from react-router-dom
 import { useNavigate } from 'react-router-dom';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
 import Charts from '../../components/AdminSettings/Charts';
 import AdminBrand from '../../components/AdminBrand/AdminBrand';
 import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
+import { jwtDecode } from 'jwt-decode';
+import AdminReviewManagement from '../../components/AdminReviewManagement/AdminReviewManagement';
 
 const AdminPage = () => {
     // Initialize navigate
     const navigate = useNavigate();
+    const [keySelected, setKeySelected] = useState('dashboard');
+
+    // 🛡️ Kiểm tra token admin
+    useEffect(() => {
+        const tokenAdmin = localStorage.getItem("tokenAdmin");
+        if (!tokenAdmin) {
+            message.warning("Vui lòng đăng nhập với quyền admin");
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const decoded = jwtDecode(tokenAdmin);
+            if (decoded.role !== "admin") {
+                message.error("Bạn không có quyền truy cập trang admin");
+                navigate("/login");
+            }
+        } catch (err) {
+            message.error("Token không hợp lệ");
+            navigate("/login");
+        }
+    }, [navigate]);
 
     const items = [
         {
@@ -49,20 +70,18 @@ const AdminPage = () => {
             type: 'group',
             children: [
                 getItem('Charts', 'charts', <LineChartOutlined />),
-                getItem('Trends', 'trends', <AreaChartOutlined />),
                 getItem('Contact', 'contact', <ContactsOutlined />),
+                getItem('Trends', 'trends', <AreaChartOutlined />),
                 getItem('Billing', 'billing', <DollarOutlined />),
             ],
         },
     ];
 
-    const [keySelected, setKeySelected] = useState('dashboard');
-
     // Function to render pages based on selected key
     const renderPage = (key) => {
         switch (key) {
             case 'dashboard':
-                return <AdminDashboard />;
+                return <AdminDashboard onGoToOrders={() => setKeySelected('order')} onGoToChart={() => setKeySelected('charts')} onGoToUsers={() => setKeySelected('user')}/>;
             case 'user':
                 return <AdminUser />;
             case 'category':
@@ -70,13 +89,15 @@ const AdminPage = () => {
             case 'product':
                 return <AdminProduct />;
             case 'order':
-                return <AdminOrder />;
+                return <AdminOrder/>;
             case 'brand':
                 return <AdminBrand />;
             case 'charts':
                 return <Charts />;  
             case 'voucher':
-                return <AdminVoucher />;  
+                return <AdminVoucher />; 
+            case 'contact':
+                return <AdminReviewManagement />;
             default:
                 return <></>;
         }
@@ -128,7 +149,7 @@ const AdminPage = () => {
 
                 {/* Render Logout Button */}
                 <LogoutButton onLogout={() => handleOnClick({ key: 'logout' })} />
-
+        
 
             </div>
 

@@ -15,6 +15,7 @@ const CategoryDropdown = () => {
     fetchCategories();
   }, []);
 
+  // Hàm này sẽ được gọi khi component được mount
   const fetchCategories = async () => {
     try {
       const res = await getAllCategory();
@@ -26,6 +27,7 @@ const CategoryDropdown = () => {
     }
   };
 
+  // Hàm này sẽ được gọi khi người dùng click vào "Tất cả sản phẩm"
   const fetchProducts = async () => {
     try {
       const res = await getAllProductTrue();
@@ -37,6 +39,7 @@ const CategoryDropdown = () => {
     }
   };
 
+  // Hàm này sẽ được gọi khi người dùng click vào một danh mục sản phẩm
   const fetchGetDetailProduct = async (categoryId) => {
     try {
       const res = await getProductByCate(categoryId);
@@ -48,6 +51,7 @@ const CategoryDropdown = () => {
     }
   };
 
+  // Hàm này sẽ được gọi khi người dùng click vào một subcategory
   const fetchGetDetailSubcategoryName = async (subcategoryName) => {
     try {
       const res = await getProductBySubcategory(subcategoryName);

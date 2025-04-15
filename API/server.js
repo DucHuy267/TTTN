@@ -52,13 +52,13 @@ connectDB();
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Middleware to parse URL-encoded requests
-app.use(express.static(path.join(__dirname, 'build')));
+// // Middleware to parse URL-encoded requests
+// app.use(express.static(path.join(__dirname, 'build')));
 
-// Catch-all: return React index.html for unknown routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// // Catch-all: return React index.html for unknown routes
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 // Sử dụng các routes cho sản phẩm và danh mục
 app.use('/products', productRouters);

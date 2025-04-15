@@ -32,7 +32,7 @@ function BottomLeft() {
                     <div className="horizontal-scroll">
                         <div className="scroll-content">
                             {categories.map((category) => (
-                                <div className="item" key={category.categoryId} style={{ margin: '10px' }}>
+                                <div className="item" key={category.categoryId} style={{ margin: ' 0 10px' }}>
                                     <Card
                                         hoverable
                                         style={{ width: 120, height: 200 , }}
@@ -44,7 +44,6 @@ function BottomLeft() {
                                                     alt="product"
                                                     style={{
                                                         marginLeft: '10%',
-                                                        marginTop: '10%',
                                                         height: '130px',
                                                         width: '100px',
                                                         objectFit: 'contain',
@@ -64,8 +63,6 @@ function BottomLeft() {
                     </div>
                 </div>
             </div>
-
-
         </div >
     );
 }

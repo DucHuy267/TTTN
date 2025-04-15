@@ -292,7 +292,7 @@ const CartPage = ({ onClose }) => {
         </div>
     );
 };
-
+ 
 export default CartPage;
 
 // Ngân hàng	NCB

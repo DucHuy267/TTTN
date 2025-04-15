@@ -217,9 +217,9 @@ router.post('/login-shipper', async (req, res) => {
           return res.status(400).json({ error: 'Mật khẩu không đúng' });
       }
       // Tạo token JWT
-      const token = jwt.sign({ userId: user._id }, 'jwt_secret_key', { expiresIn: '5h' });
+      const tokenAdmin = jwt.sign({ userId: user._id }, 'jwt_secret_key', { expiresIn: '5h' });
 
-      res.status(200).json({ message: 'Đăng nhập thành công', token });
+      res.status(200).json({ message: 'Đăng nhập thành công', tokenAdmin });
   } catch (err) {
       console.error('Login error:', err); // Log the full error in the server console
       res.status(500).json({ error: 'Lỗi đăng nhập', details: err.message });
@@ -242,7 +242,7 @@ router.post('/login-admin', async (req, res) => {
           return res.status(400).json({ error: 'Mật khẩu không đúng' });
       }
       // Tạo token JWT
-      const token = jwt.sign({ userId: user._id }, 'jwt_secret_key', { expiresIn: '5h' });
+      const token = jwt.sign({ userId: user._id, role: user.role  }, 'jwt_secret_key', { expiresIn: '5h' });
 
           res.status(200).json({ message: 'Đăng nhập thành công', token });
   } catch (err) {

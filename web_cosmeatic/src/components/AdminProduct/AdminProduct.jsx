@@ -245,6 +245,16 @@ const AdminProduct = () => {
         { title: 'Tên', dataIndex: 'name', sorter: (a, b) => a.name.length - b.name.length,  },
         { title: 'Giá', dataIndex: 'price', render: (price) => `${price.toLocaleString('vi-VN')} đ`, sorter: (a, b) => a.price - b.price },
         { title: 'Số lượng', dataIndex: 'quantity', sorter: (a, b) => a.quantity - b.quantity },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'quantity',
+            render: (quantity) => {
+                if (quantity === 0) return <span style={{ color: 'red' }}>Hết hàng</span>;
+                if (quantity < 5) return <span style={{ color: 'orange' }}>Sắp hết</span>;
+                return <span style={{ color: 'green' }}>Còn hàng</span>;
+            },
+            sorter: (a, b) => a.quantity - b.quantity,
+        },
         { title: 'Mã loại', dataIndex: 'categoryId' },
         { title: 'Thương hiệu', dataIndex: 'brand', sorter: (a, b) => a.brand.length - b.brand.length, },
         { title: 'Mã danh mục', dataIndex: 'subcategoryName', sorter: (a, b) => a.subcategoryName.length - b.subcategoryName.length,  },

@@ -25,18 +25,32 @@ exports.createComment = (req, res) => {
         }
 
         try {
+            const { userId, productId } = req.body;
+
+            // 🔍 Kiểm tra xem người dùng đã đánh giá sản phẩm này chưa
+            const existingComment = await Comment.findOne({ userId, productId });
+            if (existingComment) {
+                return res.status(400).json({
+                    status: 'thất bại',
+                    message: 'Bạn đã đánh giá sản phẩm này rồi.'
+                });
+            }
+
             const imagePaths = req.files.map(file => file.path);
             const commentData = {
                 ...req.body,
                 images: imagePaths
             };
+
             const comment = await Comment.create(commentData);
+
             res.status(201).json({
                 status: 'thành công',
                 data: {
                     comment
                 }
             });
+
         } catch (err) {
             res.status(400).json({
                 status: 'thất bại',
@@ -49,7 +63,16 @@ exports.createComment = (req, res) => {
 // Lấy tất cả các bình luận
 exports.getAllComments = async (req, res) => {
     try {
-        const comments = await Comment.find();
+        const comments = await Comment.find()
+            // .populate({
+            //     path: 'productId',
+            //     select: 'name'
+            // })
+            .populate({
+                path: 'userId',
+                select: 'name'
+            });
+
         res.status(200).json({
             status: 'thành công',
             results: comments.length,
@@ -64,6 +87,7 @@ exports.getAllComments = async (req, res) => {
         });
     }
 };
+
 
 // Lấy tất cả các bình luận theo productId
 exports.getCommentsByProductId = async (req, res) => {

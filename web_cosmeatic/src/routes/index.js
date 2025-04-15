@@ -1,5 +1,6 @@
-import LoginPage from "../components/Login-SignUp/LoginPage";
+
 import SignupPage from "../components/Login-SignUp/SignupPage";
+import LoginAdminPage from "../pages/AdminPage/LoginAdmin/LoginAdminPage";
 import Page from "../pages/AdminPage/Page";
 import Brand from "../pages/BrandPage/Brand";
 import Cocoon from "../pages/BrandPage/brand-title";
@@ -36,7 +37,7 @@ export const routes = [
     },
     {
         path: '/login',
-        page: LoginPage,
+        page: LoginAdminPage,
         showHeader: false
     },
     {

@@ -1,40 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Open+Sans&display=swap');
+
 .brand-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
-  }
-  
-  .brand-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #166534;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px clamp(16px, 5vw, 64px);
+  font-family: 'Open Sans', sans-serif;
+  background-color: #ffffff;
+  color: #1a202c;
+}
+
+.brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #2f855a;
+  flex: 1;
+}
+
+.brand-title .brand-name {
+  margin-left: 25px; /* Xích ra một chút */
+  color: #2f855a;
+  font-weight: 800;
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+}
+
+.brand-info {
+  flex: 1;
+  text-align: right;
+}
+
+.brand-info h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2d3748;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 16px;
+}
+
+.brand-image {
+  max-width: 300px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.brand-content-wrapper {
+  margin-top: 20px;
+}
+
+.brand-story h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #2d3748;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.brand-story p {
+  font-size: 18px;
+  line-height: 1.8;
+  text-align: justify;
+  color: #2e2e2e;
+  white-space: pre-line;
+}
+
+@media (max-width: 768px) {
+  .brand-header {
+    flex-direction: column;
     text-align: center;
-    margin-bottom: 20px;
   }
-  
-  .brand-title span {
-    display: block;
+
+  .brand-title {
+    font-size: 30px;
+  }
+
+  .brand-info {
+    text-align: center;
+  }
+
+  .brand-image {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .brand-story h2 {
+    font-size: 24px;
+  }
+
+  .brand-story p {
     font-size: 16px;
-    font-weight: normal;
-    color: black;
-    margin-top: 5px;
   }
-  
-  .brand-section {
-    margin-bottom: 20px;
-  }
-  
-  .brand-section h2 {
-    font-size: 20px;
-    color: #166534;
-    margin-bottom: 10px;
-  }
-  
-  .brand-section p {
-    font-size: 16px;
-    line-height: 1.6;
-    text-align: justify;
-  }
-    
+}
+
+

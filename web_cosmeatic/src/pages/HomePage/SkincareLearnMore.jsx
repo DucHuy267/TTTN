@@ -1,164 +1,185 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import skincareroutine from "./images/skincare-routine.jpg";
+import styled, { createGlobalStyle } from "styled-components";
+import { Tabs } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
-const PageContainer = styled.div`
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f0;
-  text-align: center;
-  padding: 20px;
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #fffefc;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
-const ContentSection = styled.div`
-  margin: 0 auto;
-  background: #fff;
-  padding: 20px 80px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  max-width: 800px;
+const PageContainer = styled.div`
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  padding: 50px 60px;
+  position: relative;
 `;
 
 const Title = styled.h1`
-  color: #2e7d32;
-  margin-bottom: 20px;
+  color: #1b5e20;
   text-align: center;
+  margin-bottom: 30px;
   font-size: 3rem;
-`;
-
-const Paragraph = styled.p`
-  color: #555;
-  line-height: 1.8;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-`;
-
-const List = styled.ul`
-  padding-left: 30px;
-`;
-
-const Li = styled.li`
-  color: #555;
-  line-height: 1.8;
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-`;
-
-const Strong = styled.strong`
-  color: #2e7d32;
-`;
-
-const BackButton = styled.button`
-  background-color: #2e7d32;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 1.8rem;
-  transition: background-color 0.3s ease;
-  display: block;
-  margin: 20px auto 0;
-
-  &:hover {
-    background-color: #1b5e20;
-  }
+  font-weight: 700;
 `;
 
 const Image = styled.img`
   width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin: 20px 0;
+  border-radius: 20px;
+  margin-bottom: 40px;
+  object-fit: cover;
+  max-height: 500px;
+`;
+
+const Paragraph = styled.p`
+  font-size: 1.25rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 20px;
+`;
+
+const List = styled.ul`
+  padding-left: 24px;
+`;
+
+const Li = styled.li`
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+  color: #555;
+`;
+
+const BackButton = styled.button`
+  background: #aed581;
+  color: #1b5e20;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 40px auto 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #9ccc65;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+  }
 `;
 
 const LearnMore = () => {
   const navigate = useNavigate();
+  const handleGoBack = () => navigate(-1);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  const items = [
+    {
+      key: "1",
+      label: "Nguyên tắc vàng",
+      children: (
+        <>
+          <Paragraph><strong>Nguyên tắc vàng:</strong></Paragraph>
+          <List>
+            <Li>Làm sạch da mỗi ngày.</Li>
+            <Li>Giữ ẩm bằng kem dưỡng.</Li>
+            <Li>Sử dụng kem chống nắng.</Li>
+            <Li>Uống đủ nước & ăn uống lành mạnh.</Li>
+            <Li>Ngủ đủ giấc & giảm stress.</Li>
+          </List>
+        </>
+      ),
+    },
+    {
+      key: "2",
+      label: "Chăm sóc ban ngày",
+      children: (
+        <>
+          <Paragraph><strong>Quy trình chăm sóc ban ngày:</strong></Paragraph>
+          <List>
+            <Li><strong>Làm sạch:</strong> Sữa rửa mặt dịu nhẹ.</Li>
+            <Li><strong>Toner:</strong> Cân bằng pH.</Li>
+            <Li><strong>Serum:</strong> Dưỡng sáng & chống oxy hóa.</Li>
+            <Li><strong>Dưỡng ẩm:</strong> Khóa ẩm cho da.</Li>
+            <Li><strong>Kem chống nắng:</strong> Bảo vệ khỏi tia UV.</Li>
+          </List>
+        </>
+      ),
+    },
+    {
+      key: "3",
+      label: "Chăm sóc ban đêm",
+      children: (
+        <>
+          <Paragraph><strong>Quy trình ban đêm:</strong></Paragraph>
+          <List>
+            <Li><strong>Tẩy trang:</strong> Làm sạch lớp makeup.</Li>
+            <Li><strong>Rửa mặt:</strong> Loại bỏ cặn bẩn.</Li>
+            <Li><strong>Toner:</strong> Chuẩn bị da cho dưỡng chất.</Li>
+            <Li><strong>Serum:</strong> Retinol / tái tạo da.</Li>
+            <Li><strong>Kem dưỡng:</strong> Giữ ẩm & phục hồi.</Li>
+            <Li><strong>Dưỡng mắt:</strong> Giảm thâm & nếp nhăn.</Li>
+          </List>
+        </>
+      ),
+    },
+    {
+      key: "4",
+      label: "Lỗi thường gặp & lưu ý",
+      children: (
+        <>
+          <Paragraph><strong>Lỗi thường gặp:</strong></Paragraph>
+          <List>
+            <Li>Không làm sạch kỹ.</Li>
+            <Li>Rửa mặt quá nhiều.</Li>
+            <Li>Bỏ quên chống nắng.</Li>
+            <Li>Dùng quá nhiều sản phẩm cùng lúc.</Li>
+          </List>
+          <Paragraph><strong>Lưu ý khi chọn sản phẩm:</strong></Paragraph>
+          <List>
+            <Li>Chọn thành phần lành tính.</Li>
+            <Li>Phù hợp loại da.</Li>
+            <Li>Kiểm tra hạn sử dụng.</Li>
+          </List>
+        </>
+      ),
+    },
+  ];
 
   return (
-    <PageContainer>
-      <ContentSection>
-        <Title>Chăm Sóc Da Đúng Cách</Title>
-
-        <Paragraph>
-          Một làn da đẹp không chỉ nhờ vào mỹ phẩm, mà còn phụ thuộc vào chế độ sinh hoạt và dinh dưỡng.
-          Hãy chăm sóc da đúng cách để luôn giữ được sự tươi trẻ và rạng rỡ!
-        </Paragraph>
-
-        <Paragraph>
-          <Strong>Những nguyên tắc vàng trong chăm sóc da:</Strong>
-          <List>
-            <Li>Làm sạch da hằng ngày để loại bỏ bụi bẩn và dầu thừa.</Li>
-            <Li>Giữ ẩm cho da bằng kem dưỡng phù hợp.</Li>
-            <Li>Sử dụng kem chống nắng để bảo vệ da khỏi tác hại của tia UV.</Li>
-            <Li>Bổ sung đủ nước và ăn uống lành mạnh để nuôi dưỡng làn da từ bên trong.</Li>
-            <Li>Hạn chế thức khuya và căng thẳng để tránh tình trạng da xỉn màu.</Li>
-          </List>
-        </Paragraph>
-
-        <Paragraph>
-       
-
-          <Image src="https://th.bing.com/th/id/OIP.kJ6LjhCkxRlYuBU3zsVWNwHaFT?rs=1&pid=ImgDetMain" alt="Làm sạch da đúng cách" />
-
-            <Paragraph style={{ marginLeft: 20 }}>
-                <Strong>Quy trình chăm sóc da ban ngày:</Strong>
-                <List>
-                    <Li><Strong>Bước 1: Làm sạch</Strong> - Dùng sữa rửa mặt dịu nhẹ để loại bỏ dầu thừa và bụi bẩn.</Li>
-                    <Li><Strong>Bước 2: Toner</Strong> - Cân bằng độ pH, giúp da sẵn sàng hấp thụ dưỡng chất.</Li>
-                    <Li><Strong>Bước 3: Serum</Strong> - Cung cấp dưỡng chất cần thiết như vitamin C để làm sáng da.</Li>
-                    <Li><Strong>Bước 4: Dưỡng ẩm</Strong> - Giữ nước cho da, ngăn ngừa tình trạng khô ráp.</Li>
-                    <Li><Strong>Bước 5: Kem chống nắng</Strong> - Bảo vệ da khỏi tác hại của tia UV, rất quan trọng khi ra ngoài.</Li>
-                </List>
-                </Paragraph>
-
-                <Paragraph style={{ marginLeft: 20 }}>
-                <Strong>Quy trình chăm sóc da ban đêm:</Strong>
-                <List>
-                    <Li><Strong>Bước 1: Tẩy trang</Strong> - Loại bỏ lớp trang điểm và bụi bẩn tích tụ trong ngày.</Li>
-                    <Li><Strong>Bước 2: Rửa mặt</Strong> - Làm sạch sâu để loại bỏ cặn bã trên da.</Li>
-                    <Li><Strong>Bước 3: Toner</Strong> - Giúp da hấp thụ tốt hơn các sản phẩm dưỡng sau.</Li>
-                    <Li><Strong>Bước 4: Serum</Strong> - Dùng serum có chứa retinol hoặc các hoạt chất tái tạo da.</Li>
-                    <Li><Strong>Bước 5: Kem dưỡng ẩm</Strong> - Cung cấp độ ẩm và phục hồi da khi ngủ.</Li>
-                    <Li><Strong>Bước 6: Dưỡng mắt</Strong> - Giúp giảm quầng thâm và nếp nhăn quanh mắt.</Li>
-                </List>
-            </Paragraph>
-        </Paragraph>
-
-        <Paragraph>
-          <Strong>Các lỗi thường gặp khi chăm sóc da:</Strong>
-          <List>
-            <Li>Không làm sạch da đúng cách, dẫn đến mụn và lỗ chân lông bị bít tắc.</Li>
-            <Li>Rửa mặt quá nhiều lần trong ngày khiến da bị khô và kích ứng.</Li>
-            <Li>Không dùng kem chống nắng, khiến da nhanh lão hóa.</Li>
-            <Li>Sử dụng quá nhiều sản phẩm cùng lúc, gây kích ứng và tổn thương da.</Li>
-            <Li>Không thay đổi sản phẩm theo tình trạng da và thời tiết.</Li>
-          </List>
-        </Paragraph>
-
-        <Paragraph>
-          <Strong>Lưu ý khi chọn mỹ phẩm chăm sóc da:</Strong>
-          <List>
-            <Li>Ưu tiên các sản phẩm có thành phần thiên nhiên, lành tính.</Li>
-            <Li>Tránh các sản phẩm chứa paraben, cồn khô hoặc hương liệu tổng hợp.</Li>
-            <Li>Chọn sản phẩm phù hợp với loại da: da dầu, da khô, da nhạy cảm, da hỗn hợp.</Li>
-            <Li>Luôn kiểm tra hạn sử dụng và bảo quản sản phẩm đúng cách.</Li>
-          </List>
-        </Paragraph>
-
-        <Paragraph>
-          Hãy kiên trì với chu trình chăm sóc da phù hợp, kết hợp với chế độ ăn uống lành mạnh
-          để có một làn da khỏe mạnh, sáng mịn và tràn đầy sức sống!
-        </Paragraph>
-
-        <BackButton onClick={handleGoBack}>Quay lại</BackButton>
-      </ContentSection>
-    </PageContainer>
+    <>
+      <GlobalStyle />
+      <PageContainer>
+        <ContentWrapper>
+          <Title>Chăm Sóc Da Đúng Cách</Title>
+          <Image
+            src="https://i.pinimg.com/736x/06/65/6c/06656cb49763307778b67cb74d9a9509.jpg"
+            alt="Skin care routine"
+          />
+          <Tabs defaultActiveKey="1" items={items} centered />
+          <BackButton onClick={handleGoBack}>
+            <ArrowLeftOutlined />
+            Quay lại
+          </BackButton>
+        </ContentWrapper>
+      </PageContainer>
+    </>
   );
 };
 
